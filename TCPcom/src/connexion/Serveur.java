@@ -58,14 +58,27 @@ public class Serveur implements Runnable {
                 this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
                 this.out = new DataOutputStream(this.socket.getOutputStream());
                 String tmp;
+                // PREVOIR MODE PAS A PAS
+                // Automate a = new Automate();
                 while (true) {
+                    // while (true && a.estConnecté()) {
                     tmp = this.in.readLine();
+                    // tmp est un trame/packet
+                    
+                    // a.analyserPacket(tmp);
+                    
+                    // if (a.estConnecté)
+                    // {
+                    // afficher fin de connection
+                    // }
+                    
                     System.out.println(this + "recu : " + tmp);
-                    this.out.writeBytes("Message du Serveur" + '\n');
+                    this.out.writeBytes("Message du Serveur" + System.getProperty("line.separator"));
                 }
 
             } catch (IOException ex) {
-                Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
 
         }

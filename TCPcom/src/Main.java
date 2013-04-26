@@ -22,6 +22,8 @@ public class Main {
         Inet4Address ip;
         try {
             ip = (Inet4Address) Inet4Address.getLocalHost();
+            
+            
             Serveur s1 = Connexion.creerServeur(port);
             Serveur s2 = Connexion.creerServeur(port + 1);
             Thread.sleep(100);
@@ -31,7 +33,7 @@ public class Main {
 
 
         } catch (UnknownHostException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+          //  Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
         }
 
