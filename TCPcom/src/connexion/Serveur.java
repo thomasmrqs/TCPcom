@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class Serveur implements Runnable {
 
     private int port;
-    private ArrayList<GestionClient> clients;
+    private ArrayList<ServeurThread> clients;
 
     public Serveur(int port) {
         this.port = port;
@@ -26,66 +26,19 @@ public class Serveur implements Runnable {
 
     @Override
     public void run() {
-        GestionClient gestionnaire;
+        ServeurThread gestionnaire;
         ServerSocket s;
         try {
             s = new ServerSocket(this.port);
             System.out.println(this + " en écoute");
             while (true) {
-                gestionnaire = new GestionClient(s.accept());
+                gestionnaire = new ServeurThread(s.accept());
                 System.out.println(this + " client accepté");
                 (new Thread(gestionnaire)).start();
                 this.clients.add(gestionnaire);
             }
         } catch (IOException ex) {
             Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private class GestionClient implements Runnable {
-
-        private Socket socket;
-        private BufferedReader in;
-        private DataOutputStream out;
-
-        public GestionClient(Socket socketClient) {
-            this.socket = socketClient;
-        }
-
-        @Override
-        public void run() {
-            try {
-                this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-                this.out = new DataOutputStream(this.socket.getOutputStream());
-                String tmp;
-                // PREVOIR MODE PAS A PAS
-                // Automate a = new Automate();
-                while (true) {
-                    // while (true && a.estConnecté()) {
-                    tmp = this.in.readLine();
-                    // tmp est un trame/packet
-                    
-                    // a.analyserPacket(tmp);
-                    
-                    // if (a.estConnecté)
-                    // {
-                    // afficher fin de connection
-                    // }
-                    
-                    System.out.println(this + "recu : " + tmp);
-                    this.out.writeBytes("Message du Serveur" + System.getProperty("line.separator"));
-                }
-
-            } catch (IOException ex) {
-                //Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
-            }
-
-        }
-
-        @Override
-        public String toString() {
-            return "Gestionnnaire de client : ";
         }
     }
 
