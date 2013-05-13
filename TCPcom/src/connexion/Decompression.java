@@ -352,7 +352,7 @@ public class Decompression {
 		p.MettreOption(0);
 	}
 
-	public Paquet DecompSegmentSansDonnee ()
+	public Paquet DecompSegment ()
 	{
 		this.DecompSRC();
 		this.DecompDST();
