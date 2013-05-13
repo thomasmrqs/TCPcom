@@ -477,7 +477,7 @@ public class Paquet {
 		
 	}
 	
-	public byte[] convertirBitSetSansDonne ()
+	public byte[] convertirBitSet ()
 	{
 		byte[] tab = new byte[24];
 		for (int i = 15; i >= 0; --i)
