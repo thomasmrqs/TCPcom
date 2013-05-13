@@ -14,49 +14,28 @@ import java.net.Socket;
  *
  * @author greg
  */
-public class ServeurThread implements Runnable {
+public class ServeurThread extends Connexion{
 
-        private Socket socket;
-        private BufferedReader in;
-        private DataOutputStream out;
-
-        public ServeurThread(Socket socketClient) {
-            this.socket = socketClient;
-        }
-
-        @Override
-        public void run() {
-            try {
-                this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-                this.out = new DataOutputStream(this.socket.getOutputStream());
-                String tmp;
-                // PREVOIR MODE PAS A PAS
-                // Automate a = new Automate();
-                while (true) {
-                    // while (true && a.estConnecté()) {
-                    tmp = this.in.readLine();
-                    // tmp est un trame/packet
-                    
-                    // a.analyserPacket(tmp);
-                    
-                    // if (a.estConnecté)
-                    // {
-                    // afficher fin de connection
-                    // }
-                    
-                    System.out.println(this + "recu : " + tmp);
-                    this.out.writeBytes("Message du Serveur" + System.getProperty("line.separator"));
-                }
-
-            } catch (IOException ex) {
-                //Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
-            }
-
-        }
-
-        @Override
-        public String toString() {
-            return "Gestionnnaire de client : ";
-        }
+    private String nom;
+    
+    public ServeurThread(String nom, Socket s){
+        super();
+        this.nom = nom;
+        this.socket = s;
     }
+    
+    @Override
+    protected void initialisation() throws IOException{
+        this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        this.out = new DataOutputStream(this.socket.getOutputStream());
+    }
+
+    
+    
+    @Override
+    public String toString() {
+        return "Serveur "+this.nom+"_Thread : ";
+    }
+
+    
+}

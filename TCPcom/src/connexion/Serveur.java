@@ -1,11 +1,7 @@
 package connexion;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,34 +12,54 @@ import java.util.logging.Logger;
  */
 public class Serveur implements Runnable {
 
+    ArrayList<ServeurThread> liste;
     private int port;
-    private ArrayList<ServeurThread> clients;
+    private String nom;
+    private boolean alive;
+    private ServerSocket socket;
 
-    public Serveur(int port) {
+    public Serveur(String nom, int port) {
+        this.alive = true;
+        this.liste = new ArrayList();
         this.port = port;
-        this.clients = new ArrayList();
+        this.nom = nom;
     }
 
-    @Override
-    public void run() {
-        ServeurThread gestionnaire;
-        ServerSocket s;
-        try {
-            s = new ServerSocket(this.port);
-            System.out.println(this + " en écoute");
-            while (true) {
-                gestionnaire = new ServeurThread(s.accept());
-                System.out.println(this + " client accepté");
-                (new Thread(gestionnaire)).start();
-                this.clients.add(gestionnaire);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public ArrayList<ServeurThread> getListe() {
+        return this.liste;
     }
 
     @Override
     public String toString() {
-        return "Serveur local (écoute sur le port : " + this.port + ") : ";
+        return "Serveur " + this.nom + " : ";
+    }
+
+    @Override
+    public void run() {
+        ServeurThread st;
+        try {
+            this.socket = new ServerSocket(this.port);
+            System.out.println(this + " en écoute");
+            while (this.alive) {
+                st = new ServeurThread(this.nom, this.socket.accept());
+                this.liste.add(st);
+                GestionDesConnexions.get().ajouterConnexion(st);
+                (new Thread(st)).start();
+            }
+        } catch (IOException ex) {
+            System.out.println(this  + " fermeture ....");
+        }
+    }
+
+    public void fermer() {
+        try {
+            for (Connexion c : this.liste) {
+                c.fermerConnexion();
+            }
+            this.socket.close();
+            this.alive = false;
+        } catch (Exception ex) {
+           System.out.println(this  + " Erreureeee");
+        }
     }
 }

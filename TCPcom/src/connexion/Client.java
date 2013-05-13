@@ -1,62 +1,41 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package connexion;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author greg
  */
-public class Client implements Runnable {
+public class Client extends Connexion {
 
-    private Inet4Address ipServeur;
-    private int portServeur;
-    private Socket socket;
-    private BufferedReader in;
-    private DataOutputStream out;
+    private String ipServeur;
+    private String nom;
 
-    public Client(Inet4Address ipServeur, int portServeur) {
+    public Client(String nom, String ipServeur, int portServeur) {
+        super();
+        this.nom = nom;
         this.ipServeur = ipServeur;
-        this.portServeur = portServeur;
+        this.port = portServeur;
     }
 
-    public void ecriture(String str) {
-        try {
-            this.out.writeBytes(str + '\n');
-            this.out.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    @Override
+    protected void initialisation() throws IOException {
+        this.socket = new Socket(InetAddress.getByName(this.ipServeur), this.port);
+        this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        this.out = new DataOutputStream(this.socket.getOutputStream());
     }
 
     @Override
     public String toString() {
-        return "Client (connecté à : " + this.ipServeur + ", sur le port : " + this.portServeur + ", socket : " + this.socket + ") : ";
-    }
-
-    @Override
-    public void run() {
-        try {
-            this.socket = new Socket(this.ipServeur, this.portServeur);
-            this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-            this.out = new DataOutputStream(this.socket.getOutputStream());
-            System.out.println(this + " connecté");
-            String tmp;
-            while (true) {
-                this.out.writeBytes("Message du Client" + '\n');
-                tmp = this.in.readLine();
-                System.out.println(this + "recu : " + tmp);
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception e) {
-        }
+        return "Client " + this.nom + " : ";
     }
 }
