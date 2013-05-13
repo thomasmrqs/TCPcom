@@ -24,8 +24,10 @@ public class Utils {
     }
 
     public static String afficherOctet(byte b) {
+    	//System.out.println("test greg");
         String res = "octet : [";
         for (int i = 0; i < 8; i++) {
+        	//System.out.println("rest = " + res);
             res += Utils.bitEstVrai(b, i) + "";
             if (i < 7) {
                 res += ";";
