@@ -84,7 +84,8 @@ public abstract class Connexion implements Runnable {
         synchronized (this.ecriture) {
             if (this.ecriture.size() > 0) {
                 System.out.println(this + " écrit vraiment un message ");
-                this.out.writeBytes(this.ecriture.pop().toString() + '\n');
+                this.out.write(this.ecriture.pop().convertirBitSet());
+                this.out.write('\n');
             } else {
                 this.out.write('\n');
             }
