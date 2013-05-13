@@ -439,7 +439,7 @@ public class Paquet {
 	{
 		System.out.println ("Port source = " + PortSRC);
 		System.out.println ("Port destinataire = " + PortDST);
-		/*System.out.println ("Numéro de séquence = " + seq);
+		System.out.println ("Numéro de séquence = " + seq);
 		System.out.println ("Accusé de reception = " + acc);
 		System.out.println ("Data offset = " + dataoff);
 		System.out.println ("Reservé = " + reserve);
@@ -453,11 +453,11 @@ public class Paquet {
 		System.out.println ("Checksum = " + checksum);
 		System.out.println ("Pointeur de donnée urgente = " + pointeur);
 		System.out.println ("Reservé = " + reserve);
-		System.out.println ("Données = " + donnee);*/
-		System.out.println ("taille bit " + bitS.size());
+		System.out.println ("Données = " + donnee);
+		/*System.out.println ("taille bit " + bitS.size());
 		System.out.println ("tab : " + Utils.afficherOctet(this.ObtenirBitSet().toByteArray()[0]));
 		System.out.println ("longuer: " + this.ObtenirBitSet().toByteArray().length);
-		System.out.println ("tab 2: " + Utils.afficherOctet(this.ObtenirBitSet().toByteArray()[1]));
+		System.out.println ("tab 2: " + Utils.afficherOctet(this.ObtenirBitSet().toByteArray()[1]));*/
 	}
 	
 	public BitSet CreerPaquetSansDonnée ()
