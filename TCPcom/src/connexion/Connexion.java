@@ -94,7 +94,8 @@ public abstract class Connexion implements Runnable {
             tmp = this.in.readLine();
             if (!tmp.isEmpty()) {
                 System.out.println(this + " lit vraiment un message ");
-                this.lecture.add(new Paquet(tmp));
+                Decompression d = new Decompression(tmp.getBytes());
+                this.lecture.add(d.DecompSegment());
             }
         }
     }
