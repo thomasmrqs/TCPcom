@@ -216,7 +216,7 @@ public class Paquet {
 	
 	
 	public void PortVerBit (int port) {
-		System.out.println(bit);
+		//System.out.println(bit);
 		char c[] = new char [16];
 		int i = 0;
 		int j = 0;
@@ -237,7 +237,7 @@ public class Paquet {
 				bitS.set(bit, false);
 			++bit;
 		}
-		System.out.println(bitS.size());
+		//System.out.println(bitS.size());
 	}
 	
 	public void SeqAccVerBit (boolean se)
