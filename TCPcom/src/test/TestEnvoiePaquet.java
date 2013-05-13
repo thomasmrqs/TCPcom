@@ -41,7 +41,7 @@ public class TestEnvoiePaquet {
             Logger.getLogger(TestEnvoiePaquet.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("______________Reception d'un paquet______________________________");
-        s.getListe().get(0).lireDernierMessage().AfficherPaquet();
+        s.getListe().get(0).lireMesssages().get(0).AfficherPaquet();
         
         
         try {
