@@ -24,4 +24,6 @@ public interface Ressource {
     public static int ETAT_LAST_ACK = 8;
     public static int ETAT_CLOSING = 9;
     public static int ETAT_TIME_WAIT = 10;
+    /*Pour la temporisation*/
+    public static int TEMPORISATION_TEMPS_DEFAUT = 300; // Correspond à 300 secondes
 }
