@@ -61,6 +61,4 @@ public class GestionDesConnexions {
         return "Gestion des connexions : \n\t" + this.listeConnexion.size() + " connexion : " + res;
     }
     
-    
-    
 }
