@@ -16,8 +16,19 @@ import java.util.Map.Entry;
  */
 public class Temporisation implements Runnable {
     //Permet de tuer le thread
-
     private boolean alive;
+    //Temporisation de retransmission
+    private long rto;
+    private long roundTripDelay;
+    //Borne supérieure
+    private double uBound;
+    //Borne inférieure
+    private double lBound;
+    //Temps de boucle : srtt
+    private double srtt;
+    private double alpha = 0.8;
+    private double beta = 1.5;
+    
 
     public synchronized void fermer() {
         this.alive = false;
@@ -29,13 +40,16 @@ public class Temporisation implements Runnable {
 
     /*Constructeurs*/
     public Temporisation(int tempsParDefaut) {
+        if (tempsParDefaut <= 0){
+            tempsParDefaut = Ressource.TEMPORISATION_TEMPS_DEFAUT;
+        }
+        this.roundTripDelay = 1;
         this.delai = tempsParDefaut;
-
+        this.srtt = 1;
+        this.uBound = 60; //60 secondes
+        this.lBound = 1; // 1 seconde
     }
 
-    public Temporisation() {
-        this.delai = Ressource.TEMPORISATION_TEMPS_DEFAUT;
-    }
 
     /*Interaction avec l'exterieur*/
     public void ecriturePaquet(Paquet p) {
@@ -53,6 +67,15 @@ public class Temporisation implements Runnable {
             this.determinerInterval(p);
         }
     }
+    
+    public long tempsAllerRetour(){
+        return this.roundTripDelay;
+    }
+    
+    public long tempsAvantRetransmission(){
+        return this.rto;
+    }
+    
     /*Fonctions de calcul */
     private void initialiserMarqueur(Paquet p) {
         this.marqueur = new Paire(p, Calendar.getInstance().getTimeInMillis());
@@ -67,17 +90,29 @@ public class Temporisation implements Runnable {
         return start.getValue() - end.getValue();
     }
     
+    private void calculTempsDeBoucle(long roundTripDelay){
+        this.srtt = (this.alpha * this.srtt) + ((1 - this.alpha) * roundTripDelay);
+    }
+    
+    // Pour executer cette fonction, le srtt doit etre à jour
+    private void calculTemporisationRetransmission(){
+        this.rto = (long) Math.min(this.uBound, Math.max(this.lBound, this.beta * this.srtt));
+    }
+    
     /*Boucle infinie*/
     @Override
     public void run() {
-        long roundTripDelay = 0;
         while (this.alive) {
             if (this.marqueur != null && this.marqueur2 != null) {
-                roundTripDelay = this.calculRoundTripDelay(this.marqueur, this.marqueur2);
-                
+                this.roundTripDelay = this.calculRoundTripDelay(this.marqueur, this.marqueur2);
+                this.calculTempsDeBoucle(this.roundTripDelay);
+                this.calculTemporisationRetransmission();
             }
         }
     }
+    
+    
+    
 
     @Override
     public String toString() {
