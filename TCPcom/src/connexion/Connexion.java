@@ -84,7 +84,8 @@ public abstract class Connexion implements Runnable {
         synchronized (this.ecriture) {
             if (this.ecriture.size() > 0) {
                 System.out.println(this + " écrit vraiment un message ");
-                this.out.writeBytes(this.ecriture.pop().toString() + '\n');
+                this.out.write(this.ecriture.pop().convertirBitSet());
+                this.out.write('\n');
             } else {
                 this.out.write('\n');
             }
@@ -93,7 +94,8 @@ public abstract class Connexion implements Runnable {
             tmp = this.in.readLine();
             if (!tmp.isEmpty()) {
                 System.out.println(this + " lit vraiment un message ");
-                this.lecture.add(new Paquet(tmp));
+                Decompression d = new Decompression(tmp.getBytes());
+                this.lecture.add(d.DecompSegment());
             }
         }
     }
