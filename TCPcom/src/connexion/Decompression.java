@@ -240,16 +240,22 @@ public class Decompression {
 				{
 				case 0 : 
 					p.MettreUrg(true);
+					break;
 				case 1 : 
 					p.MettreAck(true);
+					break;
 				case 2 :
 					p.MettrePsh(true);
+					break;
 				case 3 :
 					p.MettreRst(true);
+					break;
 				case 4 :
 					p.MettreSyn(true);
+					break;
 				case 5 : 
 					p.MettreFin(true);
+					break;
 				}
 		}
 
