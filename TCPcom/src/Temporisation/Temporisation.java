@@ -16,6 +16,7 @@ import java.util.Map.Entry;
  */
 public class Temporisation implements Runnable {
     //Permet de tuer le thread
+
     private boolean alive;
     //Temporisation de retransmission
     private long rto;
@@ -28,7 +29,6 @@ public class Temporisation implements Runnable {
     private double srtt;
     private double alpha = 0.8;
     private double beta = 1.5;
-    
 
     public synchronized void fermer() {
         this.alive = false;
@@ -40,7 +40,7 @@ public class Temporisation implements Runnable {
 
     /*Constructeurs*/
     public Temporisation(int tempsParDefaut) {
-        if (tempsParDefaut <= 0){
+        if (tempsParDefaut <= 0) {
             tempsParDefaut = Ressource.TEMPORISATION_TEMPS_DEFAUT;
         }
         this.roundTripDelay = 1;
@@ -62,43 +62,50 @@ public class Temporisation implements Runnable {
 
     public void lirePaquet(Paquet p) {
         System.out.println(this + " interception de la lecture d'un paquet");
-        if (this.marqueur2 != null){
+        if (this.marqueur2 != null) {
             System.out.println(this + " Je n'ai pas de marqueur de fin");
             this.determinerInterval(p);
         }
     }
-    
-    public long tempsAllerRetour(){
+
+    public long tempsAllerRetour() {
         return this.roundTripDelay;
     }
-    
-    public long tempsAvantRetransmission(){
+
+    public long tempsAvantRetransmission() {
         return this.rto;
     }
-    
+
     /*Fonctions de calcul */
     private void initialiserMarqueur(Paquet p) {
         this.marqueur = new Paire(p, Calendar.getInstance().getTimeInMillis());
     }
 
     private void determinerInterval(Paquet p) {
-        System.out.println(this + " Il faut determiner si le marqueur de fin est dans l'interval");
-        this.marqueur2 = new Paire<>(p, Calendar.getInstance().getTimeInMillis());
+        //Si le paquet recue est de type ACK
+        if (p.ObtenirAck()) {
+            System.out.println(this + " Il faut determiner si le marqueur de fin est dans l'interval");
+            //Si le numéro de séquence est >= au numéro de séquence du marqueur
+            if (p.ObtenirNbrSeq() >= this.marqueur.getKey().ObtenirNbrSeq()) {
+                System.out.println(this + " Le marqueur de fin est dans l'interval");
+                this.marqueur2 = new Paire<>(p, Calendar.getInstance().getTimeInMillis());
+            }
+        }
     }
 
-    private long calculRoundTripDelay(Paire<Paquet,Long> start, Paire<Paquet,Long> end){
+    private long calculRoundTripDelay(Paire<Paquet, Long> start, Paire<Paquet, Long> end) {
         return start.getValue() - end.getValue();
     }
-    
-    private void calculTempsDeBoucle(long roundTripDelay){
+
+    private void calculTempsDeBoucle(long roundTripDelay) {
         this.srtt = (this.alpha * this.srtt) + ((1 - this.alpha) * roundTripDelay);
     }
-    
+
     // Pour executer cette fonction, le srtt doit etre à jour
-    private void calculTemporisationRetransmission(){
+    private void calculTemporisationRetransmission() {
         this.rto = (long) Math.min(this.uBound, Math.max(this.lBound, this.beta * this.srtt));
     }
-    
+
     /*Boucle infinie*/
     @Override
     public void run() {
@@ -110,9 +117,6 @@ public class Temporisation implements Runnable {
             }
         }
     }
-    
-    
-    
 
     @Override
     public String toString() {
