@@ -16,7 +16,7 @@ public class Paquet {
 	private int fenetre = 0;
 	private int checksum = 0;
 	private int pointeur = 0;
-	private int donnee = 0;
+	private String donnee = "";
 	private int option = 0;
 	private boolean urg = false;
 	private boolean ack = false;
@@ -199,12 +199,12 @@ public class Paquet {
 			return option;
 		}
 	
-	public void MettreDonnee (int d)
+	public void MettreDonnee (String d)
 	 {
 		 donnee = d;
 	 }
 
-	public int ObtenirDonnee ()
+	public String ObtenirDonnee ()
 		{
 			return donnee;
 		}
@@ -460,7 +460,7 @@ public class Paquet {
 		System.out.println ("tab 2: " + Utils.afficherOctet(this.ObtenirBitSet().toByteArray()[1]));*/
 	}
 	
-	public BitSet CreerPaquetSansDonnee ()
+	public BitSet CreerPaquetSans ()
 	{
 		PortVerBit(PortSRC);
 		PortVerBit(PortDST);
@@ -479,7 +479,9 @@ public class Paquet {
 	
 	public byte[] convertirBitSet ()
 	{
-		byte[] tab = new byte[24];
+		int t = 0;
+		t = donnee.getBytes().length;
+		byte[] tab = new byte[24 + t];
 		for (int i = 15; i >= 0; --i)
 		{
 			if (i > 7 )
@@ -555,6 +557,13 @@ public class Paquet {
 				tab[21] = Utils.changerValeurBit(j - 8, tab[21], false);
 			else
 				tab[20] = Utils.changerValeurBit(j, tab[20], false);
+		}
+		if (t > 0)
+		{
+			for (int i = 1; i < t + 1; ++i)
+			{
+				tab[23 + i] = donnee.getBytes()[i - 1];
+			}
 		}
 		//**********************************************////////////////////////////////
 		

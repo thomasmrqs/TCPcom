@@ -17,6 +17,11 @@ public class Decompression {
 		segment = b;		
 	}
 	
+	public Paquet ObtenirPaquet ()
+	{
+		return p;
+	}
+	
 	public void DecompSRC ()
 	{
 		char[] c = new char[16];
@@ -119,7 +124,7 @@ public class Decompression {
 				seq = (int) (seq + Math.pow(2,i));
 		}
 		p.MettreNbrSeq(seq);
-		System.out.println("seq" + seq);
+		//System.out.println("seq" + seq);
 	}
 	
 	public void DecompAcc ()
@@ -164,7 +169,7 @@ public class Decompression {
 				acc = (int) (acc + Math.pow(2,i));
 		}
 		p.MettreNbrAcc(acc);
-		System.out.println("acc = " + acc);
+		//System.out.println("acc = " + acc);
 	}
 	
 
@@ -187,7 +192,7 @@ public class Decompression {
 				data = (int) (data + Math.pow(2,i));
 		}
 		p.MettreDataOff(data);
-		System.out.println("data = " + data);
+		//System.out.println("data = " + data);
 	}
 	
 	public void DecompReserve ()
@@ -216,7 +221,7 @@ public class Decompression {
 				res = (int) (res + Math.pow(2,i));
 		}
 		p.MettreReserve(res);
-		System.out.println("res = " + res);
+		//System.out.println("res = " + res);
 	}
 	
 	public void DecompFlag ()
@@ -288,7 +293,7 @@ public class Decompression {
 				fen = (int) (fen + Math.pow(2,i));
 		}
 		p.MettreFenetre(fen);
-		System.out.println("fenetre = " + fen);
+		//System.out.println("fenetre = " + fen);
 	}
 	
 	public void DecompChecksum ()
@@ -319,7 +324,7 @@ public class Decompression {
 				check = (int) (check + Math.pow(2,i));
 		}
 		p.MettreChecksum(check);
-		System.out.println("check = " + check);
+		//System.out.println("check = " + check);
 	}
 
 	public void DecompPonteur ()
@@ -350,7 +355,7 @@ public class Decompression {
 				point = (int) (point + Math.pow(2,i));
 		}
 		p.MettrePointeur(point);
-		System.out.println("point = " + point);
+		//System.out.println("point = " + point);
 	}
 
 	public void DecompOption ()
@@ -358,6 +363,22 @@ public class Decompression {
 		p.MettreOption(0);
 	}
 
+	public void DecompDonnee ()
+	{
+		int t = segment.length - 23;
+		String d;
+			if (t > 0)
+			{
+				byte[] tab = new byte[t]; 
+				for (int i = 24, y = 0; i < (23 + t); ++i, ++y)
+				{
+					tab[y] = segment[i];
+				}
+				d = new String(tab, 0, t - 1);
+				p.MettreDonnee(d);
+			}
+	}
+	
 	public Paquet DecompSegment ()
 	{
 		this.DecompSRC();
@@ -371,6 +392,7 @@ public class Decompression {
 		this.DecompChecksum();
 		this.DecompPonteur();
 		this.DecompOption();
+		this.DecompDonnee();
 		return p;
 	}
 	
