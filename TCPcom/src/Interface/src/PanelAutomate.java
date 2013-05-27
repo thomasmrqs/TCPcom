@@ -526,7 +526,6 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
             key = i.next();
             if (key.equals(state_active)) {
                 map_jlabels.get(state_active).setIcon((map_textures.get(state_active)).get("ON"));
-              // gui_manager.getPanelConsole().insertLine("State switched to : " + state_active, "Normal");
             } else {
                 map_jlabels.get(key).setIcon((map_textures.get(key)).get("OFF"));
 

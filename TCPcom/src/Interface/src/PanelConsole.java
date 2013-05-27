@@ -1,4 +1,3 @@
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -25,10 +24,7 @@ import javax.swing.text.StyledDocument;
 
 	@SuppressWarnings("serial")
 	public class PanelConsole extends JPanel implements ActionListener 
-	{
-
-	    
-		
+	{		
 		class MyTextPane extends JTextPane 
         {
             public MyTextPane() 
@@ -57,26 +53,10 @@ import javax.swing.text.StyledDocument;
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-                 
-
-
                 super.paintComponent(g);
             }
         }
-        
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		StyledDocument doc;
-	  //  JTextPane textPane;
 		MyTextPane textPane;
 	    JScrollPane scrollPane;
 	    JButton Bclear, BcmdField;
@@ -91,27 +71,6 @@ import javax.swing.text.StyledDocument;
 	        setLayout(null);
 	        setBounds(675, 305, 305, 295);
 	        setBorder(new TitledBorder("CONSOLE TCP"));
-
-	        // création de la console texte
-	        
-	        
-	   
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	       // textPane = new JTextPane();
 	        textPane =  new MyTextPane(); 
 	        doc = textPane.getStyledDocument();
 	        scrollPane = new JScrollPane(textPane);
