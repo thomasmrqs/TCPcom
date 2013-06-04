@@ -21,7 +21,7 @@ public class TestEnvoiePaquet {
         System.out.println("______________Creation du paquet à envoyer_______________________");
         int port = 8000;
         Paquet p = new Paquet(port, 45000);
-        p.CreerPaquetSans();
+        p.CreerPaquet();
         p.AfficherPaquet();
 
         System.out.println("______________CONNEXION__________________________________________");

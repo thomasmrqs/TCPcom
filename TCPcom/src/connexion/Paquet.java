@@ -460,7 +460,7 @@ public class Paquet {
 		System.out.println ("tab 2: " + Utils.afficherOctet(this.ObtenirBitSet().toByteArray()[1]));*/
 	}
 	
-	public BitSet CreerPaquetSans ()
+	public BitSet CreerPaquet ()
 	{
 		PortVerBit(PortSRC);
 		PortVerBit(PortDST);
