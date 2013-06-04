@@ -1,6 +1,5 @@
 package graphique;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
 
 public class SplashScreenMain {
 
@@ -15,7 +14,7 @@ public class SplashScreenMain {
   {
     // initialize the splash screen
     splashScreenInit();
-    // do something here to simulate the program doing something that
+    // do something here to simulate the program doing     something that
     // is time consuming
     for (int i = 0; i <= 100; i++)
     {
