@@ -1,3 +1,4 @@
+package graphique;
 /*import java.sql.Date;
 
 import javax.mail.Session;
