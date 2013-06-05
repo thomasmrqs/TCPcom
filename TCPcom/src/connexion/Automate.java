@@ -1,4 +1,4 @@
-package Automate;
+package connexion;
 
 import Ressource.Ressource;
 
