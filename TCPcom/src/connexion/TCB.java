@@ -28,7 +28,26 @@ public class TCB
 		
 	}
 
-
+	public void resetTCB ()
+	{
+		/* SEND */
+		setSND_UNA(0);
+		setSND_NXT(0);
+		setSND_WND(0);
+		setSND_UP(0);
+		setSND_WL1(0);
+		setSND_WL2(0);
+		setSND_PUSH(0);
+		setISS(0);
+		
+		/* RECEIVE */
+		setRCV_NXT(0);
+		setRCV_WND(0);
+		setRCV_UP(0);
+		setRCV_IRS(0);
+	}
+	
+	
 	public int getSND_UNA() {
 		return SND_UNA;
 	}
