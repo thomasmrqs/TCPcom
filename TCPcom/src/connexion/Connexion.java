@@ -59,6 +59,9 @@ public abstract class Connexion implements Runnable {
 
     public Paquet lireDernierMessage() {
         synchronized (this.lecture) {
+            if (this.lecture.isEmpty()){
+                return null;
+            }
             return this.lecture.pop();
         }
     }
