@@ -19,7 +19,6 @@ public class Client extends Connexion {
 
     private String nom;
     private int id;
-    private boolean alive;
 
     public String getIpClient() {
         if (this.socket != null && !this.socket.isClosed()) {
@@ -38,7 +37,6 @@ public class Client extends Connexion {
 
     public Client(String nom, String ipServeur, int portServeur) {
         super();
-        this.alive = true;
         this.id = Utils.creerIdentifiantClient();
         this.portLocal = 0;
         this.nom = nom;
@@ -48,7 +46,6 @@ public class Client extends Connexion {
 
     public Client(String nom, String ipServeur, int portServeur, int portClient) {
         super();
-        this.alive = true;
         this.id = Utils.creerIdentifiantClient();
         this.portLocal = portClient;
         this.nom = nom;
@@ -67,7 +64,6 @@ public class Client extends Connexion {
         } catch (Exception e) {
             this.alive = false;
             System.out.println("Erreur du client " + this.id + " " + e.getMessage());
-            
         }
     }
 
@@ -75,9 +71,6 @@ public class Client extends Connexion {
         return id;
     }
 
-    public boolean isAlive() {
-        return alive;
-    }
 
     @Override
     public String toString() {

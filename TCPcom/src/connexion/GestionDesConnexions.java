@@ -5,6 +5,8 @@
 package connexion;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,7 +43,6 @@ public class GestionDesConnexions {
     public Serveur lancerServeur(String nom, int port) {
         Serveur serveur = new Serveur(nom, port);
         (new Thread(serveur)).start();
-
         return serveur;
     }
 
@@ -57,6 +58,11 @@ public class GestionDesConnexions {
         Client t = new Client(nom, adresseDest, portServeur, portClient);
         (new Thread(t)).start();
         this.ajouterConnexion(t);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GestionDesConnexions.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return t;
     }
 

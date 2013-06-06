@@ -19,13 +19,11 @@ import java.util.logging.Logger;
  */
 public abstract class Connexion implements Runnable {
 
-    private boolean alive;
-    
+    protected boolean alive;
     protected int portDistant;
     protected String ipLocale;
     protected String ipDistante;
     protected int portLocal;
-    
     protected DataOutputStream out;
     protected BufferedReader in;
     protected Socket socket;
@@ -72,13 +70,13 @@ public abstract class Connexion implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
-            System.out.println("Interuption lecture/ecriture Connexion " + e);
+            System.out.println(this + "Interuption lecture/ecriture Connexion " + e);
         }
     }
 
     public Paquet lireDernierMessage() {
         synchronized (this.lecture) {
-            if (this.lecture.isEmpty()){
+            if (this.lecture.isEmpty()) {
                 return null;
             }
             return this.lecture.pop();
@@ -147,11 +145,14 @@ public abstract class Connexion implements Runnable {
             if (this.socket != null) {
                 this.socket.close();
             }
-            
+
         } catch (IOException ex) {
             Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(this  + " fermeture ....");
+        System.out.println(this + " fermeture ....");
     }
 
+    public boolean isAlive() {
+        return alive;
+    }
 }

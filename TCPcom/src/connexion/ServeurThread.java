@@ -46,6 +46,6 @@ public class ServeurThread extends Connexion {
 
     @Override
     public String toString() {
-        return "Serveur : " + this.idServeur + " / Connexion n°" + this.id + " : ";
+        return "ServeurTH : " + this.idServeur + "_" + this.id + " : ";
     }
 }
