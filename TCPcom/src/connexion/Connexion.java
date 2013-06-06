@@ -39,7 +39,7 @@ public abstract class Connexion implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(this + " a été lancé ");
+        System.out.println(this + " lance ");
         try {
             this.initialisation();
         } catch (IOException ex) {
