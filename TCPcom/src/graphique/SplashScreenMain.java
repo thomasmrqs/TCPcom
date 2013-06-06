@@ -18,7 +18,7 @@ public class SplashScreenMain {
     // is time consuming
     for (int i = 0; i <= 100; i++)
     {
-      for (long j=0; j < 2500000; ++j)
+      for (long j=0; j < 1; ++j)
       {
         String poop = " " + (j + i);
       }
