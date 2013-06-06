@@ -74,6 +74,7 @@ public abstract class Connexion implements Runnable {
         }
     }
 
+    
     public Paquet lireDernierMessage() {
         synchronized (this.lecture) {
             if (this.lecture.isEmpty()) {
@@ -89,6 +90,7 @@ public abstract class Connexion implements Runnable {
         }
     }
 
+    @Deprecated
     public ArrayList<Paquet> lireMesssages() {
         synchronized (this.lecture) {
             ArrayList<Paquet> liste = new ArrayList();
@@ -120,6 +122,7 @@ public abstract class Connexion implements Runnable {
         }
     }
 
+    @Deprecated
     public synchronized String etatLecture() {
         String res = this.lecture.size() + " messages lus :";
         for (Paquet p : this.lecture) {
