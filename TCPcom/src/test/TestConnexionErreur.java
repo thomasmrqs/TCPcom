@@ -7,6 +7,7 @@ package test;
 import connexion.Connexion;
 import connexion.GestionDesConnexions;
 import connexion.Paquet;
+import connexion.Serveur;
 import java.io.IOException;
 
 /**
@@ -28,6 +29,8 @@ public class TestConnexionErreur {
         c = GestionDesConnexions.get().lancerClient(null, "127.0.0.7000", 4500, 1);
         System.out.println(c.isAlive() == false);
         System.out.println("______________ERREUR 4__________________________________________");
-        GestionDesConnexions.get().lancerServeur(null, 4500);
+        Serveur s = GestionDesConnexions.get().lancerServeur(null, 4500);
+        Thread.sleep(1000);
+        System.out.println(c.isAlive() == false);
     }
 }
