@@ -9,7 +9,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +21,7 @@ public abstract class Connexion implements Runnable {
 
     private boolean alive;
     
-    protected int port;
+    protected int portServeur;
     protected DataOutputStream out;
     protected BufferedReader in;
     protected Socket socket;
@@ -127,6 +126,14 @@ public abstract class Connexion implements Runnable {
             Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(this  + " fermeture ....");
+    }
+
+    public int getPortServeur() {
+        return portServeur;
+    }
+
+    public void setPortServeur(int portServeur) {
+        this.portServeur = portServeur;
     }
     
 }

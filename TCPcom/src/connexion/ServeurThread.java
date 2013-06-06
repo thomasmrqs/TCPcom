@@ -14,28 +14,26 @@ import java.net.Socket;
  *
  * @author greg
  */
-public class ServeurThread extends Connexion{
+public class ServeurThread extends Connexion {
 
-    private String nom;
-    
-    public ServeurThread(String nom, Socket s){
+    private int id;
+    private int idServeur;
+
+    public ServeurThread(int idServeur, int id, Socket s) {
         super();
-        this.nom = nom;
+        this.id = id;
+        this.idServeur = idServeur;
         this.socket = s;
     }
-    
+
     @Override
-    protected void initialisation() throws IOException{
+    protected void initialisation() throws IOException {
         this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         this.out = new DataOutputStream(this.socket.getOutputStream());
     }
 
-    
-    
     @Override
     public String toString() {
-        return "Serveur "+this.nom+"_Thread : ";
+        return "Serveur : " + this.idServeur + " / Connexion n°" + this.id + " : ";
     }
-
-    
 }

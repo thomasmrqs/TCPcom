@@ -30,9 +30,9 @@ public class GestionDesConnexions {
     public synchronized void ajouterConnexion(Connexion c) {
         this.listeConnexion.add(c);
     }
-    
-    public synchronized Connexion obtenirConnexion(int i ){
-        if ((i >= 0) && (i < this.listeConnexion.size())){
+
+    public synchronized Connexion obtenirConnexion(int i) {
+        if ((i >= 0) && (i < this.listeConnexion.size())) {
             return this.listeConnexion.get(i);
         }
         return null;
@@ -45,8 +45,16 @@ public class GestionDesConnexions {
         return serveur;
     }
 
-    public Client lancerClient(String nom, String adresseDest, int port) {
-        Client t = new Client(nom, adresseDest, port);
+    @Deprecated
+    public Client lancerClient(String nom, String adresseDest, int portServeur) {
+        Client t = new Client(nom, adresseDest, portServeur);
+        (new Thread(t)).start();
+        this.ajouterConnexion(t);
+        return t;
+    }
+
+    public Client lancerClient(String nom, String adresseDest, int portServeur, int portClient) {
+        Client t = new Client(nom, adresseDest, portServeur, portClient);
         (new Thread(t)).start();
         this.ajouterConnexion(t);
         return t;
@@ -55,10 +63,9 @@ public class GestionDesConnexions {
     @Override
     public String toString() {
         String res = "";
-        for (Connexion c : this.listeConnexion){
+        for (Connexion c : this.listeConnexion) {
             res += "\n\t-" + c + c.etatLecture();
         }
         return "Gestion des connexions : \n\t" + this.listeConnexion.size() + " connexion : " + res;
     }
-    
 }
