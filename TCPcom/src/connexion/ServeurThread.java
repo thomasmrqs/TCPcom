@@ -24,6 +24,18 @@ public class ServeurThread extends Connexion {
         this.id = id;
         this.idServeur = idServeur;
         this.socket = s;
+        this.portLocal = s.getLocalPort();
+        this.portDistant = s.getPort();
+        this.ipLocale = s.getLocalAddress().getHostName();
+        this.ipDistante = s.getInetAddress().getHostName();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getIdServeur() {
+        return idServeur;
     }
 
     @Override

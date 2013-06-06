@@ -272,7 +272,7 @@ public class Automate {
 	{
 		if (this.getMod() == true)
 		{		
-			int port_ser = this.getTcb().getConnexion().portServeur;
+			int port_ser = this.getTcb().getConnexion().portDistant;
 			/* CA FAIT TOUT CASSEEEEEE */
 			//int port_client = this.getTcb().getConnexion().socket.getLocalPort();
 			Paquet p = new Paquet (100005, port_ser);

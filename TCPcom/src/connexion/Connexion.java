@@ -21,12 +21,32 @@ public abstract class Connexion implements Runnable {
 
     private boolean alive;
     
-    protected int portServeur;
+    protected int portDistant;
+    protected String ipLocale;
+    protected String ipDistante;
+    protected int portLocal;
+    
     protected DataOutputStream out;
     protected BufferedReader in;
     protected Socket socket;
     protected final Stack<Paquet> ecriture;
     protected final Stack<Paquet> lecture;
+
+    public int getPortDistant() {
+        return portDistant;
+    }
+
+    public String getIpLocale() {
+        return ipLocale;
+    }
+
+    public String getIpDistante() {
+        return ipDistante;
+    }
+
+    public int getPortLocal() {
+        return portLocal;
+    }
 
     protected abstract void initialisation() throws IOException;
 
@@ -52,7 +72,7 @@ public abstract class Connexion implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Interuption lecture/ecriture Connexion " + e);
         }
     }
 
@@ -112,28 +132,26 @@ public abstract class Connexion implements Runnable {
 
     public void fermerConnexion() {
         try {
-            if (this.in == null) {
+            this.alive = false;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (this.in != null) {
                 this.in.close();
             }
-            if (this.out == null) {
+            if (this.out != null) {
                 this.out.close();
             }
-            if (this.socket == null) {
+            if (this.socket != null) {
                 this.socket.close();
             }
-            this.alive = false;
+            
         } catch (IOException ex) {
             Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(this  + " fermeture ....");
     }
 
-    public int getPortServeur() {
-        return portServeur;
-    }
-
-    public void setPortServeur(int portServeur) {
-        this.portServeur = portServeur;
-    }
-    
 }

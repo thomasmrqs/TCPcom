@@ -17,10 +17,8 @@ import java.net.Socket;
  */
 public class Client extends Connexion {
 
-    private String ipServeur;
     private String nom;
     private int id;
-    private int portClient;
     private boolean alive;
 
     public String getIpClient() {
@@ -30,43 +28,40 @@ public class Client extends Connexion {
         return "ClientNoAdr";
     }
 
-    public String getIpServeur() {
-        return ipServeur;
-    }
+    
 
     public String getNom() {
         return nom;
     }
 
-    public int getPortClient() {
-        return portClient;
-    }
+    
 
     public Client(String nom, String ipServeur, int portServeur) {
         super();
         this.alive = true;
         this.id = Utils.creerIdentifiantClient();
-        this.portClient = 0;
+        this.portLocal = 0;
         this.nom = nom;
-        this.ipServeur = ipServeur;
-        this.portServeur = portServeur;
+        this.ipDistante = ipServeur;
+        this.portDistant = portServeur;
     }
 
     public Client(String nom, String ipServeur, int portServeur, int portClient) {
         super();
         this.alive = true;
         this.id = Utils.creerIdentifiantClient();
-        this.portClient = portClient;
+        this.portLocal = portClient;
         this.nom = nom;
-        this.ipServeur = ipServeur;
-        this.portServeur = portServeur;
+        this.ipDistante = ipServeur;
+        this.portDistant = portServeur;
     }
 
     @Override
     protected void initialisation() throws IOException {
         try {
-            this.socket = new Socket(InetAddress.getByName(this.ipServeur), this.portServeur, null, this.portClient);
-            this.portClient = this.socket.getLocalPort();
+            this.socket = new Socket(InetAddress.getByName(this.ipDistante), this.portDistant, null, this.portLocal);
+            this.portLocal = this.socket.getLocalPort();
+            this.ipLocale = this.socket.getLocalAddress().getHostName();
             this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.out = new DataOutputStream(this.socket.getOutputStream());
         } catch (Exception e) {
