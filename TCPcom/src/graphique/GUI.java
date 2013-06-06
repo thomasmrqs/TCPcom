@@ -145,10 +145,10 @@ public class GUI extends JFrame
 		defaultOption.setText("Default Option");
 		manuel.setText("manuel".toUpperCase());
 		help.setText("AIDE & FEEDBACK");
-connexion.setIcon(new ImageIcon(getClass().getResource("/IMAGES/connect.gif")));
-	deconnexion.setIcon(new ImageIcon(getClass().getResource("/IMAGES/deconnexion.jpeg")));
-	manuel.setIcon(new ImageIcon(getClass().getResource("/IMAGES/manuel.png")));
-	help.setIcon(new ImageIcon(getClass().getResource("/IMAGES/aide.png")));
+connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")));
+	deconnexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/deconnexion.jpeg")));
+	manuel.setIcon(new ImageIcon(getClass().getResource("./IMAGES/manuel.png")));
+	help.setIcon(new ImageIcon(getClass().getResource("./IMAGES/aide.png")));
 		connexion.setMnemonic(KeyEvent.VK_C);
 		deconnexion.setMnemonic(KeyEvent.VK_D);
 		manuel.setMnemonic(KeyEvent.VK_M);
