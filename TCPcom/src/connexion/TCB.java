@@ -2,6 +2,9 @@ package connexion;
 
 public class TCB
 {
+    
+    
+        private Connexion connexion;
 	/*
 	 * SEND Variables
 	 * */
@@ -23,9 +26,9 @@ public class TCB
 	private int RCV_IRS = 0;
 	
 	
-	public TCB ()
+	public TCB (Connexion connexion)
 	{
-		
+            this.connexion = connexion;
 	}
 
 	public void resetTCB ()
