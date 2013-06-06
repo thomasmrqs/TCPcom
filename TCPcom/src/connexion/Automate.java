@@ -7,8 +7,17 @@ public class Automate {
 	 /* attribut de l'etat courant */
 	 private int etatCourant = Ressource.ETAT_CLOSED;
 	 private TCB tcb = null;
+	 private boolean mod = false;
 	 
-	 public Automate () {
+	 public boolean getMod() {
+		return mod;
+	}
+
+	public void setMod(boolean mod) {
+		this.mod = mod;
+	}
+
+	public Automate () {
 	  
 	 }
  
@@ -50,12 +59,15 @@ public class Automate {
 				 System.out.println("Etat actuel : ETAT_LAST_ACK");
 				 break;  
 			 case Ressource.ETAT_LISTEN :
+				 this.listenToSynRec();
 				 System.out.println("Etat actuel : ETAT_LISTEN");
 				 break;  
 			 case Ressource.ETAT_SYN_RCVD :
+				 this.synRevToEstablished();
 				 System.out.println("Etat actuel : ETAT_SYN_RCVD");
 				 break;  
 			 case Ressource.ETAT_SYN_SENT :
+				 this.synSentToEstablished();
 				 //System.out.println("Etat actuel : ETAT_SYN_SENT");
 				 System.out.println("youpi ?");
 				 break;  
@@ -236,6 +248,7 @@ public class Automate {
 		if (mode == true)
 		{
 			Automate auto = new Automate();
+			auto.setMod(mode);
 			Client c = null;
 			try
 			{
@@ -257,15 +270,81 @@ public class Automate {
 	 /* Changer l'état de CLOSED à SYN_SENT */
 	public void closedToSynSent()
 	{
-		int port_ser = this.getTcb().getConnexion().port;
-		/* CA FAIT TOUT CASSEEEEEE */
-		int port_client = this.getTcb().getConnexion().socket.getLocalPort();
-		Paquet p = new Paquet (100005, port_ser);
-		p.MettreSyn(true);
-		p.CreerPaquet();
-		this.getTcb().getConnexion().ecrirePaquet(p);
-		this.etatCourant = Ressource.ETAT_SYN_SENT;
+		if (this.getMod() == true)
+		{		
+			int port_ser = this.getTcb().getConnexion().port;
+			/* CA FAIT TOUT CASSEEEEEE */
+			//int port_client = this.getTcb().getConnexion().socket.getLocalPort();
+			Paquet p = new Paquet (100005, port_ser);
+			p.MettreSyn(true);
+			p.CreerPaquet();
+			this.getTcb().getConnexion().ecrirePaquet(p);
+			this.etatCourant = Ressource.ETAT_SYN_SENT;
+		}
 	}
 
+	public void synSentToEstablished ()
+	{
+		if (this.getMod() == false)
+			return;
+		System.out.println("debut");
+		Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+		if(p == null)
+		{
+			System.out.println("null");
+			return;
+		}
+		if (p.ObtenirSyn() == true)
+		{
+			if (p.ObtenirAck() == true)
+			{
+				this.etatCourant = Ressource.ETAT_ESTABLISHED;
+				p.MettreSyn(false);
+				p.CreerPaquet();
+				this.getTcb().getConnexion().ecrirePaquet(p);
+			}
+		}
+	}
+	
+	public void closedToListen ()
+	{
+		if (this.getMod() == false)
+			this.etatCourant = Ressource.ETAT_LISTEN;
+	}
+	
+	public void listenToSynRec ()
+	{
+		if (this.getMod() == true)
+			return;
+		Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+		if (p == null)
+		{
+			return;
+		}
+		if (p.ObtenirSyn() == true)
+		{
+			this.etatCourant = Ressource.ETAT_SYN_RCVD;
+			p.MettreSyn(true);
+			p.MettreAck(true);
+			p.CreerPaquet();
+			this.getTcb().getConnexion().ecrirePaquet(p);
+		}
+	}
+	
+	public void synRevToEstablished ()
+	{
+		if (this.getMod() == true)
+			return;
+		Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+		if (p == null)
+		{
+			return;
+		}
+		if (p.ObtenirAck() == true)
+		{
+			this.etatCourant = Ressource.ETAT_ESTABLISHED;
+		}
+	}
+	
  
 }
