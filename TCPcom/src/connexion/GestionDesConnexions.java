@@ -58,11 +58,6 @@ public class GestionDesConnexions {
         Client t = new Client(nom, adresseDest, portServeur, portClient);
         (new Thread(t)).start();
         this.ajouterConnexion(t);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(GestionDesConnexions.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return t;
     }
 
