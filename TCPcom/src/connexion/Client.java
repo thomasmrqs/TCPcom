@@ -20,6 +20,30 @@ public class Client extends Connexion {
     private String ipServeur;
     private String nom;
 
+    public String getIpServeur() {
+        return ipServeur;
+    }
+
+    public void setIpServeur(String ipServeur) {
+        this.ipServeur = ipServeur;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public Client(String nom, String ipServeur, int portServeur) {
         super();
         this.nom = nom;
