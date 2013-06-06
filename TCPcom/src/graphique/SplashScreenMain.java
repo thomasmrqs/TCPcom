@@ -35,7 +35,7 @@ public class SplashScreenMain {
   }
 
   private void splashScreenInit() {
-    ImageIcon myImage = new ImageIcon(SplashScreenMain.class.getResource("/IMAGES/world4.gif"));
+    ImageIcon myImage = new ImageIcon(SplashScreenMain.class.getResource("./IMAGES/world4.gif"));
     screen = new SplashScreen(myImage);
     screen.setLocationRelativeTo(null);
     screen.setProgressMax(100);
