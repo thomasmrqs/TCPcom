@@ -2,6 +2,14 @@ package connexion;
 
 public class TCB
 {
+
+    public Connexion getConnexion() {
+        return connexion;
+    }
+
+    public void setConnexion(Connexion connexion) {
+        this.connexion = connexion;
+    }
     
     
         private Connexion connexion;
