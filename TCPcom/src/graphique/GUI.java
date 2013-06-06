@@ -331,7 +331,7 @@ connexion.setIcon(new ImageIcon(getClass().getResource("/IMAGES/connect.gif")));
 			e.printStackTrace();
 		} 
 		    
-		SplashScreenMain splash =	new SplashScreenMain();
+		SplashScreenMain splash = new SplashScreenMain();
 		splash.splash();
 		GUI gui = new GUI();
 		gui.CreateTCPJMenuBar();
