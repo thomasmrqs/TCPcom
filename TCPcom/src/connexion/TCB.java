@@ -8,7 +8,7 @@ public class TCB
 	/*
 	 * SEND Variables
 	 * */
-	private int SND_UNA = 0;
+        private int SND_UNA = 0;
 	private int SND_NXT = 0;
 	private int SND_WND = 0;
 	private int SND_UP = 0;
