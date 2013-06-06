@@ -83,7 +83,7 @@ public class Automate {
 	 }
  
  
- 	/*change l'etat de l'automate, prend en compte la continuité des etats (on peut pas passer de closed a established)*/
+ 	/*change l'etat de l'automate, prend en compte la continuitï¿½ des etats (on peut pas passer de closed a established)*/
  	public void validerChangementEtat (int etat) {
 	 
   if (this.etatCourant == Ressource.ETAT_CLOSED) {
@@ -267,12 +267,12 @@ public class Automate {
 		return null;
 	}
 	
-	 /* Changer l'état de CLOSED à SYN_SENT */
+	 /* Changer l'ï¿½tat de CLOSED ï¿½ SYN_SENT */
 	public void closedToSynSent()
 	{
 		if (this.getMod() == true)
 		{		
-			int port_ser = this.getTcb().getConnexion().port;
+			int port_ser = this.getTcb().getConnexion().portServeur;
 			/* CA FAIT TOUT CASSEEEEEE */
 			//int port_client = this.getTcb().getConnexion().socket.getLocalPort();
 			Paquet p = new Paquet (100005, port_ser);
