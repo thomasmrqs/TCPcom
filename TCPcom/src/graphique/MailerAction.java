@@ -1,5 +1,7 @@
 package graphique;
-/*import java.sql.Date;
+/*
+
+import java.sql.Date;
 
 import javax.mail.Session;
 import javax.naming.Context;
@@ -93,4 +95,7 @@ public class MailerAction
 		MailerAction mail = new MailerAction("TEST", "TestText", "TestSubject", "gbada_yaovi@yahoo.fr", "gbada_yaovi@yahoo.fr");
 		mail.sendMessage();
 	}
-}*/
+}
+
+
+*/

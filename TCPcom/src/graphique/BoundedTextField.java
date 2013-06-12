@@ -74,7 +74,6 @@ class BoundedPlainDocument extends PlainDocument
 
     public BoundedPlainDocument() 
     {
-        // Default constructor - must use setMaxLength later
         this.maxLength = 0;
     }
 
@@ -88,8 +87,7 @@ class BoundedPlainDocument extends PlainDocument
         super(content);
         if (content.length() > maxLength) 
         {
-            throw new IllegalArgumentException(
-                    "Initial content larger than maximum size");
+            throw new IllegalArgumentException("Initial content larger than maximum size");
         }
         this.maxLength = maxLength;
     }
@@ -135,7 +133,8 @@ class BoundedPlainDocument extends PlainDocument
             }
 
          
-            if (errorListener != null) {
+            if (errorListener != null) 
+            {
                 errorListener.insertFailed(this, offset, str, a);
             }
         }
@@ -149,8 +148,7 @@ class BoundedPlainDocument extends PlainDocument
             return;
         }
         throw new IllegalArgumentException
-        (
-                "InsertErrorListener already registered");
+        ("InsertErrorListener already registered");
     }
 
     public void removeInsertErrorListener(InsertErrorListener l) 
@@ -167,6 +165,6 @@ class BoundedPlainDocument extends PlainDocument
         public abstract void insertFailed(BoundedPlainDocument doc, int offset,
                 String str, AttributeSet a);
     }
-    protected InsertErrorListener errorListener; // Unicast listener
+    protected InsertErrorListener errorListener;
     protected int maxLength;
 }

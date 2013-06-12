@@ -1,5 +1,6 @@
 package graphique;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 
 public class SplashScreenMain {
 
@@ -14,11 +15,11 @@ public class SplashScreenMain {
   {
     // initialize the splash screen
     splashScreenInit();
-    // do something here to simulate the program doing     something that
+    // do something here to simulate the program doing something that
     // is time consuming
     for (int i = 0; i <= 100; i++)
     {
-      for (long j=0; j < 1; ++j)
+      for (long j=0; j < 2500000; ++j)
       {
         String poop = " " + (j + i);
       }
@@ -35,7 +36,7 @@ public class SplashScreenMain {
   }
 
   private void splashScreenInit() {
-    ImageIcon myImage = new ImageIcon(SplashScreenMain.class.getResource("./IMAGES/world4.gif"));
+    ImageIcon myImage = new ImageIcon(SplashScreenMain.class.getResource("IMAGES/world4.gif"));
     screen = new SplashScreen(myImage);
     screen.setLocationRelativeTo(null);
     screen.setProgressMax(100);

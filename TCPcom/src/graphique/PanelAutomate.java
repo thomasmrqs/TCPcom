@@ -9,14 +9,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 @SuppressWarnings("serial")
@@ -27,20 +31,28 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
     Map<String, JLabel> map_jlabels = new HashMap<String, JLabel>();
     JLabel labclosed1, lablisten, labsynrcvd, labsynsent;
     JComboBox listStates = null;
-    JButton /*Bgotostate,*/ Bnextstep;
-    Checkbox Boxstepbystep, Boxautoack;
-  //  GUIManager gui_manager = GUIManager.getInstance();
-   // Traitement traitement = Traitement.getInstance();
+    JButton Bnextstep;
+    JCheckBox Boxstepbystep, Boxautoack;
+  Automaton automaton = Automaton.getInstance();
     String[] automate_states = new String[]{"", "CLOSED_INIT", "LISTEN", "SYN_RCVD", "SYN_SENT", "ESTAB",
         "FIN_WAIT_1", "CLOSE_WAIT", "FIN_WAIT_2", "CLOSING",
         "LAST_ACK", "TIME_WAIT", "CLOSED"};
 
+    
+    private String state = null;
+    private Boolean error = false;
+    private PanelConsole console = null;
+    
     /**
      * Constructeur du panneau automate
      */
-    public PanelAutomate() {
-        setLayout(null);
-       // setPreferredSize(new Dimension(1000, 800));
+    
+    
+    public PanelAutomate(PanelConsole console) 
+    {
+        this.console = console;
+    	setLayout(null);
+        state = new String();
         setBounds(620, 20, 2000,800//(int)getToolkit().getScreenSize().getWidth() + 200,  (int)getToolkit().getScreenSize().getHeight()-150);
 );
         // chargement de l'automate
@@ -49,16 +61,50 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
         draw_automate();
 
         // check box ack-auto
-        Boxautoack = new Checkbox("ACK Automatique", true);
-        Boxautoack.setBounds(8, 550, 130, 20);
+       /* Boxautoack = new Checkbox("ACK Automatique", true);
+        Boxautoack.setBounds(400, 620, 140, 30);
+        Boxautoack.setBackground(new Color(59, 59, 59));
+        Boxautoack.setForeground(Color.white);
+        Boxautoack.addItemListener(this);
+       add(Boxautoack); */
+        Boxautoack = new JCheckBox("ACK Automatique");
+		Boxautoack.setMnemonic(KeyEvent.VK_A);
+		Boxautoack.setSelected(false);
+        Boxautoack.setBounds(50, 520, 160, 30);
         Boxautoack.setBackground(new Color(59, 59, 59));
         Boxautoack.setForeground(Color.white);
         Boxautoack.addItemListener(this);
         add(Boxautoack);
+       /*class Bouton extends JButton  implements ActionListener, ChangeListener {
+    	      public Bouton() 
+    	      {
+    	         super("<html><i>ACK<br>Automatique</i></html>", new ImageIcon("ACK.png"));
+    	         setBounds(480, 620, 90, 20);
+    	         addActionListener(this);
+    	         addChangeListener((ChangeListener) this);
+    	         setEnabled(false);
+    	         setFocusPainted(false);
+    	         setRolloverIcon(new ImageIcon("ACK2.png"));
+    	      }    
+    	      
+    	      
+    	      public void stateChanged(ChangeEvent e) {
+    	         setForeground(getModel().isRollover() ? Color.RED : Color.BLACK);
+    	      }
 
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+    	   }
+       add(new Bouton()); */
         // check box step-by-step
-        Boxstepbystep = new Checkbox("Mode \"Step-by-Step\"", false);
-        Boxstepbystep.setBounds(8, 575, 140, 20);
+        Boxstepbystep = new JCheckBox("Mode \"Step-by-Step\"");
+        Boxstepbystep.setMnemonic(KeyEvent.VK_S);
+		Boxstepbystep.setSelected(false);
+        Boxstepbystep.setBounds(50, 550, 180, 30);
         Boxstepbystep.setBackground(new Color(59, 59, 59));
         Boxstepbystep.setForeground(Color.white);
         Boxstepbystep.addItemListener(this);
@@ -81,7 +127,7 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
         Bnextstep.addActionListener(this);
         Bnextstep.setEnabled(false);
         add(Bnextstep);
-        Bnextstep.setBounds(480, 620, 90, 20);
+        Bnextstep.setBounds(480, 570, 90, 20); 
     }
 
     
@@ -96,10 +142,11 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
     }
 
    
-    public void loadMapTextures() {
-        map_textures.put("CLOSED_INIT", loadTexture("Automate/closed.png", "Automate/closed.png"));
+    public void loadMapTextures() 
+    {
+        map_textures.put("CLOSED_INIT", loadTexture("Automate/closed.png", "Automate/closed-on.png"));
         map_textures.put("LISTEN", loadTexture("Automate/listen.png", "Automate/listen.png"));
-        map_textures.put("SYN_RCVD", loadTexture("Automate/synrcvd.png", "Automate/synrcvd.png"));
+        map_textures.put("SYN_RCVD", loadTexture("Automate/synrcvd.png", "Automate/closed.png"));
         map_textures.put("SYN_SENT", loadTexture("Automate/synsent.png", "Automate/synsent.png"));
         map_textures.put("ESTAB", loadTexture("Automate/estab.png", "Automate/estab.png"));
         map_textures.put("FIN_WAIT_1", loadTexture("Automate/finwait1.png", "Automate/finwait1.png"));
@@ -523,11 +570,17 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
     public void update_states(String state_active) 
     {
         String key;
+        //state_active = "SYN_RCVD";
         for (Iterator<String> i = map_jlabels.keySet().iterator(); i.hasNext();) {
             key = i.next();
-            if (key.equals(state_active)) {
+            if (key.equals(state_active)) 
+            {
                 map_jlabels.get(state_active).setIcon((map_textures.get(state_active)).get("ON"));
-            } else {
+              //PanelConsole.insertLine("State switched to : " + state_active, "Normal");
+                this.console.insertLine("State switched to : " + state_active, "Normal");
+            } 
+            else 
+            {
                 map_jlabels.get(key).setIcon((map_textures.get(key)).get("OFF"));
 
             }
@@ -570,16 +623,173 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
        
        
     }
-
-	@Override
-	public void itemStateChanged(ItemEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void actionPerformed(ActionEvent action) 
+    {
+        
+        if (action.getSource() == Bnextstep && automaton.getStepByStep() == true)
+        {
+        	if (automaton.getClosed1() == true)
+        	{
+        		update_states("CLOSED_INIT");
+        		//automaton.setClosed1(false);
+        	}
+        	else if (automaton.getAutoAck() == true)
+        	{	
+        		this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		
+        		error = true;
+        	}
+        	if (automaton.getListen() == true)
+        	{
+        		update_states("LISTEN");
+        		//return (automaton.getListen());
+        	}
+        	else if (automaton.getAutoAck() == true  && !automaton.getClosed1() == true)
+        	{
+        		 this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		System.out.println("OK1");
+        		//return (automaton.getListen());
+        		error = true;
+        	}
+        	
+        	if (automaton.getSynrcvd() == true)
+        	{
+        		update_states("SYN_RCVD");
+        		//return (automaton.getSynrcvd());
+        	}
+        	else if (automaton.getAutoAck() == true  && error == false)
+        	{
+        	   this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		//return (automaton.getSynrcvd());
+        		error = true;
+        	}
+        	if (automaton.getSynsent() == true)
+        	{
+        		update_states("SYN_SENT");
+        	}
+        	else if (automaton.getAutoAck() == true  && error == false)
+        	{
+        		this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		//return (automaton.getSynsent());
+        		error = true;
+        	}
+        	if (automaton.getEstab() == true)
+        	{
+        		update_states("ESTAB");
+        	}
+        	else if (automaton.getAutoAck() == true  && error == false )
+        	{
+        		 this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		//return (automaton.getEstab());
+        		error = true;
+        	}
+        	
+        	if (automaton.getFinwait1() == true)
+        	{
+        		update_states("FIN_WAIT_1");
+        	}
+        	else if (automaton.getAutoAck() == true  && error == false)
+        	{
+        		this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		//return (automaton.getFinwait1());
+        		error = true;
+        	}
+        	
+        	if (automaton.getFinwait2() == true )
+        	{
+        		update_states("FIN_WAIT_2");
+        	}
+        	else if (automaton.getAutoAck() == true && error == false)
+        	{
+        		this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		//return (automaton.getFinwait2());
+        		error = true;
+        	}
+        	
+        	if (automaton.getClosing() == true)
+        	{
+        		update_states("CLOSING");
+        	}
+        	else if (automaton.getAutoAck() == true && error == false)
+        	{
+        	   this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		//return (automaton.getClosing());
+        		error = true;
+        	}
+        	
+        	if (automaton.getLastack() == true)
+        	{
+        		update_states("LAST_ACK");
+        	}
+        	else if (automaton.getAutoAck() == true && error == false)
+        	{
+        		 this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		//return (automaton.getLastack());
+        		error = true;
+        	}
+        	
+        	if (automaton.getTimewait() == true)
+        	{
+        		update_states("TIME_WAIT");
+        	}
+        	else if (automaton.getAutoAck() == true  && error == false)
+        	{
+        		 this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		//return (automaton.getTimewait());
+        		error = true;
+        	}
+        	
+        	if (automaton.getClosed2() == true)
+        	{
+        		update_states("CLOSED");
+        	}
+        	else if (automaton.getAutoAck() == true  && error == false)
+        	{
+        		 this.console.insertLine("Cannot switched state to : CLOSED", "Normal");
+        		//return (automaton.getClosed2());
+        		error = true;
+        	}
+        }
+        
+        //return (true);
+    }
+    
+    
+    
+    
+    @Override
+    public void itemStateChanged(ItemEvent item) 
+    {
+        
+        if (item.getSource() == Boxstepbystep) 
+        {
+            if (item.getStateChange() == ItemEvent.SELECTED) 
+            {
+                Bnextstep.setEnabled(true);
+                automaton.setStepByStep(true);
+                 this.console.insertLine("Step-by-Step Mode : ENABLED", "Normal");
+            } 
+            else 
+            {
+                Bnextstep.setEnabled(false);
+                automaton.setStepByStep(false);
+                 this.console.insertLine("Step-by-Step Mode : DISABLED", "Normal");
+            }
+        }
+        if (item.getSource() == Boxautoack) 
+        {
+            if (item.getStateChange() == ItemEvent.SELECTED) 
+            {
+                automaton.setAutoAck(true);
+                 this.console.insertLine("ACK Auto Mode : ENABLED", "Normal");
+            } 
+            else 
+            {
+                automaton.setAutoAck(false);
+                this.console.insertLine("ACK Auto Mode : DISABLED", "Normal");
+            }
+        }
+    }
+	
 }
