@@ -7,6 +7,8 @@ public class Automate {
 	 /* attribut de l'etat courant */
 	 private int etatCourant = Ressource.ETAT_CLOSED;
 	 private TCB tcb = null;
+	 private Client cli = null;
+	 private ServeurThread ser = null;
 	 private boolean mod = false;
 	 
 	 public boolean getMod() {
@@ -29,58 +31,21 @@ public class Automate {
 	  return this.etatCourant;
 	 }
  
-	 public void changerEtat () throws InterruptedException
-	 {
-		 /* CHANGER LE TRUE */
-		 while (true)
-		 {
-			 afficheEtatCourant();
-			 switch (this.etatCourant)
-			 {
-			 case Ressource.ETAT_CLOSE_WAIT :
-				 System.out.println("Etat actuel : ETAT_CLOSE_WAIT");
-				 break;
-			 case Ressource.ETAT_CLOSED :
-				 this.closedToSynSent();
-				 break;
-			 case Ressource.ETAT_CLOSING :
-				 System.out.println("Etat actuel : ETAT_CLOSING");
-				 break;  
-			 case Ressource.ETAT_ESTABLISHED :
-				 System.out.println("Etat actuel : ETAT_ESTABLISHED");
-				 break;
-			 case Ressource.ETAT_FIN_WAIT_1 :
-				 System.out.println("Etat actuel : ETAT_FIN_WAIT_1");
-				 break;  
-			 case Ressource.ETAT_FIN_WAIT_2 :
-				 System.out.println("Etat actuel : ETAT_FIN_WAIT_2");
-				 break;  
-			 case Ressource.ETAT_LAST_ACK :
-				 System.out.println("Etat actuel : ETAT_LAST_ACK");
-				 break;  
-			 case Ressource.ETAT_LISTEN :
-				 this.listenToSynRec();
-				 System.out.println("Etat actuel : ETAT_LISTEN");
-				 break;  
-			 case Ressource.ETAT_SYN_RCVD :
-				 this.synRevToEstablished();
-				 System.out.println("Etat actuel : ETAT_SYN_RCVD");
-				 break;  
-			 case Ressource.ETAT_SYN_SENT :
-				 this.synSentToEstablished();
-				 //System.out.println("Etat actuel : ETAT_SYN_SENT");
-				 System.out.println("youpi ?");
-				 break;  
-			 case Ressource.ETAT_TIME_WAIT :
-				 System.out.println("Etat actuel : ETAT_TIME_WAIT");
-				 break;  
-			 default :
-				 System.out.println("Etat inconnu");
-				 break;
-			 }
-			 Thread.sleep(100);
-		 }
-	 }
+		public Client getCli() {
+			return cli;
+		}
+
+		public void setCli(Client cli) {
+			this.cli = cli;
+		}
+
+		public ServeurThread getSer() {
+			return ser;
+		}
+
+		public void setSer(ServeurThread ser) {
+			this.ser = ser;
+		}
  
  
  	/*change l'etat de l'automate, prend en compte la continuit� des etats (on peut pas passer de closed a established)*/
@@ -243,7 +208,7 @@ public class Automate {
 	
 	public static Automate open(int port_local, String ip_ser, int port_ser, boolean mode)
 	{
-		// mode True = client
+		//mode True = client
 		System.out.println(1);
 		if (mode == true)
 		{
@@ -253,7 +218,8 @@ public class Automate {
 			try
 			{
 				c = GestionDesConnexions.get().lancerClient("toto", ip_ser, port_ser);
-				auto.setTcb(new TCB(c));
+				//auto.setTcb(new TCB(c));
+				auto.setCli(c);
 				auto.etatCourant = Ressource.ETAT_CLOSED;
 				/*wait*/
 				auto.changerEtat();
@@ -263,7 +229,9 @@ public class Automate {
 				System.out.println("J'ai tout casse");
 			}
 			return auto;
+			
 		}
+		//mode false = serveur
 		return null;
 	}
 	
@@ -280,6 +248,7 @@ public class Automate {
 			p.CreerPaquet();
 			this.getTcb().getConnexion().ecrirePaquet(p);
 			this.etatCourant = Ressource.ETAT_SYN_SENT;
+			
 		}
 	}
 
@@ -346,5 +315,75 @@ public class Automate {
 		}
 	}
 	
+	public void listenToClosed ()
+	{
+		if (this.getTcb().getConnexion().isAlive() == false)
+			this.etatCourant = Ressource.ETAT_CLOSED;
+			
+	}
+	 public void changerEtat () throws InterruptedException
+	 {
+		 /* CHANGER LE TRUE */
+		 while (true)
+		 {
+			 afficheEtatCourant();
+			 switch (this.etatCourant)
+			 {
+			 case Ressource.ETAT_CLOSE_WAIT :
+				// System.out.println("Etat actuel : ETAT_CLOSE_WAIT");
+				 break;
+			 case Ressource.ETAT_CLOSED :
+				 this.closedToListen();
+				 this.closedToSynSent();
+				 if (this.etatCourant == Ressource.ETAT_LISTEN)
+				 {
+					this.setTcb(new TCB(getSer()));
+				 }
+				 break;
+			 case Ressource.ETAT_CLOSING :
+				 //System.out.println("Etat actuel : ETAT_CLOSING");
+				 break;  
+			 case Ressource.ETAT_ESTABLISHED :
+				 //System.out.println("Etat actuel : ETAT_ESTABLISHED");
+				 break;
+			 case Ressource.ETAT_FIN_WAIT_1 :
+				 //System.out.println("Etat actuel : ETAT_FIN_WAIT_1");
+				 break;  
+			 case Ressource.ETAT_FIN_WAIT_2 :
+				 //System.out.println("Etat actuel : ETAT_FIN_WAIT_2");
+				 break;  
+			 case Ressource.ETAT_LAST_ACK :
+				 //System.out.println("Etat actuel : ETAT_LAST_ACK");
+				 break;  
+			 case Ressource.ETAT_LISTEN :
+				 this.listenToSynRec();
+				 this.listenToClosed();
+				 if (this.etatCourant == Ressource.ETAT_LISTEN)
+				 {
+					 this.setTcb(new TCB(getCli()));
+				 }
+				 System.out.println("Etat actuel : ETAT_LISTEN");
+				 break;  
+			 case Ressource.ETAT_SYN_RCVD :
+				 this.synRevToEstablished();
+				 System.out.println("Etat actuel : ETAT_SYN_RCVD");
+				 break;  
+			 case Ressource.ETAT_SYN_SENT :
+				 this.synSentToEstablished();
+				 //System.out.println("Etat actuel : ETAT_SYN_SENT");
+				 System.out.println("youpi ?");
+				 break;  
+			 case Ressource.ETAT_TIME_WAIT :
+				 //System.out.println("Etat actuel : ETAT_TIME_WAIT");
+				 break;  
+			 default :
+				 //System.out.println("Etat inconnu");
+				 break;
+			 }
+			 Thread.sleep(100);
+		 }
+	 }
+
+
  
 }
