@@ -144,18 +144,18 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
    
     public void loadMapTextures() 
     {
-        map_textures.put("CLOSED_INIT", loadTexture("Automate/closed.png", "Automate/closed-on.png"));
-        map_textures.put("LISTEN", loadTexture("Automate/listen.png", "Automate/listen.png"));
-        map_textures.put("SYN_RCVD", loadTexture("Automate/synrcvd.png", "Automate/closed.png"));
-        map_textures.put("SYN_SENT", loadTexture("Automate/synsent.png", "Automate/synsent.png"));
-        map_textures.put("ESTAB", loadTexture("Automate/estab.png", "Automate/estab.png"));
-        map_textures.put("FIN_WAIT_1", loadTexture("Automate/finwait1.png", "Automate/finwait1.png"));
-        map_textures.put("CLOSE_WAIT", loadTexture("Automate/closewait.png", "Automate/closewait.png"));
-        map_textures.put("FIN_WAIT_2", loadTexture("Automate/finwait2.png", "Automate/finwait2.png"));
-        map_textures.put("CLOSING", loadTexture("Automate/closing.png", "Automate/closing.png"));
-        map_textures.put("LAST_ACK", loadTexture("Automate/lastack.png", "Automate/lastack.png"));
-        map_textures.put("TIME_WAIT", loadTexture("Automate/timewait.png", "Automate/timewait.png"));
-        map_textures.put("CLOSED", loadTexture("Automate/closed.png", "Automate/closed.png"));
+        map_textures.put("CLOSED_INIT", loadTexture("./Automate/closed.png", "./Automate/closed.png"));
+        map_textures.put("LISTEN", loadTexture("./Automate/listen.png", "./Automate/listen.png"));
+        map_textures.put("SYN_RCVD", loadTexture("./Automate/synrcvd.png", "./Automate/closed.png"));
+        map_textures.put("SYN_SENT", loadTexture("./Automate/synsent.png", "./Automate/synsent.png"));
+        map_textures.put("ESTAB", loadTexture("./Automate/estab.png", "./Automate/estab.png"));
+        map_textures.put("FIN_WAIT_1", loadTexture("./Automate/finwait1.png", "./Automate/finwait1.png"));
+        map_textures.put("CLOSE_WAIT", loadTexture("./Automate/closewait.png", "./Automate/closewait.png"));
+        map_textures.put("FIN_WAIT_2", loadTexture("./Automate/finwait2.png", "./Automate/finwait2.png"));
+        map_textures.put("CLOSING", loadTexture("./Automate/closing.png", "./Automate/closing.png"));
+        map_textures.put("LAST_ACK", loadTexture("./Automate/lastack.png", "./Automate/lastack.png"));
+        map_textures.put("TIME_WAIT", loadTexture("./Automate/timewait.png", "./Automate/timewait.png"));
+        map_textures.put("CLOSED", loadTexture("./Automate/closed.png", "./Automate/closed.png"));
     }
 
     /**
