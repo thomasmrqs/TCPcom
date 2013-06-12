@@ -1,4 +1,3 @@
-package graphique;
 public class GUIManager 
 {
 

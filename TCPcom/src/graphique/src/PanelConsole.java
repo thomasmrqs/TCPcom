@@ -1,4 +1,3 @@
-//package graphique;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -231,12 +230,15 @@ import javax.swing.text.StyledDocument;
 	     * @param str La chaîne de caractère à écrire
 	     * @param style Le style à utiliser
 	     */
-	    public  void insertLine(String str, String style) {
+	    public  void insertLine(String str, String style) 
+	    {
 	        try {
 	            textPane.scrollRectToVisible(textPane.modelToView(textPane.getDocument().getLength()));
 	            insertPrompt();
 	            doc.insertString(doc.getLength(), str + "\n", textPane.getStyle(style));
-	        } catch (BadLocationException e) {
+	        } 
+	        catch (BadLocationException e) 
+	        {
 	            e.printStackTrace();
 	        }
 	    }
@@ -244,10 +246,14 @@ import javax.swing.text.StyledDocument;
 	    /**
 	     * Vide tout le texte de la console
 	     */
-	    public void clearConsole() {
-	        try {
+	    public void clearConsole() 
+	    {
+	        try 
+	        {
 	            doc.remove(0, doc.getLength());
-	        } catch (Exception e) {
+	        } 
+	        catch (Exception e) 
+	        {
 	            // TODO: handle exception
 	        }
 	    }
