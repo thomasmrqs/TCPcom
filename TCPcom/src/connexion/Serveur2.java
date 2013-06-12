@@ -1,0 +1,74 @@
+package connexion;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+
+public class Serveur2 extends Connexion {
+
+	@Override
+	protected void initialisation() throws IOException {
+		// TODO Auto-generated method stub
+		run();
+	}
+
+	ArrayList<ServeurThread> liste;
+    private int port;
+    private int id;
+    private boolean alive;
+    private ServerSocket socket;
+
+    public Serveur2(String nom, int port)
+    {
+        //Retirer le nom du serveur => identifiant géré automatiquement
+        this.alive = true;
+        this.liste = new ArrayList();
+        this.port = port;
+        this.id = Utils.creerIdentifiantServeur();
+    }
+
+    public ArrayList<ServeurThread> getListe() {
+        return this.liste;
+    }
+
+    @Override
+    public String toString() {
+        return "Serveur " + this.id + " : ";
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    @Override
+    public void run() {
+        ServeurThread st;
+        int idServeurThread = 0;
+        try {
+            this.socket = new ServerSocket(this.port);
+            System.out.println(this + " en écoute");
+            while (this.alive) {
+                st = new ServeurThread(this.id, ++idServeurThread, this.socket.accept());
+                this.liste.add(st);
+                GestionDesConnexions.get().ajouterConnexion(st);
+                (new Thread(st)).start();
+            }
+        } catch (IOException ex) {
+            System.out.println("Erreur de " + this + " IOException");
+            this.alive = false;
+        }
+    }
+
+    public void fermer() {
+        try {
+            this.alive = false;
+            for (Connexion c : this.liste) {
+                c.fermerConnexion();
+            }
+            this.socket.close();
+        } catch (Exception ex) {
+           System.out.println("Erreur de " + this  + " lors de la fermeture");
+        }
+    }
+
+}
