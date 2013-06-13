@@ -9,7 +9,7 @@ public class Automate {
 	 private TCB tcb = null;
 	 private Client cli = null;
 	 private ServeurThread ser = null;
-	 private boolean mod = false;
+	 private boolean mod = false; //Si true = client
 	 
 	 public boolean getMod() {
 		return mod;
@@ -321,6 +321,112 @@ public class Automate {
 			this.etatCourant = Ressource.ETAT_CLOSED;
 			
 	}
+	
+	public void estaToCloseWait ()
+	{
+		if (this.getMod() == true)
+			return;
+		Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+		if (p == null)
+		{
+			return;
+		}
+		if (p.ObtenirFin() == true)
+		{
+			p.MettreAck(true);
+			p.CreerPaquet();
+			this.getTcb().getConnexion().ecrirePaquet(p);
+			this.etatCourant = Ressource.ETAT_CLOSE_WAIT;
+		}
+	}
+	
+	public void estaToFinWait1 ()
+	{
+		if (this.getMod() == true)
+		{		
+			int port_ser = this.getTcb().getConnexion().portDistant;
+			Paquet p = new Paquet (100005, port_ser);
+			p.MettreFin(true);
+			p.CreerPaquet();
+			this.getTcb().getConnexion().ecrirePaquet(p);
+			this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
+			
+		}
+	}
+	
+	public void finWait1ToFinWait2 ()
+	{
+		if (this.getMod() != true)
+			return;
+		Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+		if (p == null)
+			return;
+		if (p.ObtenirFin() == true)
+		{
+			if (p.ObtenirAck() == true)
+			{
+				this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
+			}
+		}
+	}
+	
+	/****************************/
+	/* GREGGGGGGGGGGGGGGGGGGGGGG*/
+	/*****************************/
+	
+	public void closeWaitToLastAck ()
+	{
+		if (this.getMod() == true)
+			return;
+		int port_cli = this.getTcb().getConnexion().portDistant;
+		Paquet p = new Paquet (100005, port_cli);
+		p.MettreFin(true);
+		p.CreerPaquet();
+		this.getTcb().getConnexion().ecrirePaquet(p);
+		this.etatCourant = Ressource.ETAT_LAST_ACK;
+		
+	}
+	
+	public void finWait2ToTimeWait ()
+	{
+		/*******************************/
+		/*          TIMER              */
+		/*******************************/
+		
+		return;
+	}
+	
+	public void timeWaitToClosed ()
+	{
+		if (this.getMod() != true)
+			return;
+		Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+		if (p == null)
+			return;
+		if (p.ObtenirFin() == true)
+		{
+			p.MettreAck(true);
+			p.CreerPaquet();
+			this.getTcb().getConnexion().ecrirePaquet(p);
+			this.etatCourant = Ressource.ETAT_TIME_WAIT;
+		}		
+	}
+	public void lastAckToClosed ()
+	{
+		if (this.getMod() == true)
+			return;
+		Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+		if (p == null)
+			return;
+		if (p.ObtenirFin() == true)
+		{
+			if (p.ObtenirAck() == true)
+			{
+				this.etatCourant = Ressource.ETAT_CLOSED;
+			}
+		}
+	}
+	
 	 public void changerEtat () throws InterruptedException
 	 {
 		 /* CHANGER LE TRUE */
@@ -330,6 +436,7 @@ public class Automate {
 			 switch (this.etatCourant)
 			 {
 			 case Ressource.ETAT_CLOSE_WAIT :
+				 this.closeWaitToLastAck ();
 				// System.out.println("Etat actuel : ETAT_CLOSE_WAIT");
 				 break;
 			 case Ressource.ETAT_CLOSED :
@@ -344,15 +451,25 @@ public class Automate {
 				 //System.out.println("Etat actuel : ETAT_CLOSING");
 				 break;  
 			 case Ressource.ETAT_ESTABLISHED :
+				 this.estaToCloseWait();
+				 
+				 
+				 // Si j'envoie une commande close 
+				 // Rajouter ici la commande close !!!!!!!!
+				 this.estaToFinWait1 ();
+				 
 				 //System.out.println("Etat actuel : ETAT_ESTABLISHED");
 				 break;
 			 case Ressource.ETAT_FIN_WAIT_1 :
+				 this.finWait1ToFinWait2 ();
 				 //System.out.println("Etat actuel : ETAT_FIN_WAIT_1");
 				 break;  
 			 case Ressource.ETAT_FIN_WAIT_2 :
+				 this.finWait2ToTimeWait ();
 				 //System.out.println("Etat actuel : ETAT_FIN_WAIT_2");
 				 break;  
 			 case Ressource.ETAT_LAST_ACK :
+				 this.lastAckToClosed ();
 				 //System.out.println("Etat actuel : ETAT_LAST_ACK");
 				 break;  
 			 case Ressource.ETAT_LISTEN :
@@ -374,6 +491,7 @@ public class Automate {
 				 System.out.println("youpi ?");
 				 break;  
 			 case Ressource.ETAT_TIME_WAIT :
+				 this.timeWaitToClosed();
 				 //System.out.println("Etat actuel : ETAT_TIME_WAIT");
 				 break;  
 			 default :
