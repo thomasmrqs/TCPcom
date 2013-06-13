@@ -79,11 +79,13 @@ import javax.swing.text.StyledDocument;
 		
 		
 		
+
 	 private static	StyledDocument doc;
 	 private	static MyTextPane textPane;
 	 private  static JScrollPane scrollPane;
 	 private   JButton Bclear, BcmdField;
 	 private   JComboBox cmdField;
+
 
 	    /**
 	     * Constructeur
@@ -324,7 +326,6 @@ import javax.swing.text.StyledDocument;
 	            		CheckSumFrame chf = new CheckSumFrame();
 	            	}
 	                insertLine((String)cmdField.getSelectedItem(), "White Bold");
-	                System.out.println(cmdField.getSelectedIndex());
 	                //cmdField.setText("");
 	            }
 	        }
