@@ -60,7 +60,7 @@ public class GUI extends JFrame
 	private Boolean connect = false;
 	private Boolean clientflag = false;
 	private Boolean serverflag = false;
-	private Boolean sbsflag = false;
+	private static Boolean sbsflag = false;
 	private Boolean defaultflag = false;
 	private Boolean sslflag = false;
 	private JOptionPane jop1 = null;
@@ -223,6 +223,7 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 				{
 					// TODO Auto-generated method stub
 					sbs_actionPerformed(e);
+					
 					//new PanelSend();
 					//System.out.println("connect");
 				}
@@ -358,6 +359,46 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 		//splash.splash();
 		GUI gui = new GUI();
 		gui.CreateTCPJMenuBar();
+	}
+
+
+
+
+
+
+
+	public JButton getSbs() {
+		return sbs;
+	}
+
+
+
+
+
+
+
+	public void setSbs(JButton sbs) {
+		this.sbs = sbs;
+	}
+
+
+
+
+
+
+
+	public static Boolean getSbsflag() {
+		return sbsflag;
+	}
+
+
+
+
+
+
+
+	public static void setSbsflag(Boolean sbsflag) {
+		GUI.sbsflag = sbsflag;
 	}
 
 	/*@Override

@@ -33,7 +33,7 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
     JComboBox listStates = null;
     JButton Bnextstep;
     JCheckBox Boxstepbystep, Boxautoack;
-  Automaton automaton = Automaton.getInstance();
+  private Automaton automaton =  new Automaton();    // Automaton.getInstance();
     String[] automate_states = new String[]{"", "CLOSED_INIT", "LISTEN", "SYN_RCVD", "SYN_SENT", "ESTAB",
         "FIN_WAIT_1", "CLOSE_WAIT", "FIN_WAIT_2", "CLOSING",
         "LAST_ACK", "TIME_WAIT", "CLOSED"};
@@ -42,6 +42,8 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
     private String state = null;
     private Boolean error = false;
     private PanelConsole console = null;
+    //private AutomateConditions conditions = null;
+    private Boolean stepon = true;
     
     /**
      * Constructeur du panneau automate
@@ -53,6 +55,7 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
         this.console = console;
     	setLayout(null);
         state = new String();
+      //  conditions = new AutomateConditions();
         setBounds(620, 20, 2000,800//(int)getToolkit().getScreenSize().getWidth() + 200,  (int)getToolkit().getScreenSize().getHeight()-150);
 );
         // chargement de l'automate
@@ -145,17 +148,17 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
     public void loadMapTextures() 
     {
         map_textures.put("CLOSED_INIT", loadTexture("Automate/closed.png", "Automate/closed-on.png"));
-        map_textures.put("LISTEN", loadTexture("Automate/listen.png", "Automate/listen.png"));
-        map_textures.put("SYN_RCVD", loadTexture("Automate/synrcvd.png", "Automate/closed.png"));
-        map_textures.put("SYN_SENT", loadTexture("Automate/synsent.png", "Automate/synsent.png"));
-        map_textures.put("ESTAB", loadTexture("Automate/estab.png", "Automate/estab.png"));
-        map_textures.put("FIN_WAIT_1", loadTexture("Automate/finwait1.png", "Automate/finwait1.png"));
-        map_textures.put("CLOSE_WAIT", loadTexture("Automate/closewait.png", "Automate/closewait.png"));
-        map_textures.put("FIN_WAIT_2", loadTexture("Automate/finwait2.png", "Automate/finwait2.png"));
-        map_textures.put("CLOSING", loadTexture("Automate/closing.png", "Automate/closing.png"));
-        map_textures.put("LAST_ACK", loadTexture("Automate/lastack.png", "Automate/lastack.png"));
-        map_textures.put("TIME_WAIT", loadTexture("Automate/timewait.png", "Automate/timewait.png"));
-        map_textures.put("CLOSED", loadTexture("Automate/closed.png", "Automate/closed.png"));
+        map_textures.put("LISTEN", loadTexture("Automate/listen.png", "Automate/listen-on.png"));
+        map_textures.put("SYN_RCVD", loadTexture("Automate/synrcvd.png", "Automate/synrcvd-on.png"));
+        map_textures.put("SYN_SENT", loadTexture("Automate/synsent.png", "Automate/synsent-on.png"));
+        map_textures.put("ESTAB", loadTexture("Automate/estab.png", "Automate/estab-on.png"));
+        map_textures.put("FIN_WAIT_1", loadTexture("Automate/finwait1.png", "Automate/finwait-1-on.png"));
+        map_textures.put("CLOSE_WAIT", loadTexture("Automate/closewait.png", "Automate/closewait-on.png"));
+        map_textures.put("FIN_WAIT_2", loadTexture("Automate/finwait2.png", "Automate/finwait-2-on.png"));
+        map_textures.put("CLOSING", loadTexture("Automate/closing.png", "Automate/closing-on.png"));
+        map_textures.put("LAST_ACK", loadTexture("Automate/lastack.png", "Automate/lastack-on.png"));
+        map_textures.put("TIME_WAIT", loadTexture("Automate/timewait.png", "Automate/timewait-on.png"));
+        map_textures.put("CLOSED", loadTexture("Automate/closed.png", "Automate/closed-on.png"));
     }
 
     /**
@@ -570,7 +573,7 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
     public void update_states(String state_active) 
     {
         String key;
-        //state_active = "SYN_RCVD";
+        //state_active = "LISTEN";
         for (Iterator<String> i = map_jlabels.keySet().iterator(); i.hasNext();) {
             key = i.next();
             if (key.equals(state_active)) 
@@ -627,60 +630,82 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
     public void actionPerformed(ActionEvent action) 
     {
         
-        if (action.getSource() == Bnextstep && automaton.getStepByStep() == true)
+        if (action.getSource() == Bnextstep &&  (GUI.getSbsflag() == true ||  automaton.getboxStepByStep() == true))
         {
-        	if (automaton.getClosed1() == true)
+        	//if (automaton.getClosed1() == false)
+        	//	System.out.println("FAUX");
+        	
+        	if (automaton.getClosed1() == true && stepon == true)
         	{
         		update_states("CLOSED_INIT");
+        		System.out.println("toto");
+        		stepon = false;
         		//automaton.setClosed1(false);
+        		automaton.setClosed1(false);
+        		//automaton.setListen(true);
+        		
         	}
         	else if (automaton.getAutoAck() == true)
         	{	
-        		this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		this.console.insertLine("Cannot switched state to : CLOSED INIT", "Normal");
         		
         		error = true;
+        		System.out.println("FAUX11");
         	}
-        	if (automaton.getListen() == true)
+        	if (automaton.getListen() == true && stepon == true)
         	{
         		update_states("LISTEN");
         		//return (automaton.getListen());
+        		stepon = false;
+        		automaton.setListen(false);
         	}
-        	else if (automaton.getAutoAck() == true  && !automaton.getClosed1() == true)
+        	//if (error == false)
+        	//	System.out.println("FAUX3");
+        	else if (automaton.getAutoAck() == true)
         	{
-        		 this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		 this.console.insertLine("Cannot switched state to : LISTEN", "Normal");
         		System.out.println("OK1");
         		//return (automaton.getListen());
         		error = true;
         	}
         	
-        	if (automaton.getSynrcvd() == true)
+        	if (automaton.getSynrcvd() == true && stepon == false)
         	{
         		update_states("SYN_RCVD");
+        		stepon = true;
+        		automaton.setSynrcvd(false);
+        		
         		//return (automaton.getSynrcvd());
         	}
         	else if (automaton.getAutoAck() == true  && error == false)
         	{
-        	   this.console.insertLine("Cannot switched state to : next state", "Normal");
+        	   this.console.insertLine("Cannot switched state to : SYN RCVD", "Normal");
         		//return (automaton.getSynrcvd());
-        		error = true;
+        	   System.out.println("FAUX12");
+        	   error = true;
+        	   
         	}
-        	if (automaton.getSynsent() == true)
+        	if (automaton.getSynsent() == true && stepon == false)
         	{
         		update_states("SYN_SENT");
+        		stepon = true;
+        		automaton.setSynsent(false);
         	}
         	else if (automaton.getAutoAck() == true  && error == false)
         	{
-        		this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		this.console.insertLine("Cannot switched state to : SYN SENT", "Normal");
         		//return (automaton.getSynsent());
         		error = true;
         	}
-        	if (automaton.getEstab() == true)
+        	if (automaton.getEstab() == true && stepon == false)
         	{
         		update_states("ESTAB");
+        		stepon = true;
+        		automaton.setEstab(false);
         	}
-        	else if (automaton.getAutoAck() == true  && error == false )
+        	else if (automaton.getAutoAck() == true && error == false)
         	{
-        		 this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		 this.console.insertLine("Cannot switched state to : ESTAB next state", "Normal");
         		//return (automaton.getEstab());
         		error = true;
         	}
@@ -688,71 +713,81 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
         	if (automaton.getFinwait1() == true)
         	{
         		update_states("FIN_WAIT_1");
+        		stepon = true;
+        		automaton.setFinwait1(false);
         	}
         	else if (automaton.getAutoAck() == true  && error == false)
         	{
-        		this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		this.console.insertLine("Cannot switched state to : FIN WAIT-1 next state", "Normal");
         		//return (automaton.getFinwait1());
         		error = true;
         	}
         	
-        	if (automaton.getFinwait2() == true )
+        	if (automaton.getFinwait2() == true && stepon == false)
         	{
         		update_states("FIN_WAIT_2");
+        		stepon = true;
+        		automaton.setFinwait2(false);
         	}
         	else if (automaton.getAutoAck() == true && error == false)
         	{
-        		this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		this.console.insertLine("Cannot switched state to : FIN WAIT-2 next state", "Normal");
         		//return (automaton.getFinwait2());
         		error = true;
         	}
         	
-        	if (automaton.getClosing() == true)
+        	if (automaton.getClosing() == true && stepon == false)
         	{
         		update_states("CLOSING");
+        		stepon = true;
+        		automaton.setClosing(false);
         	}
-        	else if (automaton.getAutoAck() == true && error == false)
+        	else if (automaton.getAutoAck() == true && error == false) 
         	{
-        	   this.console.insertLine("Cannot switched state to : next state", "Normal");
+        	   this.console.insertLine("Cannot switched state to : CLOSING", "Normal");
         		//return (automaton.getClosing());
         		error = true;
         	}
         	
-        	if (automaton.getLastack() == true)
+        	if (automaton.getLastack() == true && stepon == false)
         	{
         		update_states("LAST_ACK");
+        		stepon = true;
+        		automaton.setLastack(false);
         	}
         	else if (automaton.getAutoAck() == true && error == false)
         	{
-        		 this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		 this.console.insertLine("Cannot switched state to : LAST ACK next state", "Normal");
         		//return (automaton.getLastack());
         		error = true;
         	}
         	
-        	if (automaton.getTimewait() == true)
+        	if (automaton.getTimewait() == true && stepon == false)
         	{
         		update_states("TIME_WAIT");
+        		stepon = true;
+        		automaton.setTimewait(false);
         	}
         	else if (automaton.getAutoAck() == true  && error == false)
         	{
-        		 this.console.insertLine("Cannot switched state to : next state", "Normal");
+        		 this.console.insertLine("Cannot switched state to : TIME WAIT next state", "Normal");
         		//return (automaton.getTimewait());
         		error = true;
         	}
         	
-        	if (automaton.getClosed2() == true)
+        	if (automaton.getClosed2() == true && stepon == false)
         	{
         		update_states("CLOSED");
+        		stepon = true;
+        		automaton.setClosed2(false);
         	}
         	else if (automaton.getAutoAck() == true  && error == false)
         	{
-        		 this.console.insertLine("Cannot switched state to : CLOSED", "Normal");
+        		 this.console.insertLine("Cannot switched state to : CLOSED END", "Normal");
         		//return (automaton.getClosed2());
         		error = true;
         	}
-        }
-        
-        //return (true);
+        }    
     }
     
     
@@ -767,7 +802,7 @@ public class PanelAutomate extends JPanel implements ActionListener, ItemListene
             if (item.getStateChange() == ItemEvent.SELECTED) 
             {
                 Bnextstep.setEnabled(true);
-                automaton.setStepByStep(true);
+                automaton.boxSetStepByStep(true);
                  this.console.insertLine("Step-by-Step Mode : ENABLED", "Normal");
             } 
             else 

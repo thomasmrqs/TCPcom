@@ -6,7 +6,7 @@ public class Automaton
 	private static Automaton instance;
 	
 	private Boolean closed1 = true;
-	private Boolean listen = false;
+	private Boolean listen = true;
 	private Boolean estab = false;
 	private Boolean closing = false;
 	private Boolean timewait = false;
@@ -17,7 +17,7 @@ public class Automaton
 	private Boolean synrcvd = false;
 	private Boolean finwait1 = false;
 	private Boolean finwait2 = false;
-	private Boolean setStepByStep = false;
+	private Boolean boxStepByStep = false;
 	private Boolean AutoAck = false;
 	private Boolean StepByStep = false;
 	
@@ -298,8 +298,8 @@ public class Automaton
 
 
 
-	public Boolean getSetStepByStep() {
-		return setStepByStep;
+	public Boolean getboxStepByStep() {
+		return boxStepByStep;
 	}
 
 
@@ -308,8 +308,8 @@ public class Automaton
 
 
 
-	public void setSetStepByStep(Boolean setStepByStep) {
-		this.setStepByStep = setStepByStep;
+	public void boxSetStepByStep(Boolean boxStepByStep) {
+		this.boxStepByStep = boxStepByStep;
 	}
 
 
