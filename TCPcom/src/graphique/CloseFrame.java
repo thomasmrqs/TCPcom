@@ -76,7 +76,7 @@ public class CloseFrame extends JFrame{
 					/*************** Fonction close
 					 * param: NomLocale
 					 *   ***********************/
-					
+					closeframe.dispose();
 				}
 				}
 			}

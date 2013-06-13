@@ -124,7 +124,7 @@ public class SendFrame extends JFrame{
 					 * 		  Urg
 					 * 		  Push
 					 *  ***********************/
-					
+					sendframe.dispose();
 				}
 				}
 			}

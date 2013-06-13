@@ -112,7 +112,7 @@ private PanelSend panelsend = null;
 			// TODO Auto-generated method stub
 			if (e.getSource() == EnvoiBtnAccept){
 				/*************** Fonction connection ***********************/
-				
+				conectframe.dispose();
 			}
 			}
 		}

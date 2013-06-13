@@ -76,7 +76,7 @@ public class StatusFrame extends JFrame {
 					/*************** Fonction status
 					 * param: NomLocale
 					 *   ***********************/
-					
+					statusframe.dispose();
 				}
 				}
 			}

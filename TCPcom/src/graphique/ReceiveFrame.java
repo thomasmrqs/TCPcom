@@ -97,7 +97,7 @@ public class ReceiveFrame extends JFrame{
 					 * 		  AddrTampon
 					 * 		  Compteur
 					 *   ***********************/
-					
+					receiveframe.dispose();
 				}
 				}
 			}
