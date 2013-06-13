@@ -108,6 +108,7 @@ private PanelSend panelsend = null;
 				System.out.println(Socket.getText());
 				System.out.println(Tempo.getText());
 				System.out.println(Actif.isSelected());
+				openframe.dispose();
 			}
 			}
 		}

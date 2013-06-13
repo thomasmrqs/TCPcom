@@ -76,7 +76,7 @@ public class AbordFrame extends JFrame{
 					 * param: NomLocale
 					 *  ***********************/
 					
-					
+					abordframe.dispose();
 				}
 				}
 			}

@@ -77,7 +77,7 @@ public class CheckSumFrame extends JFrame {
 					
 					/*************** Fonction chg chksum ***********************/
 					
-					
+					chksumframe.dispose();
 				}
 				}
 			}
