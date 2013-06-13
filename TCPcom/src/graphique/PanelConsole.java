@@ -79,11 +79,11 @@ import javax.swing.text.StyledDocument;
 		
 		
 		
-	static	StyledDocument doc;
-		static MyTextPane textPane;
-	   static JScrollPane scrollPane;
-	    JButton Bclear, BcmdField;
-	    JComboBox cmdField;
+	 private static	StyledDocument doc;
+	 private	static MyTextPane textPane;
+	 private  static JScrollPane scrollPane;
+	 private   JButton Bclear, BcmdField;
+	 private   JComboBox cmdField;
 
 	    /**
 	     * Constructeur
@@ -118,7 +118,7 @@ import javax.swing.text.StyledDocument;
 
 	        // ajout champ de texte commande
 	        String[] option = {"Open", "Send", "Receive", "Close", "Status", "Abort", "Checksum"};
-	        cmdField = new JComboBox(option);//On crée la liste en lui donnant un tableau d'opérateurs
+	        cmdField = new JComboBox(option);//On crï¿½e la liste en lui donnant un tableau d'opï¿½rateurs
 			cmdField.setPreferredSize(new Dimension(100,25));//On lui donne une taille
 			cmdField.setBounds(150, 600, 173, 26);
 			add(cmdField);

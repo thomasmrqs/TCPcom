@@ -41,10 +41,10 @@ private PanelSend panelsend = null;
     private class PanelSend extends JPanel implements ActionListener
    {
 	   
-    	JButton EnvoiBtnAccept;
-	    JCheckBox Actif;
-	    JLabel LabPortLocale, LabSocket, LabTempo;
-	    BoundedTextField PortLocale, Socket, Tempo;
+    	private JButton EnvoiBtnAccept;
+	    private JCheckBox Actif;
+	    private JLabel LabPortLocale, LabSocket, LabTempo;
+	    private BoundedTextField PortLocale, Socket, Tempo;
 
 	    /**
 	     * Constructeur
@@ -88,7 +88,7 @@ private PanelSend panelsend = null;
 	        // Actif Passif
 	        Actif = new JCheckBox("Actif");
 	        Actif.setFont(new Font("arial", 0, 12));
-	        Actif.setBounds(10, 140, 52, 20);
+	        Actif.setBounds(10, 140, 60, 20);
 	        add(Actif);
 
 

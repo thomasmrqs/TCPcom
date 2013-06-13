@@ -28,7 +28,7 @@ public class CheckSumFrame extends JFrame {
 	    {
 	        chksumframe = new JFrame();
 	        panelsend = new PanelSend();
-	        chksumframe.setTitle("Abord");
+	        chksumframe.setTitle("Abort");
 	        chksumframe.setLocationRelativeTo(null);
 	        chksumframe.setSize(400, 150);
 	        chksumframe.setContentPane(panelsend);
@@ -69,9 +69,11 @@ public class CheckSumFrame extends JFrame {
 
 		    }
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
 				// TODO Auto-generated method stub
-				if (e.getSource() == EnvoiBtnAccept){
+				if (e.getSource() == EnvoiBtnAccept)
+				{
 					
 					/*************** Fonction chg chksum ***********************/
 					

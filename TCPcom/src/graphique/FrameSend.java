@@ -50,10 +50,10 @@ private PanelSend panelsend = null;
 	   private class PanelSend extends JPanel implements ActionListener
 	   {
 		   
-		   JButton EnvoiBtnAccept, EnvoiBtnParcourir;
-		    JCheckBox EnvoiURG, EnvoiACK, EnvoiPSH, EnvoiSYN, EnvoiRST, EnvoiFIN;
-		    JLabel EnvoiTitle, EnvoiLabNum, EnvoiLabAqu, EnvoiLabOff, EnvoiLabFen, EnvoiLabChk, EnvoiLabPtr, EnvoiLabData;
-		    BoundedTextField EnvoiNum, EnvoiAqu, EnvoiOff, EnvoiFen, EnvoiChk, EnvoiPtr, EnvoiData;
+		   private JButton EnvoiBtnAccept, EnvoiBtnParcourir;
+		    private JCheckBox EnvoiURG, EnvoiACK, EnvoiPSH, EnvoiSYN, EnvoiRST, EnvoiFIN;
+		    private JLabel EnvoiTitle, EnvoiLabNum, EnvoiLabAqu, EnvoiLabOff, EnvoiLabFen, EnvoiLabChk, EnvoiLabPtr, EnvoiLabData;
+		  private  BoundedTextField EnvoiNum, EnvoiAqu, EnvoiOff, EnvoiFen, EnvoiChk, EnvoiPtr, EnvoiData;
 		    private ImageIcon imageParcourir = null;
 		    private File fichierselectionne = null;
 		    /**
@@ -97,7 +97,7 @@ private PanelSend panelsend = null;
 		        // URG
 		        EnvoiURG = new JCheckBox("URG");
 		        EnvoiURG.setFont(new Font("arial", 0, 12));
-		        EnvoiURG.setBounds(138, 103, 52, 20);
+		        EnvoiURG.setBounds(138, 103, 60, 20);
 		        add(EnvoiURG);
 
 		        // ACK
@@ -109,25 +109,25 @@ private PanelSend panelsend = null;
 		        // PSH
 		        EnvoiPSH = new JCheckBox("PSH");
 		        EnvoiPSH.setFont(new Font("arial", 0, 12));
-		        EnvoiPSH.setBounds(248, 103, 52, 20);
+		        EnvoiPSH.setBounds(248, 103, 60, 20);
 		        add(EnvoiPSH);
 
 		        // RST
 		        EnvoiRST = new JCheckBox("RST");
 		        EnvoiRST.setFont(new Font("arial", 0, 12));
-		        EnvoiRST.setBounds(138, 123, 52, 20);
+		        EnvoiRST.setBounds(138, 123, 60, 20);
 		        add(EnvoiRST);
 
 		        // SYN
 		        EnvoiSYN = new JCheckBox("SYN");
 		        EnvoiSYN.setFont(new Font("arial", 0, 12));
-		        EnvoiSYN.setBounds(193, 123, 52, 20);
+		        EnvoiSYN.setBounds(193, 123, 60, 20);
 		        add(EnvoiSYN);
 
 		        // FIN
 		        EnvoiFIN = new JCheckBox("FIN");
 		        EnvoiFIN.setFont(new Font("arial", 0, 12));
-		        EnvoiFIN.setBounds(248, 123, 52, 20);
+		        EnvoiFIN.setBounds(248, 123, 60, 20);
 		        add(EnvoiFIN);
 
 		        // Fenêtre

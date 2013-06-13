@@ -27,7 +27,7 @@ public class AbordFrame extends JFrame{
 	    {
 	        abordframe = new JFrame();
 	        panelsend = new PanelSend();
-	        abordframe.setTitle("Abord");
+	        abordframe.setTitle("Abort");
 	        abordframe.setLocationRelativeTo(null);
 	        abordframe.setSize(400, 150);
 	        abordframe.setContentPane(panelsend);

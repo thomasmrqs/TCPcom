@@ -38,10 +38,10 @@ public class SendFrame extends JFrame{
 	    private class PanelSend extends JPanel implements ActionListener
 	   {
 		   
-	    	JButton EnvoiBtnAccept;
-		    JCheckBox Push, Urg;
-		    JLabel LabNomLocale, LabAddrTampon, LabTempo, LabCompteur;
-		    BoundedTextField NomLocale, AddrTampon, Tempo, Compteur;
+	    	private JButton EnvoiBtnAccept;
+		    private JCheckBox Push, Urg;
+		    private JLabel LabNomLocale, LabAddrTampon, LabTempo, LabCompteur;
+		    private BoundedTextField NomLocale, AddrTampon, Tempo, Compteur;
 
 		    /**
 		     * Constructeur
@@ -94,13 +94,13 @@ public class SendFrame extends JFrame{
 		        // Push
 		        Push = new JCheckBox("Push");
 		        Push.setFont(new Font("arial", 0, 12));
-		        Push.setBounds(10, 200, 52, 20);
+		        Push.setBounds(10, 200, 60, 20);
 		        add(Push);
 		        
 		        // Urg
 		        Urg = new JCheckBox("Urg");
 		        Urg.setFont(new Font("arial", 0, 12));
-		        Urg.setBounds(150, 200, 52, 20);
+		        Urg.setBounds(150, 200, 60, 20);
 		        add(Urg);
 
 
@@ -112,9 +112,11 @@ public class SendFrame extends JFrame{
 
 		    }
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
 				// TODO Auto-generated method stub
-				if (e.getSource() == EnvoiBtnAccept){
+				if (e.getSource() == EnvoiBtnAccept)
+				{
 					
 					/*************** Fonction send
 					 * param: NomLocale
