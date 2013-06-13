@@ -28,7 +28,7 @@ public class CheckSumFrame extends JFrame {
 	    {
 	        chksumframe = new JFrame();
 	        panelsend = new PanelSend();
-	        chksumframe.setTitle("Abort");
+	        chksumframe.setTitle("CheckSum");
 	        chksumframe.setLocationRelativeTo(null);
 	        chksumframe.setSize(400, 150);
 	        chksumframe.setContentPane(panelsend);
