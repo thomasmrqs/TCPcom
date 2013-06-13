@@ -106,7 +106,7 @@ public class GUI extends JFrame
 		console.setLocation(10, 5);
 		cards.add(console);
 		cards.add(automate);
-		fenetre.setTitle("                                                                            TRANSMISSION          CONTROL           PROTOCOL    (T.C.P)      ");
+		fenetre.setTitle(" TRANSMISSION CONTROL PROTOCOL (T.C.P)");
 		fenetre.setBackground(Color.BLACK);
 			fenetre.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("IMAGES/connect.gif")));
 			
@@ -278,7 +278,7 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 		PanelAutomate automate_tmp = new PanelAutomate(console_tmp);
 		console_tmp.setLocation(10, 5);					
 		JPanel cards_tmp = new JPanel (new CardLayout());
-		cards_tmp.setLayout(null);					
+		cards_tmp.setLayout(null);
 		cards_tmp.add(console_tmp);
 		cards_tmp.add(automate_tmp);
 		if (count_serv == 1)		
