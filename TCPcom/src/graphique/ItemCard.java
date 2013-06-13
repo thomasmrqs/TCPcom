@@ -1,3 +1,4 @@
+package graphique;
 import java.awt.CardLayout;
 import java.util.logging.ConsoleHandler;
 

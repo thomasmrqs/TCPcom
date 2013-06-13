@@ -1,3 +1,4 @@
+package graphique;
 //package graphique;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -138,10 +139,10 @@ public class GUI extends JFrame
 		defaultOption.setText("Default Option");
 		manuel.setText("manuel".toUpperCase());
 		help.setText("AIDE & FEEDBACK");
-connexion.setIcon(new ImageIcon(getClass().getResource("/IMAGES/connect.gif")));
-	deconnexion.setIcon(new ImageIcon(getClass().getResource("/IMAGES/deconnexion.jpeg")));
-	manuel.setIcon(new ImageIcon(getClass().getResource("/IMAGES/manuel.png")));
-	help.setIcon(new ImageIcon(getClass().getResource("/IMAGES/aide.png")));
+connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")));
+	deconnexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/deconnexion.jpeg")));
+	manuel.setIcon(new ImageIcon(getClass().getResource("./IMAGES/manuel.png")));
+	help.setIcon(new ImageIcon(getClass().getResource("./IMAGES/aide.png")));
 		connexion.setMnemonic(KeyEvent.VK_C);
 		deconnexion.setMnemonic(KeyEvent.VK_D);
 		manuel.setMnemonic(KeyEvent.VK_M);
@@ -263,7 +264,7 @@ connexion.setIcon(new ImageIcon(getClass().getResource("/IMAGES/connect.gif")));
 		
 					ItemCard card = new ItemCard();
 					
-					onglets.addTab("Client " + count++, new ImageIcon(getClass().getResource("/IMAGES/Client.gif")) , card, "Client");
+					onglets.addTab("Client " + count++, new ImageIcon(getClass().getResource("./IMAGES/Client.gif")) , card, "Client");
 					
 					card = null;
 			
@@ -281,11 +282,11 @@ connexion.setIcon(new ImageIcon(getClass().getResource("/IMAGES/connect.gif")));
 		cards_tmp.add(console_tmp);
 		cards_tmp.add(automate_tmp);
 		if (count_serv == 1)		
-			onglets.addTab("Serveur " + count_serv, new ImageIcon(getClass().getResource("/IMAGES/network.png")) , cards_tmp, "Serveur");
+			onglets.addTab("Serveur " + count_serv, new ImageIcon(getClass().getResource("./IMAGES/network.png")) , cards_tmp, "Serveur");
 		if (count_serv > count_serv_tmp)
 			{
 					
-					onglets.addTab("Serveur " + count_serv, new ImageIcon(getClass().getResource("/IMAGES/network.png")) , cards_tmp, "Serveur");
+					onglets.addTab("Serveur " + count_serv, new ImageIcon(getClass().getResource("./IMAGES/network.png")) , cards_tmp, "Serveur");
 			}
 		count_serv_tmp = count_serv;
 		count_serv += 1;

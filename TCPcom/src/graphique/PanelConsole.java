@@ -1,5 +1,7 @@
+package graphique;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +13,8 @@ import java.util.GregorianCalendar;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -79,7 +83,7 @@ import javax.swing.text.StyledDocument;
 		static MyTextPane textPane;
 	   static JScrollPane scrollPane;
 	    JButton Bclear, BcmdField;
-	    JTextField cmdField;
+	    JComboBox cmdField;
 
 	    /**
 	     * Constructeur
@@ -113,9 +117,18 @@ import javax.swing.text.StyledDocument;
 	        add(Bclear);
 
 	        // ajout champ de texte commande
-	        cmdField = new JTextField();
-	        cmdField.setBounds(150, 600, 173, 26);
-	        add(cmdField);
+	        String[] option = {"Open", "Abort", "Close"};
+	        cmdField = new JComboBox(option);//On crée la liste en lui donnant un tableau d'opérateurs
+			cmdField.setPreferredSize(new Dimension(100,25));//On lui donne une taille
+			cmdField.setBounds(150, 600, 173, 26);
+			add(cmdField);
+	        
+	        
+	    //    JOptionPane opt = new JOptionPane();
+	    //    opt.showInternalConfirmDialog(null, "option", "test", opt.QUESTION_MESSAGE, option);
+	    //    cmdField = new JTextField();
+	    //    cmdField.setBounds(150, 600, 173, 26);
+	    //    add(cmdField);
 
 	        // ajout bouton validation commande
 	        BcmdField = new JButton("OK");
@@ -287,10 +300,10 @@ import javax.swing.text.StyledDocument;
 	        }
 	        if (e.getSource() == BcmdField) 
 	        {
-	            if (!(cmdField.getText().equals(""))) 
+	            if (!(cmdField.equals(""))) 
 	            {
-	                insertLine(cmdField.getText(), "White Bold");
-	                cmdField.setText("");
+	                insertLine((String)cmdField.getSelectedItem(), "White Bold");
+	                //cmdField.setText("");
 	            }
 	        }
 	    }

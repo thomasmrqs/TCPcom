@@ -1,3 +1,4 @@
+package graphique;
 
 import java.awt.Toolkit;
 import javax.swing.JTextField;

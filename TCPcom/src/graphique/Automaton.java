@@ -1,3 +1,4 @@
+package graphique;
 
 public class Automaton 
 {
