@@ -47,7 +47,7 @@ private PanelSend panelsend = null;
 	        framesend.setVisible(true);
 	    }
 	    
-	   public class PanelSend extends JPanel implements ActionListener
+	   private class PanelSend extends JPanel implements ActionListener
 	   {
 		   
 		   JButton EnvoiBtnAccept, EnvoiBtnParcourir;

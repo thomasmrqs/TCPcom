@@ -117,7 +117,7 @@ import javax.swing.text.StyledDocument;
 	        add(Bclear);
 
 	        // ajout champ de texte commande
-	        String[] option = {"Open", "Send", "Receive", "Close", "Status", "Abort"};
+	        String[] option = {"Open", "Send", "Receive", "Close", "Status", "Abort", "Checksum"};
 	        cmdField = new JComboBox(option);//On crée la liste en lui donnant un tableau d'opérateurs
 			cmdField.setPreferredSize(new Dimension(100,25));//On lui donne une taille
 			cmdField.setBounds(150, 600, 173, 26);
@@ -307,6 +307,21 @@ import javax.swing.text.StyledDocument;
 	            	}
 	            	if (cmdField.getSelectedIndex() == 1){ // commande Send
 	            		SendFrame sf = new SendFrame();
+	            	}
+	            	if (cmdField.getSelectedIndex() == 2){ // commande Receive
+	            		ReceiveFrame rf = new ReceiveFrame();
+	            	}
+	            	if (cmdField.getSelectedIndex() == 3){ // commande Close
+	            		CloseFrame cf = new CloseFrame();
+	            	}
+	            	if (cmdField.getSelectedIndex() == 4){ // commande Status
+	            		StatusFrame cf = new StatusFrame();
+	            	}
+	            	if (cmdField.getSelectedIndex() == 5){ // commande Abort
+	            		AbordFrame af = new AbordFrame();
+	            	}
+	            	if (cmdField.getSelectedIndex() == 6){ // commande Checksum
+	            		CheckSumFrame chf = new CheckSumFrame();
 	            	}
 	                insertLine((String)cmdField.getSelectedItem(), "White Bold");
 	                System.out.println(cmdField.getSelectedIndex());

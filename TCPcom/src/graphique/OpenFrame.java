@@ -1,6 +1,5 @@
 package graphique;
 
-import graphique.FrameSend.PanelSend;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -39,7 +38,7 @@ private PanelSend panelsend = null;
         openframe.setVisible(true);
     }
     
-    public class PanelSend extends JPanel implements ActionListener
+    private class PanelSend extends JPanel implements ActionListener
    {
 	   
     	JButton EnvoiBtnAccept;
@@ -105,7 +104,6 @@ private PanelSend panelsend = null;
 			// TODO Auto-generated method stub
 			if (e.getSource() == EnvoiBtnAccept){
 				/*************** Fonction open ***********************/
-				System.out.println(PortLocale.getText());
 			}
 			}
 		}
