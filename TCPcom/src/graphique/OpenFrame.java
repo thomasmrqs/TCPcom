@@ -104,6 +104,10 @@ private PanelSend panelsend = null;
 			// TODO Auto-generated method stub
 			if (e.getSource() == EnvoiBtnAccept){
 				/*************** Fonction open ***********************/
+				System.out.println(PortLocale.getText());
+				System.out.println(Socket.getText());
+				System.out.println(Tempo.getText());
+				System.out.println(Actif.isSelected());
 			}
 			}
 		}

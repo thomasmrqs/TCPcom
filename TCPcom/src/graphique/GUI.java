@@ -169,9 +169,11 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 				public void actionPerformed(ActionEvent e) 
 				{
 					// TODO Auto-generated method stub
-					if ((clientflag || serverflag) && (sbsflag || sslflag || defaultflag))
+					if ((clientflag || serverflag) && (sbsflag || sslflag || defaultflag)){
 					
 						valider_actionPerformed(e);
+						ConnectionFrame cof = new ConnectionFrame();
+					}
 					//new PanelSend();
 					//System.out.println("connect");
 					else
@@ -190,6 +192,7 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 				{
 					// TODO Auto-generated method stub
 					client_actionPerformed(e);
+					//
 					//new PanelSend();
 					//System.out.println("connect");
 				}

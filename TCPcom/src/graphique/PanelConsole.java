@@ -80,10 +80,10 @@ import javax.swing.text.StyledDocument;
 		
 		
 	static	StyledDocument doc;
-		static MyTextPane textPane;
-	   static JScrollPane scrollPane;
-	    JButton Bclear, BcmdField;
-	    JComboBox cmdField;
+		private static MyTextPane textPane;
+	   private static JScrollPane scrollPane;
+	    private JButton Bclear, BcmdField;
+	    private JComboBox cmdField;
 
 	    /**
 	     * Constructeur
@@ -324,7 +324,6 @@ import javax.swing.text.StyledDocument;
 	            		CheckSumFrame chf = new CheckSumFrame();
 	            	}
 	                insertLine((String)cmdField.getSelectedItem(), "White Bold");
-	                System.out.println(cmdField.getSelectedIndex());
 	                //cmdField.setText("");
 	            }
 	        }
