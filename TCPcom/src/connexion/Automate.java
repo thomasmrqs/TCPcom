@@ -1,8 +1,10 @@
 package connexion;
 
 import Ressource.Ressource;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Automate {
+public class Automate implements Runnable {
 
     /* attribut de l'etat courant */
     private int etatCourant = Ressource.ETAT_CLOSED;
@@ -152,28 +154,29 @@ public class Automate {
         this.tcb = tcb;
     }
 
-    public static Automate open(int port_local, String ip_ser, int port_ser, boolean mode) {
+    public static boolean open(Automate a, int port_local, String ip_ser, int port_ser, boolean mode) {
         //mode True = client
-        Automate auto = new Automate();
-        auto.setMod(mode);
+        a.setMod(mode);
         if (mode == true) {//Client
-            auto.setMod(mode);
             Client c = null;
             try {
                 c = GestionDesConnexions.get().lancerClient("toto", ip_ser, port_ser);
-                auto.setTcb(new TCB(c));
-                auto.connexion = c;
-                auto.etatCourant = Ressource.ETAT_CLOSED;
-                auto.changerEtat();
+                a.setTcb(new TCB(c));
+                a.connexion = c;
+                a.etatCourant = Ressource.ETAT_CLOSED;
             } catch (Exception e) {
                 System.out.println("Automate::J'ai tout casse");
             }
-            return auto;
-
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return c.isAlive();
         }
         //Dans le cas d'un serveur
-        auto.etatCourant = Ressource.ETAT_LISTEN;
-        return null;
+        a.etatCourant = Ressource.ETAT_LISTEN;
+        return true;
     }
 
     /* Changer l'�tat de CLOSED � SYN_SENT */
@@ -370,7 +373,7 @@ public class Automate {
                     // System.out.println("Etat actuel : ETAT_CLOSE_WAIT");
                     break;
                 case Ressource.ETAT_CLOSED:
-                    
+
                     this.closedToListen();
                     this.closedToSynSent();
                     break;
@@ -404,7 +407,7 @@ public class Automate {
                     this.listenToClosed();
                     //if (this.etatCourant == Ressource.ETAT_LISTEN) {
                     //    this.setTcb(new TCB(getCli()));
-                   // }
+                    // }
                     System.out.println("Etat actuel : ETAT_LISTEN");
                     break;
                 case Ressource.ETAT_SYN_RCVD:
@@ -425,6 +428,17 @@ public class Automate {
                     break;
             }
             Thread.sleep(100);
+        }
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                this.changerEtat();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
