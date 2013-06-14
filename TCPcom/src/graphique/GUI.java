@@ -17,6 +17,7 @@ import java.awt.image.ImageProducer;
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -64,8 +65,8 @@ public class GUI extends JFrame
 	private Boolean defaultflag = false;
 	private Boolean sslflag = false;
 	private JOptionPane jop1 = null;
-	private PanelConsole console = null;
-	private PanelAutomate automate = null;
+	private ClientConsolePanel console = null;
+	private ClientAutomatePanel automate = null;
 	private JPanel imagedefond = null;
 	private JPanel contain = null;
 	private JTabbedPane onglets = null;
@@ -100,8 +101,8 @@ public class GUI extends JFrame
 		defaultOption = new JButton();
 		jop1 = new JOptionPane();
 		cards = new JPanel (new CardLayout());
-		console = new PanelConsole();
-		automate = new PanelAutomate(console);
+		console = new ClientConsolePanel();
+		automate = new ClientAutomatePanel(console);
 		cards.setLayout(null);
 		console.setLocation(10, 5);
 		cards.add(console);
@@ -125,7 +126,7 @@ public class GUI extends JFrame
 
 	
 	
-	public void CreateTCPJMenuBar ()
+	public void CreateTCPJMenuBar () throws SocketException
 	{
 		connexion.setText("connexion".toUpperCase());
 		deconnexion.setText("deconnexion".toUpperCase());
@@ -161,7 +162,7 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 		option.add(ssl);
 		option.add(defaultOption);
 		
-			valider.addActionListener(new java.awt.event.ActionListener()
+			valider.addActionListener(new java.awt.event.ActionListener() 
 			{
 
 				@SuppressWarnings("static-access")
@@ -171,7 +172,13 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 					// TODO Auto-generated method stub
 					if ((clientflag || serverflag) && (sbsflag || sslflag || defaultflag)){
 					
-						valider_actionPerformed(e);
+						try {
+							valider_actionPerformed(e);
+						} catch (SocketException e1) 
+						{
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						ConnectionFrame cof = new ConnectionFrame();
 					}
 					//new PanelSend();
@@ -263,7 +270,7 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 	}
 	
 	
-	public void creer_onglet_client()
+	public void creer_onglet_client() throws SocketException
 	{
 		
 					ItemCard card = new ItemCard();
@@ -276,10 +283,10 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 			
 	}
 	
-	public void creer_onglet_server()
+	public void creer_onglet_server() throws SocketException
 	{
-		PanelConsole console_tmp = new PanelConsole();
-		PanelAutomate automate_tmp = new PanelAutomate(console_tmp);
+		ClientConsolePanel console_tmp = new ClientConsolePanel();
+		ClientAutomatePanel automate_tmp = new ClientAutomatePanel(console_tmp);
 		console_tmp.setLocation(10, 5);					
 		JPanel cards_tmp = new JPanel (new CardLayout());
 		cards_tmp.setLayout(null);
@@ -298,7 +305,7 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 		cards_tmp = null;
 	}
 	
-	public void valider_actionPerformed(ActionEvent e)
+	public void valider_actionPerformed(ActionEvent e) throws SocketException
 	{
 		if (clientflag == true)
 		{

@@ -182,7 +182,7 @@ private PanelSend panelsend = null;
                
                 BufferedImage image;
 				try {
-					image = ImageIO.read(PanelConsole.class.getResource("Automate/black-world.jpg"));
+					image = ImageIO.read(ClientConsolePanel.class.getResource("Automate/black-world.jpg"));
 					 g.drawImage(image, 0, 0, this);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

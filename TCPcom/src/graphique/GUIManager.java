@@ -1,10 +1,13 @@
 package graphique;
+
+import java.net.SocketException;
+
 public class GUIManager 
 {
 
     private static GUIManager instance;
-    PanelAutomate panel_automate;
-    PanelConsole panel_console;
+    ClientAutomatePanel panel_automate;
+    ClientConsolePanel panel_console;
 
     public static GUIManager getInstance() 
     {
@@ -19,14 +22,14 @@ public class GUIManager
   
 
     
-    public void setPanelConsole(PanelConsole panelconsole) 
+    public void setPanelConsole(ClientConsolePanel panelconsole) 
     {
         panel_console = panelconsole;
     }
 
-    public PanelConsole getPanelConsole() 
+    public ClientConsolePanel getPanelConsole() throws SocketException
     {
-        return new PanelConsole();
+        return new ClientConsolePanel();
     }
 
    
