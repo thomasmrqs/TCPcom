@@ -154,9 +154,9 @@ public class Automate {
 
     public static Automate open(int port_local, String ip_ser, int port_ser, boolean mode) {
         //mode True = client
-        System.out.println(1);
         Automate auto = new Automate();
-        if (mode == true) {
+        auto.setMod(mode);
+        if (mode == true) {//Client
             auto.setMod(mode);
             Client c = null;
             try {
@@ -164,16 +164,14 @@ public class Automate {
                 auto.setTcb(new TCB(c));
                 auto.connexion = c;
                 auto.etatCourant = Ressource.ETAT_CLOSED;
-                /*wait*/
                 auto.changerEtat();
             } catch (Exception e) {
-                System.out.println("J'ai tout casse");
+                System.out.println("Automate::J'ai tout casse");
             }
             return auto;
 
         }
-        //mode false = serveur
-        auto.setMod(false);
+        //Dans le cas d'un serveur
         auto.etatCourant = Ressource.ETAT_LISTEN;
         return null;
     }
