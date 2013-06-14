@@ -32,5 +32,6 @@ public class TestConnexionErreur {
         Serveur s = GestionDesConnexions.get().lancerServeur(null, 4500);
         Thread.sleep(1000);
         System.out.println(c.isAlive() == false);
+        System.exit(0);
     }
 }

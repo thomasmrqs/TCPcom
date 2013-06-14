@@ -19,7 +19,7 @@ public class Serveur implements Runnable {
     @Deprecated
     public Serveur(String nom, int port) {
         //Retirer le nom du serveur => identifiant géré automatiquement
-        this.alive = true;
+        this.alive = false;
         this.liste = new ArrayList();
         this.port = port;
         this.id = Utils.creerIdentifiantServeur();
@@ -45,6 +45,7 @@ public class Serveur implements Runnable {
         try {
             this.socket = new ServerSocket(this.port);
             System.out.println(this + " en écoute");
+            this.alive = true;
             while (this.alive) {
                 st = new ServeurThread(this.id, ++idServeurThread, this.socket.accept());
                 this.liste.add(st);

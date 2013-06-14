@@ -55,16 +55,11 @@ public class Client extends Connexion {
 
     @Override
     protected void initialisation() throws IOException {
-        try {
             this.socket = new Socket(InetAddress.getByName(this.ipDistante), this.portDistant, null, this.portLocal);
             this.portLocal = this.socket.getLocalPort();
             this.ipLocale = this.socket.getLocalAddress().getHostName();
             this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.out = new DataOutputStream(this.socket.getOutputStream());
-        } catch (Exception e) {
-            this.alive = false;
-            System.out.println("Erreur du client " + this.id + " " + e.getMessage());
-        }
     }
 
     public int getId() {

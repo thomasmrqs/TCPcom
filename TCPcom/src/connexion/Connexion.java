@@ -49,7 +49,7 @@ public abstract class Connexion implements Runnable {
     protected abstract void initialisation() throws IOException;
 
     public Connexion() {
-        this.alive = true;
+        this.alive = false;
         this.lecture = new Stack();
         this.ecriture = new Stack();
     }
@@ -59,18 +59,17 @@ public abstract class Connexion implements Runnable {
         System.out.println(this + " lance ");
         try {
             this.initialisation();
-        } catch (IOException ex) {
-            Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
+            this.alive = true;
             while (this.alive) {
                 Thread.sleep(10);
                 this.lectureEcriture();
             }
         } catch (IOException ex) {
-            Logger.getLogger(Serveur.class.getName()).log(Level.SEVERE, null, ex);
+            this.alive = false;
+            System.out.println("Connexion::" + this + " Erreure run()");
         } catch (Exception e) {
-            System.out.println(this + "Interuption lecture/ecriture Connexion " + e);
+            this.alive = false;
+            System.out.println("Connexion::" + this + " Erreure run()_Etape 2");
         }
     }
 
