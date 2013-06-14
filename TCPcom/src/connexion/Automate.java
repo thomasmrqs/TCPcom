@@ -210,15 +210,15 @@ public class Automate {
 	{
 		//mode True = client
 		System.out.println(1);
+		Automate auto = new Automate();
 		if (mode == true)
 		{
-			Automate auto = new Automate();
 			auto.setMod(mode);
 			Client c = null;
 			try
 			{
 				c = GestionDesConnexions.get().lancerClient("toto", ip_ser, port_ser);
-				//auto.setTcb(new TCB(c));
+				auto.setTcb(new TCB(c));
 				auto.setCli(c);
 				auto.etatCourant = Ressource.ETAT_CLOSED;
 				/*wait*/
@@ -232,6 +232,8 @@ public class Automate {
 			
 		}
 		//mode false = serveur
+		auto.setMod(false); 
+		auto.etatCourant = Ressource.ETAT_LISTEN;
 		return null;
 	}
 	
@@ -433,6 +435,7 @@ public class Automate {
 		 while (true)
 		 {
 			 afficheEtatCourant();
+			 System.out.println("before switch");
 			 switch (this.etatCourant)
 			 {
 			 case Ressource.ETAT_CLOSE_WAIT :
