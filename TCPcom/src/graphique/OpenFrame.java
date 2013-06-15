@@ -118,17 +118,17 @@ public class OpenFrame extends JFrame {
                 if (boundedPortDst.getText() != null && !boundedPortDst.getText().isEmpty()) {
                     portDistant = Integer.parseInt(boundedPortDst.getText());
                 }
+                
                 if (card.isClient()) {
 
                     card.getAutomate().open(portLocal, ipDistante, portDistant, true);
                     boolean succeed = card.getAutomate().getOpenOk();
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
-                        System.out.println("Client créé" + card.getAutomate().getTcb().getConnexion());
                         
-                        GUI.get().getSelectedPane().getConsole().insertLine("Client créé" + card.getAutomate().getTcb().getConnexion(), "Green");
+                        card.getConsole().insertLine("Client créé" + card.getAutomate().getTcb().getConnexion(), "Green");
                     } else {
-                        GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
+                        card.getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 } else {//Cas d'un serveur                    
                    
@@ -142,12 +142,13 @@ public class OpenFrame extends JFrame {
                         Logger.getLogger("OpenFrame::" + OpenFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     if (s.isAlive()) {
-                        GUI.get().getSelectedPane().getConsole().insertLine("Serveur créé", "Green");
-                        GUI.get().getSelectedPane().setServeur(s);
+                        card.getConsole().insertLine("Serveur créé", "Green");
+                        card.setServeur(s);
                     } else {
-                        GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
+                        card.getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 }
+                openframe.removeAll();
                 openframe.dispose();
             }
         }

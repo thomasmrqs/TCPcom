@@ -40,9 +40,9 @@ import java.text.SimpleDateFormat;
 @SuppressWarnings("serial")
 public class ClientConsolePanel extends JPanel implements ActionListener {
 
-    private static StyledDocument doc;
-    private static MyTextPane textPane;
-    private static JScrollPane scrollPane;
+    private  StyledDocument doc;
+    private  MyTextPane textPane;
+    private  JScrollPane scrollPane;
     private JButton Bclear, BcmdField;
     private JComboBox cmdField;
     private String networkstr = null;
