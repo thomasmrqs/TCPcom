@@ -494,7 +494,13 @@ public class Automate implements Runnable {
 
     @Override
     public String toString() {
-        return this.getTcb().getConnexion().ipLocale;
+        Connexion c = this.getTcb().getConnexion();
+        if (this.getTcb().getConnexion() instanceof Client){
+            Client cl = (Client) c;            
+            return "Client " + cl.getId();
+        }
+        ServeurThread st = (ServeurThread) c;        
+        return "Client_" + st.getId() + "_Server_" + st.getIdServeur();
     }
 
     @Override

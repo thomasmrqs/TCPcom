@@ -68,11 +68,11 @@ public class Serveur implements Runnable {
             while (this.alive) {
                 st = new ServeurThread(this.id, ++idServeurThread, this.socket.accept());
                 this.liste.add(st);
-                System.out.println("Je vais ajouter un client à mon serveur"); 
+                System.out.println("Je vais ajouter un client à mon serveur");
                 Automate a = new Automate();
-                a.setConnexion(st);                
+                a.setConnexion(st);
                 a.open(st.portLocal, this.ip_saisie, this.port_saisie, false);
-                (new Thread(a)).start();                
+                (new Thread(a)).start();
                 GUI.get().obtainCard(this).addClientToServeur(a);//Ajout du serveurThread                
                 GestionDesConnexions.get().ajouterConnexion(st);
                 (new Thread(st)).start();
@@ -91,7 +91,7 @@ public class Serveur implements Runnable {
             }
             this.socket.close();
         } catch (Exception ex) {
-           System.out.println("Erreur de " + this  + " lors de la fermeture");
+            System.out.println("Erreur de " + this + " lors de la fermeture");
         }
     }
 }

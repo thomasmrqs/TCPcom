@@ -126,7 +126,7 @@ public class OpenFrame extends JFrame {
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
                         
-                        card.getConsole().insertLine("Client créé" + card.getAutomate().getTcb().getConnexion(), "Green");
+                        card.getConsole().insertLine("Client créé", "Green");
                     } else {
                         card.getConsole().insertLine("Informations de connexion invalides", "Red");
                     }

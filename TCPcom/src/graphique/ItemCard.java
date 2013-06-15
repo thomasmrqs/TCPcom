@@ -85,13 +85,17 @@ public class ItemCard extends JPanel //implements Runnable
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    /*  Automate a = (Automate) e.getItem();
-                     ClientConsolePanel console = GUI.get().obtainCard(serveur).getMap_console().get(a);
-                     System.out.println("State Changed : " + console);
-                     GUI.get().obtainCard(serveur).remove(0);
-                     GUI.get().obtainCard(serveur).add(console, 0);
-                     GUI.get().obtainCard(serveur).invalidate();
-                     GUI.get().obtainCard(serveur).validate();*/
+                    Automate a = (Automate) e.getItem();
+                    ClientConsolePanel c = GUI.get().obtainCard(serveur).getMap_console().get(a);
+                    c.setLocation(10, 5);
+                    GUI.get().obtainCard(serveur).remove(0);
+                    GUI.get().obtainCard(serveur).add(c, 0);
+                    GUI.get().obtainCard(serveur).repaint();
+                   // c.setLayout(null);
+                    GUI.get().obtainCard(serveur).paintImmediately(675, 300, 600, 650);
+                  //  console.setR
+                    //GUI.get().obtainCard(serveur).invalidate();
+                    GUI.get().obtainCard(serveur).validate();
                 }
             }
         });

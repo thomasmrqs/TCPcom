@@ -245,7 +245,7 @@ public class ClientConsolePanel extends JPanel implements ActionListener {
             doc.insertString(doc.getLength(), getCurrentMin(), textPane.getStyle("Normal"));
             doc.insertString(doc.getLength(), "]", textPane.getStyle("Red"));
             doc.insertString(doc.getLength(), " ", textPane.getStyle("Normal"));
-            doc.insertString(doc.getLength(), ((this.isClient) ? "Client" : "Server") + ">", textPane.getStyle("Red"));
+            doc.insertString(doc.getLength(), ((this.isClient) ? "Client" : "Server") + "> ", textPane.getStyle("Red"));
         } catch (BadLocationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
