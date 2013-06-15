@@ -20,7 +20,7 @@ public class GUIManager {
     }
 
     public ClientConsolePanel getPanelConsole() throws SocketException {
-        return new ClientConsolePanel();
+        return new ClientConsolePanel(false);
     }
 
     private GUIManager() {

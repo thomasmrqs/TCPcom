@@ -123,11 +123,11 @@ public class GUI extends JFrame {
         defaultOption = new JButton();
         jop1 = new JOptionPane();
         cards = new JPanel(new CardLayout());
-        console = new ClientConsolePanel();
+        //console = new ClientConsolePanel();
         automate = new ClientAutomatePanel(console);
         cards.setLayout(null);
-        console.setLocation(10, 5);
-        cards.add(console);
+//        console.setLocation(10, 5);
+//        cards.add(console);
         cards.add(automate);
         fenetre.setTitle(" TRANSMISSION CONTROL PROTOCOL (T.C.P)");
         fenetre.setBackground(Color.BLACK);

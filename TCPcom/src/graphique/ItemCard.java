@@ -55,7 +55,7 @@ public class ItemCard extends JPanel //implements Runnable
         this.client = false;
         this.automate = null;
         this.serveur = null;
-        this.console = new ClientConsolePanel();
+        this.console = new ClientConsolePanel(this.client);
         console.setLocation(10, 5);
         this.panel_automate = new ClientAutomatePanel(console);
         this.setLayout(null);
@@ -75,7 +75,7 @@ public class ItemCard extends JPanel //implements Runnable
         this.client = true;
         this.automate = a;
         this.serveur = null;
-        this.console = new ClientConsolePanel();
+        this.console = new ClientConsolePanel(this.client);
         console.setLocation(10, 5);
         this.panel_automate = new ClientAutomatePanel(console);
         this.setLayout(null);
