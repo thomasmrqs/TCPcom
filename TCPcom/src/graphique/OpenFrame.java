@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 public class OpenFrame extends JFrame {
 
@@ -40,7 +41,6 @@ public class OpenFrame extends JFrame {
     private class PanelSend extends JPanel implements ActionListener {
 
         private JButton EnvoiBtnAccept;
-        private JCheckBox Actif;
         private JLabel LabPortLocale, LabTempo;
         private JLabel labelIpDst;
         private JLabel labelPortDst;
@@ -98,11 +98,6 @@ public class OpenFrame extends JFrame {
             add(LabTempo);
             add(Tempo);
 
-            // Actif Passif
-            Actif = new JCheckBox("Actif");
-            Actif.setFont(new Font("arial", 0, 12));
-            Actif.setBounds(10, 185, 60, 20);
-            add(Actif);
 
 
 
@@ -123,20 +118,20 @@ public class OpenFrame extends JFrame {
                 if (boundedPortDst.getText() != null && !boundedPortDst.getText().isEmpty()) {
                     portDistant = Integer.parseInt(boundedPortDst.getText());
                 }
+                
                 if (card.isClient()) {
 
                     card.getAutomate().open(portLocal, ipDistante, portDistant, true);
                     boolean succeed = card.getAutomate().getOpenOk();
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
-                        GUI.get().getSelectedPane().getConsole().insertLine("Client créé" + card.getAutomate().getTcb().getConnexion(), "Green");
+                        
+                        card.getConsole().insertLine("Client créé" + card.getAutomate().getTcb().getConnexion(), "Green");
                     } else {
-                        GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
+                        card.getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 } else {//Cas d'un serveur                    
-                    this.Actif.setEnabled(false);
-                    //this.Actif.setSelected(true);
-                    //this.set
+                   
                     Serveur s = GestionDesConnexions.get().lancerServeur("toto", portLocal);
                     s.setIp_saisie(ipDistante);
                     s.setPort_saisie(portDistant);
@@ -147,12 +142,13 @@ public class OpenFrame extends JFrame {
                         Logger.getLogger("OpenFrame::" + OpenFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     if (s.isAlive()) {
-                        GUI.get().getSelectedPane().getConsole().insertLine("Serveur créé", "Green");
-                        GUI.get().getSelectedPane().setServeur(s);
+                        card.getConsole().insertLine("Serveur créé", "Green");
+                        card.setServeur(s);
                     } else {
-                        GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
+                        card.getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 }
+                openframe.removeAll();
                 openframe.dispose();
             }
         }

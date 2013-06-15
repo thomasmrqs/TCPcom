@@ -7,14 +7,11 @@ import connexion.Automate;
 import connexion.Serveur;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -88,20 +85,23 @@ public class ItemCard extends JPanel //implements Runnable
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    Automate a = (Automate) e.getItem();
-                    ClientConsolePanel console = GUI.get().getSelectedPane().getMap_console().get(a);
-                    GUI.get().getSelectedPane().remove(0);
-                    GUI.get().getSelectedPane().add(console, 0);
+                    /*  Automate a = (Automate) e.getItem();
+                     ClientConsolePanel console = GUI.get().obtainCard(serveur).getMap_console().get(a);
+                     System.out.println("State Changed : " + console);
+                     GUI.get().obtainCard(serveur).remove(0);
+                     GUI.get().obtainCard(serveur).add(console, 0);
+                     GUI.get().obtainCard(serveur).invalidate();
+                     GUI.get().obtainCard(serveur).validate();*/
                 }
             }
         });
         nomComboBox.setBounds(500, 0, 140, 20);
         this.comboBoxServeur.setBounds(650, 0, 600, 20);
-         this.add(console);
+        this.add(console);
         this.add(nomComboBox);
         this.add(this.comboBoxServeur);
         /*Fin ComboBox*/
-       
+
         this.add(panel_automate);
     }
 
