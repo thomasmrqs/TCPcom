@@ -1,14 +1,14 @@
 package connexion;
 
 import Ressource.Ressource;
+
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Automate implements Runnable {
 
-	//test2
-    /* attribut de l'etat courant */
-    private int etatCourant = Ressource.ETAT_CLOSED;
+	private int etatCourant = Ressource.ETAT_CLOSED;
     private TCB tcb = null;
     private Connexion connexion;
     private boolean mod = false; //Si true = client
@@ -16,51 +16,15 @@ public class Automate implements Runnable {
     private int port_loc = 0;
     private String ip_dist = null;
     private boolean openOk = false;
+    private Stack<Paquet> bufferPaquet = null;
 
-    public boolean getMod() {
-        return mod;
-    }
-
-    public void setMod(boolean mode) {
-        this.mod = mode;
-    }
-
-    public int getPort_dist() {
-        return port_dist;
-    }
-
-    public void setPort_dist(int port_distant) {
-        this.port_dist = port_distant;
-    }
-
-    public int getPort_local() {
-        return port_loc;
-    }
-
-    public void setPort_local(int port_local) {
-        this.port_loc = port_local;
-    }
     
-    public String getIp_dist() {
-        return ip_dist;
+    public Automate()
+    {
+    	setBufferPaquet(new Stack<Paquet>());
     }
 
-    public void setIp_dist(String ip_distant) {
-        this.ip_dist = ip_distant;
-    }
-
-    public Automate() {
-    }
-
-    public void setEtatCourant(int etat) {
-        this.etatCourant = etat;
-    }
-
-    public int getEtatCourant() {
-        return this.etatCourant;
-    }
-
-    /*change l'etat de l'automate, prend en compte la continuit� des etats (on peut pas passer de closed a established)*/
+    /* change l'etat de l'automate, prend en compte la continuite des etats (on peut pas passer de closed a established) */
     public void validerChangementEtat(int etat) {
 
         if (this.etatCourant == Ressource.ETAT_CLOSED) {
@@ -136,7 +100,7 @@ public class Automate implements Runnable {
 
     public void afficheEtatCourant()
     {
-    	String state = ((this.getMod()) ? "client" : "serveur" );
+    	String state = ((this.getMod()) ? "client" : "serveur");
         switch (this.etatCourant)
         {
             case Ressource.ETAT_CLOSE_WAIT:
@@ -178,36 +142,37 @@ public class Automate implements Runnable {
         }
     }
 
-    public TCB getTcb() {
-        return tcb;
-    }
-
-    public void setTcb(TCB tcb) {
-        this.tcb = tcb;
-    }
-
-   public String open(int port_local, String ip_distant, int port_ser, boolean mode) {
+   public String open(int port_local, String ip_distant, int port_ser, boolean mode)
+   {
         //mode True = client
         this.setMod(mode);
         this.setIp_dist(ip_distant);
         this.setPort_local(port_local);
         this.setPort_dist(port_ser);
-        if (mode == true) {//Client
+        if (mode == true)
+        {//Client
             Client c = null;
-            try {
-                c = GestionDesConnexions.get().lancerClient("toto", ip_distant, port_ser);
+            try
+            {
+                c = GestionDesConnexions.get().lancerClient("toto", ip_distant, port_ser, port_local);
                 this.setTcb(new TCB(c));
                 this.connexion = c;
                 this.etatCourant = Ressource.ETAT_CLOSED;
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 System.out.println("Automate::J'ai tout casse");
             }
-            try {
+            
+            try
+            {
                 Thread.sleep(3000);
-            } catch (InterruptedException ex) {
+            }
+            catch (InterruptedException ex)
+            {
                 Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.getTcb().setNomLocalConnexion("loc" + this.getTcb().getConnexion().getIpLocale()+ ip_distant );
+            this.getTcb().setNomLocalConnexion("loc" + this.getTcb().getConnexion().getIpLocale() + ip_distant);
             this.setOpenOk(true);
             return getTcb().getNomLocalConnexion();
         }
@@ -217,7 +182,8 @@ public class Automate implements Runnable {
         	this.setTcb(new TCB (connexion));
         	this.etatCourant = Ressource.ETAT_LISTEN;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             System.out.println("Automate::Probleme serveur");
         }
         this.setOpenOk(true);
@@ -225,12 +191,11 @@ public class Automate implements Runnable {
         return getTcb().getNomLocalConnexion();
     }
 
-    /* Changer l'�tat de CLOSED � SYN_SENT */
-    public void closedToSynSent() {
-        if (this.getMod() == true) {
-            int port_ser = this.getTcb().getConnexion().portDistant;
-            /* CA FAIT TOUT CASSEEEEEE */
-            //int port_client = this.getTcb().getConnexion().socket.getLocalPort();
+    /* Changer l'etat de CLOSED a SYN_SENT */
+    public void closedToSynSent()
+    {
+        if (this.getMod())
+        {
             Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
             p.MettreSyn(true);
             p.CreerPaquet();
@@ -242,56 +207,57 @@ public class Automate implements Runnable {
 
     public void synSentToEstablished() 
     {
-    	//System.out.println("dans la fonction synSentToEstablished");
-        if (this.getMod() == false) {
+        if (!this.getMod())
+        {
             return;
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        if (p == null) {
+        if (p == null)
+        {
             return;
         }
-        if (p.ObtenirSyn() == true) {
-            if (p.ObtenirAck() == true) {
-                this.etatCourant = Ressource.ETAT_ESTABLISHED;
-                p.MettreSyn(false);
-                p.CreerPaquet();
-                this.getTcb().getConnexion().ecrirePaquet(p);
-            }
+        if (p.ObtenirSyn() && p.ObtenirAck())
+        {
+        	this.etatCourant = Ressource.ETAT_ESTABLISHED;
+        	p.MettreSyn(false);
+        	p.CreerPaquet();
+        	this.getTcb().getConnexion().ecrirePaquet(p);
         }
     }
 
-    public boolean getOpenOk() {
-        return openOk;
-    }
 
-    public void setOpenOk(boolean ok) {
-        this.openOk = ok;
-    }
-
-    public void closedToListen() {
-        if (this.getMod() == false) {
+    public void closedToListen()
+    {
+        if (!this.getMod())
+        {
             this.etatCourant = Ressource.ETAT_LISTEN;
         }
     }
 
-    public void listenToSynRec() {
-        if (this.getMod() == true) {
+    public void listenToSynRec()
+    {
+        if (this.getMod())
+        {
             return;
         }
-        if (this.getIp_dist() != null && this.getPort_dist() != 0) {
-            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist()) {
+        if (this.getIp_dist() != null && this.getPort_dist() != 0)
+        {
+            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist())
+            {
                 return;
             }
-            if (this.getTcb().getConnexion().getPortDistant() != this.getPort_dist()) {
+            if (this.getTcb().getConnexion().getPortDistant() != this.getPort_dist())
+            {
                 return;
             }
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        //p.AfficherPaquet();
-        if (p == null) {
+        if (p == null)
+        {
             return;
         }
-        if (p.ObtenirSyn() == true) {
+        if (p.ObtenirSyn())
+        {
             this.etatCourant = Ressource.ETAT_SYN_RCVD;
             p.MettreSyn(true);
             p.MettreAck(true);
@@ -300,43 +266,56 @@ public class Automate implements Runnable {
         }
     }
 
-    public void synRevToEstablished() {
-        if (this.getMod() == true) {
+    public void synRevToEstablished()
+    {
+        if (this.getMod())
+        {
             return;
         }
-        if (this.getIp_dist() != null && this.getPort_dist() != 0) {
-            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist()) {
+        if (this.getIp_dist() != null && this.getPort_dist() != 0)
+        {
+            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist())
+            {
                 return;
             }
-            if (this.getTcb().getConnexion().getPortDistant() != this.getPort_dist()) {
+            if (this.getTcb().getConnexion().getPortDistant() != this.getPort_dist())
+            {
                 return;
             }
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        if (p == null) {
+        if (p == null)
+        {
             return;
         }
-        if (p.ObtenirAck() == true) {
+        if (p.ObtenirAck())
+        {
             this.etatCourant = Ressource.ETAT_ESTABLISHED;
         }
     }
 
-    public void listenToClosed() {
-        if (this.getTcb().getConnexion().isAlive() == false) {
+    public void listenToClosed()
+    {
+        if (!this.getTcb().getConnexion().isAlive())
+        {
             this.etatCourant = Ressource.ETAT_CLOSED;
         }
 
     }
 
-    public void estaToCloseWait() {
-        if (this.getMod() == true) {
+    public void estaToCloseWait()
+    {
+        if (this.getMod())
+        {
             return;
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        if (p == null) {
+        if (p == null)
+        {
             return;
         }
-        if (p.ObtenirFin() == true) {
+        if (p.ObtenirFin())
+        {
             p.MettreAck(true);
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
@@ -344,10 +323,11 @@ public class Automate implements Runnable {
         }
     }
 
-    public void estaToFinWait1() {
-        if (this.getMod() == true) {
-            int port_ser = this.getTcb().getConnexion().portDistant;
-            Paquet p = new Paquet(100005, port_ser);
+    public void estaToFinWait1()
+    {
+        if (this.getMod())
+        {
+            Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
             p.MettreFin(true);
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
@@ -356,22 +336,28 @@ public class Automate implements Runnable {
         }
     }
 
-    public void finWait1ToFinWait2() {
-        if (this.getMod() != true) {
+    public void finWait1ToFinWait2()
+    {
+        if (!this.getMod())
+        {
             return;
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        if (p == null) {
+        if (p == null)
+        {
             return;
         }
-        if (p.ObtenirFin() == true) {
-            if (p.ObtenirAck() == true) {
+        if (p.ObtenirFin())
+        {
+            if (p.ObtenirAck())
+            {
                 this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
             }
         }
     }
 
-    public void setConnexion(Connexion connexion) {
+    public void setConnexion(Connexion connexion)
+    {
         this.connexion = connexion;
     }
 
@@ -382,12 +368,13 @@ public class Automate implements Runnable {
     /**
      * **************************
      */
-    public void closeWaitToLastAck() {
-        if (this.getMod() == true) {
+    public void closeWaitToLastAck()
+    {
+        if (this.getMod())
+        {
             return;
         }
-        int port_cli = this.getTcb().getConnexion().portDistant;
-        Paquet p = new Paquet(100005, port_cli);
+        Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
         p.MettreFin(true);
         p.CreerPaquet();
         this.getTcb().getConnexion().ecrirePaquet(p);
@@ -395,7 +382,8 @@ public class Automate implements Runnable {
 
     }
 
-    public void finWait2ToTimeWait() {
+    public void finWait2ToTimeWait()
+    {
         /**
          * ****************************
          */
@@ -406,15 +394,19 @@ public class Automate implements Runnable {
         return;
     }
 
-    public void timeWaitToClosed() {
-        if (this.getMod() != true) {
+    public void timeWaitToClosed()
+    {
+        if (!this.getMod())
+        {
             return;
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        if (p == null) {
+        if (p == null)
+        {
             return;
         }
-        if (p.ObtenirFin() == true) {
+        if (p.ObtenirFin())
+        {
             p.MettreAck(true);
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
@@ -422,30 +414,35 @@ public class Automate implements Runnable {
         }
     }
 
-    public void lastAckToClosed() {
-        if (this.getMod() == true) {
+    public void lastAckToClosed()
+    {
+        if (this.getMod() == true)
+        {
             return;
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        if (p == null) {
+        if (p == null)
+        {
             return;
         }
-        if (p.ObtenirFin() == true) {
-            if (p.ObtenirAck() == true) {
+        if (p.ObtenirFin() == true)
+        {
+            if (p.ObtenirAck() == true)
+            {
                 this.etatCourant = Ressource.ETAT_CLOSED;
             }
         }
     }
 
-    public void changerEtat() throws InterruptedException {
-        /* CHANGER LE TRUE */
-        while (true) {
+    public void changerEtat() throws InterruptedException
+    {
+        while (true)
+        {
             afficheEtatCourant();
-            //System.out.println("before switch");
-            switch (this.etatCourant) {
+            switch (this.etatCourant)
+            {
                 case Ressource.ETAT_CLOSE_WAIT:
                     this.closeWaitToLastAck();
-                    // System.out.println("Etat actuel : ETAT_CLOSE_WAIT");
                     break;
                 case Ressource.ETAT_CLOSED:
 
@@ -453,54 +450,37 @@ public class Automate implements Runnable {
                     this.closedToSynSent();
                     break;
                 case Ressource.ETAT_CLOSING:
-                    //System.out.println("Etat actuel : ETAT_CLOSING");
                     break;
                 case Ressource.ETAT_ESTABLISHED:
                     //this.estaToCloseWait();
 
-
                     // Si j'envoie une commande close 
                     // Rajouter ici la commande close !!!!!!!!
                     //this.estaToFinWait1();
-
-                    //System.out.println("Etat actuel : ETAT_ESTABLISHED");
                     break;
                 case Ressource.ETAT_FIN_WAIT_1:
                     this.finWait1ToFinWait2();
-                    //System.out.println("Etat actuel : ETAT_FIN_WAIT_1");
                     break;
                 case Ressource.ETAT_FIN_WAIT_2:
                     this.finWait2ToTimeWait();
-                    //System.out.println("Etat actuel : ETAT_FIN_WAIT_2");
                     break;
                 case Ressource.ETAT_LAST_ACK:
                     this.lastAckToClosed();
-                    //System.out.println("Etat actuel : ETAT_LAST_ACK");
                     break;
                 case Ressource.ETAT_LISTEN:
                     this.listenToSynRec();
                     this.listenToClosed();
-                    //if (this.etatCourant == Ressource.ETAT_LISTEN) {
-                    //    this.setTcb(new TCB(getCli()));
-                    // }
-                    //System.out.println("Etat actuel : ETAT_LISTEN");
                     break;
                 case Ressource.ETAT_SYN_RCVD:
                     this.synRevToEstablished();
-                    //System.out.println("Etat actuel : ETAT_SYN_RCVD");
                     break;
                 case Ressource.ETAT_SYN_SENT:
-                	//System.out.println("youpi ?");
                     this.synSentToEstablished();
-                    //System.out.println("Etat actuel : ETAT_SYN_SENT");
-                   
                     break;
                 case Ressource.ETAT_TIME_WAIT:
                     this.timeWaitToClosed();
-                    //System.out.println("Etat actuel : ETAT_TIME_WAIT");
                     break;
                 default:
-                    //System.out.println("Etat inconnu");
                     break;
             }
             Thread.sleep(100);
@@ -508,24 +488,107 @@ public class Automate implements Runnable {
     }
 
     @Override
-    public String toString() {
+    public void run()
+    {
+        while (true)
+        {
+            try
+            {
+                this.changerEtat();
+            }
+            catch (InterruptedException ex)
+            {
+                Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    @Override
+    public String toString()
+    {
         Connexion c = this.getTcb().getConnexion();
-        if (this.getTcb().getConnexion() instanceof Client){
+        if (this.getTcb().getConnexion() instanceof Client)
+        {
             Client cl = (Client) c;            
             return "Client " + cl.getId();
         }
         ServeurThread st = (ServeurThread) c;        
         return "Client_" + st.getId() + "_Server_" + st.getIdServeur();
     }
+    
+    public boolean getMod()
+    {
+        return mod;
+    }
 
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                this.changerEtat();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public void setMod(boolean mode)
+    {
+        this.mod = mode;
+    }
+
+    public int getPort_dist()
+    {
+        return port_dist;
+    }
+
+    public void setPort_dist(int port_distant)
+    {
+        this.port_dist = port_distant;
+    }
+
+    public int getPort_local()
+    {
+        return port_loc;
+    }
+
+    public void setPort_local(int port_local)
+    {
+        this.port_loc = port_local;
+    }
+    
+    public String getIp_dist()
+    {
+        return ip_dist;
+    }
+
+    public void setIp_dist(String ip_distant)
+    {
+        this.ip_dist = ip_distant;
+    }
+	public Stack<Paquet> getBufferPaquet()
+	{
+		return bufferPaquet;
+	}
+
+	public void setBufferPaquet(Stack<Paquet> bufferPaquet)
+	{
+		this.bufferPaquet = bufferPaquet;
+	}
+	
+    public boolean getOpenOk()
+    {
+        return openOk;
+    }
+
+    public void setOpenOk(boolean ok)
+    {
+        this.openOk = ok;
+    }
+    public void setEtatCourant(int etat)
+    {
+        this.etatCourant = etat;
+    }
+
+    public int getEtatCourant()
+    {
+        return this.etatCourant;
+    }
+    
+    public TCB getTcb() {
+        return tcb;
+    }
+
+    public void setTcb(TCB tcb) {
+        this.tcb = tcb;
     }
 }
