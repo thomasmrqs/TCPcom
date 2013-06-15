@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 public class Automate implements Runnable {
 
-	//test
+	//test2
     /* attribut de l'etat courant */
     private int etatCourant = Ressource.ETAT_CLOSED;
     private TCB tcb = null;
