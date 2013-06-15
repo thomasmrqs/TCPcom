@@ -78,6 +78,22 @@ public class GUI extends JFrame {
     public ItemCard getSelectedPane() {
         return (ItemCard) this.onglets.getSelectedComponent();
     }
+
+    public ItemCard obtainCard(Automate a) {
+        for (int i = 0; i < this.onglets.getTabCount(); i++) {
+            ItemCard item = (ItemCard) this.onglets.getComponentAt(i);
+            if (item.isClient()) {
+                if (item.getAutomate() == a) {
+                    return item;
+                }
+            }else{
+                System.out.println("zdfjvlkfjvkljfncblkfnbjvknfdbnldfvbdf");
+                System.exit(0);
+            }
+        }
+        return null;
+    }
+
     //Permet de retourner l'onglet du serveur en fonction du serveur 
     public ItemCard obtainCard(Serveur s) {
         for (int i = 0; i < this.onglets.getTabCount(); i++) {
@@ -91,6 +107,7 @@ public class GUI extends JFrame {
         return null;
     }
     //Permet de retourner l'onglet du client en fonction du client 
+
     public ItemCard obtainCard(Client s) {
         for (int i = 0; i < this.onglets.getTabCount(); i++) {
             ItemCard item = (ItemCard) this.onglets.getComponentAt(i);
@@ -102,7 +119,6 @@ public class GUI extends JFrame {
         }
         return null;
     }
-    
     private static GUI inst = null;
 
     public static GUI get() {
@@ -153,7 +169,7 @@ public class GUI extends JFrame {
         fenetre.setVisible(true);
         fenetre.setJMenuBar(mb);
         cards_tmp = new JPanel();
-        serverconnectedclients = new String ();
+        serverconnectedclients = new String();
     }
 
     public void CreateTCPJMenuBar() throws SocketException {
@@ -275,7 +291,7 @@ public class GUI extends JFrame {
     public void creer_onglet_server() throws SocketException {
         ItemCard card = new ItemCard();
         onglets.addTab("Serveur " + count_serv++, new ImageIcon(getClass().getResource("./IMAGES/network.png")), card, "Serveur" + count_serv);
-                /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
+        /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
          ClientAutomatePanel automate_tmp = new ClientAutomatePanel(console_tmp);
          console_tmp.setLocation(10, 5);
          JPanel cards_tmp = new JPanel(new CardLayout());
