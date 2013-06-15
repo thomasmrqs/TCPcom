@@ -1,29 +1,21 @@
 package graphique;
 //package graphique;
-import java.awt.BorderLayout;
+import connexion.Automate;
 import java.awt.CardLayout;
-import java.awt.Checkbox;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.io.Console;
-import java.io.File;
 import java.io.IOException;
+//<<<<<<< HEAD
 import java.net.SocketException;
+//=======
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
+//>>>>>>> 3b0bd7b9416a8c1b7abaafabd57172b3f148d820
 
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -32,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+//<<<<<<< HEAD
 import javax.swing.plaf.SplitPaneUI;
 
 
@@ -414,4 +407,6 @@ connexion.setIcon(new ImageIcon(getClass().getResource("./IMAGES/connect.gif")))
 		
 	}*/
 	
+//=======
+
 }

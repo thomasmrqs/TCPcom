@@ -1,15 +1,16 @@
 package graphique;
+
 import java.awt.CardLayout;
 import java.net.SocketException;
 import java.util.logging.ConsoleHandler;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
+import connexion.Automate;
+import javax.swing.JPanel;
 
 public class ItemCard extends JPanel //implements Runnable
 {
+
 
 	/**
 	 * 
@@ -36,7 +37,5 @@ public class ItemCard extends JPanel //implements Runnable
 	{
 		return (count ++);
 	}
-	
-	
 	
 }
