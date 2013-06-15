@@ -6,13 +6,14 @@ import java.util.logging.Logger;
 
 public class Automate implements Runnable {
 
-	//test
+	//test2
     /* attribut de l'etat courant */
     private int etatCourant = Ressource.ETAT_CLOSED;
     private TCB tcb = null;
     private Connexion connexion;
     private boolean mod = false; //Si true = client
     private int port_dist = 0;
+    private int port_loc = 0;
     private String ip_dist = null;
     private boolean openOk = false;
 
@@ -20,18 +21,26 @@ public class Automate implements Runnable {
         return mod;
     }
 
-    public void setMod(boolean mod) {
-        this.mod = mod;
+    public void setMod(boolean mode) {
+        this.mod = mode;
     }
 
     public int getPort_dist() {
         return port_dist;
     }
 
-    public void setPort_loc(int port_distant) {
+    public void setPort_dist(int port_distant) {
         this.port_dist = port_distant;
     }
 
+    public int getPort_local() {
+        return port_loc;
+    }
+
+    public void setPort_local(int port_local) {
+        this.port_loc = port_local;
+    }
+    
     public String getIp_dist() {
         return ip_dist;
     }
@@ -125,40 +134,43 @@ public class Automate implements Runnable {
         }
     }
 
-    public void afficheEtatCourant() {
-        switch (this.etatCourant) {
+    public void afficheEtatCourant()
+    {
+    	String state = ((this.getMod()) ? "client" : "serveur" );
+        switch (this.etatCourant)
+        {
             case Ressource.ETAT_CLOSE_WAIT:
-                System.out.println("Etat actuel : ETAT_CLOSE_WAIT");
+                System.out.println("Etat " + state + " actuel : ETAT_CLOSE_WAIT");
                 break;
             case Ressource.ETAT_CLOSED:
-                System.out.println("Etat actuel : ETAT_CLOSED");
+                System.out.println("Etat " + state + " actuel : ETAT_CLOSED");
                 break;
             case Ressource.ETAT_CLOSING:
-                System.out.println("Etat actuel : ETAT_CLOSING");
+                System.out.println("Etat " + state + " actuel : ETAT_CLOSING");
                 break;
             case Ressource.ETAT_ESTABLISHED:
-                System.out.println("Etat actuel : ETAT_ESTABLISHED");
+                System.out.println("Etat " + state + " actuel : ETAT_ESTABLISHED");
                 break;
             case Ressource.ETAT_FIN_WAIT_1:
-                System.out.println("Etat actuel : ETAT_FIN_WAIT_1");
+                System.out.println("Etat " + state + " actuel : ETAT_FIN_WAIT_1");
                 break;
             case Ressource.ETAT_FIN_WAIT_2:
-                System.out.println("Etat actuel : ETAT_FIN_WAIT_2");
+                System.out.println("Etat " + state + " actuel : ETAT_FIN_WAIT_2");
                 break;
             case Ressource.ETAT_LAST_ACK:
-                System.out.println("Etat actuel : ETAT_LAST_ACK");
+                System.out.println("Etat " + state + " actuel : ETAT_LAST_ACK");
                 break;
             case Ressource.ETAT_LISTEN:
-                System.out.println("Etat actuel : ETAT_LISTEN");
+                System.out.println("Etat " + state + " actuel : ETAT_LISTEN");
                 break;
             case Ressource.ETAT_SYN_RCVD:
-                System.out.println("Etat actuel : ETAT_SYN_RCVD");
+                System.out.println("Etat " + state + " actuel : ETAT_SYN_RCVD");
                 break;
             case Ressource.ETAT_SYN_SENT:
-                System.out.println("Etat actuel : ETAT_SYN_SENT");
+                System.out.println("Etat " + state + " actuel : ETAT_SYN_SENT");
                 break;
             case Ressource.ETAT_TIME_WAIT:
-                System.out.println("Etat actuel : ETAT_TIME_WAIT");
+                System.out.println("Etat " + state + " actuel : ETAT_TIME_WAIT");
                 break;
             default:
                 System.out.println("Etat inconnu");
@@ -178,7 +190,8 @@ public class Automate implements Runnable {
         //mode True = client
         this.setMod(mode);
         this.setIp_dist(ip_distant);
-        this.setPort_loc(port_local);
+        this.setPort_local(port_local);
+        this.setPort_dist(port_ser);
         if (mode == true) {//Client
             Client c = null;
             try {
@@ -201,14 +214,14 @@ public class Automate implements Runnable {
         //Dans le cas d'un serveur
         try 
         {
-        this.setTcb(new TCB (connexion));
-        this.etatCourant = Ressource.ETAT_LISTEN;
+        	this.setTcb(new TCB (connexion));
+        	this.etatCourant = Ressource.ETAT_LISTEN;
         }
         catch (Exception e) {
             System.out.println("Automate::Probleme serveur");
         }
         this.setOpenOk(true);
-        this.getTcb().setNomLocalConnexion("loc" + ip_distant + this.getTcb().getConnexion().getIpLocale());
+        this.getTcb().setNomLocalConnexion("loc" + this.getTcb().getConnexion().getIpLocale()+ ip_distant);
         return getTcb().getNomLocalConnexion();
     }
 
@@ -218,7 +231,7 @@ public class Automate implements Runnable {
             int port_ser = this.getTcb().getConnexion().portDistant;
             /* CA FAIT TOUT CASSEEEEEE */
             //int port_client = this.getTcb().getConnexion().socket.getLocalPort();
-            Paquet p = new Paquet(100005, port_ser);
+            Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
             p.MettreSyn(true);
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
@@ -227,14 +240,14 @@ public class Automate implements Runnable {
         }
     }
 
-    public void synSentToEstablished() {
+    public void synSentToEstablished() 
+    {
+    	//System.out.println("dans la fonction synSentToEstablished");
         if (this.getMod() == false) {
             return;
         }
-        System.out.println("debut");
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
         if (p == null) {
-            System.out.println("null");
             return;
         }
         if (p.ObtenirSyn() == true) {
@@ -274,6 +287,7 @@ public class Automate implements Runnable {
             }
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+        //p.AfficherPaquet();
         if (p == null) {
             return;
         }
@@ -427,7 +441,7 @@ public class Automate implements Runnable {
         /* CHANGER LE TRUE */
         while (true) {
             afficheEtatCourant();
-            System.out.println("before switch");
+            //System.out.println("before switch");
             switch (this.etatCourant) {
                 case Ressource.ETAT_CLOSE_WAIT:
                     this.closeWaitToLastAck();
@@ -442,12 +456,12 @@ public class Automate implements Runnable {
                     //System.out.println("Etat actuel : ETAT_CLOSING");
                     break;
                 case Ressource.ETAT_ESTABLISHED:
-                    this.estaToCloseWait();
+                    //this.estaToCloseWait();
 
 
                     // Si j'envoie une commande close 
                     // Rajouter ici la commande close !!!!!!!!
-                    this.estaToFinWait1();
+                    //this.estaToFinWait1();
 
                     //System.out.println("Etat actuel : ETAT_ESTABLISHED");
                     break;
@@ -469,16 +483,17 @@ public class Automate implements Runnable {
                     //if (this.etatCourant == Ressource.ETAT_LISTEN) {
                     //    this.setTcb(new TCB(getCli()));
                     // }
-                    System.out.println("Etat actuel : ETAT_LISTEN");
+                    //System.out.println("Etat actuel : ETAT_LISTEN");
                     break;
                 case Ressource.ETAT_SYN_RCVD:
                     this.synRevToEstablished();
-                    System.out.println("Etat actuel : ETAT_SYN_RCVD");
+                    //System.out.println("Etat actuel : ETAT_SYN_RCVD");
                     break;
                 case Ressource.ETAT_SYN_SENT:
+                	//System.out.println("youpi ?");
                     this.synSentToEstablished();
                     //System.out.println("Etat actuel : ETAT_SYN_SENT");
-                    System.out.println("youpi ?");
+                   
                     break;
                 case Ressource.ETAT_TIME_WAIT:
                     this.timeWaitToClosed();
