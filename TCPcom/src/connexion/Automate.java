@@ -194,6 +194,7 @@ public class Automate implements Runnable {
                 Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
             }
             this.getTcb().setNomLocalConnexion("loc" + this.getTcb().getConnexion().getIpLocale()+ ip_distant );
+            this.setOpenOk(true);
             return getTcb().getNomLocalConnexion();
         }
         //Dans le cas d'un serveur

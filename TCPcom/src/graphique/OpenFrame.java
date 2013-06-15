@@ -115,23 +115,17 @@ public class OpenFrame extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
             if (e.getSource() == EnvoiBtnAccept) {
-                /**
-                 * ************* Fonction open **********************
-                 */
                 int portLocal = Integer.parseInt(PortLocale.getText());
-
-                String ipDistante = boundedIpDst.getText();
-                int portDistant = Integer.parseInt(boundedPortDst.getText());
-
                 ItemCard card = GUI.get().getSelectedPane();
                 if (card.isClient()) {
+                    String ipDistante = boundedIpDst.getText();
+                    int portDistant = Integer.parseInt(boundedPortDst.getText());
                     card.getAutomate().open(portLocal, ipDistante, portDistant, true);
                     boolean succeed = card.getAutomate().getOpenOk();
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
-                        GUI.get().getSelectedPane().getConsole().insertLine("Client créé", "Green");
+                        GUI.get().getSelectedPane().getConsole().insertLine("Client créé" + card.getAutomate().getTcb().getConnexion(), "Green");
                     } else {
                         GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
                     }

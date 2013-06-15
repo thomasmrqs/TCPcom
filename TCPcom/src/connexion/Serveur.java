@@ -54,6 +54,7 @@ public class Serveur implements Runnable {
                 Automate a = new Automate();
                 a.setConnexion(st);
                 a.open(st.portLocal, st.ipDistante, st.portDistant, false);
+                (new Thread(a)).start();
                 //Faire le OPen
                 GUI.get().obtainCard(this).addClientToServeur(st);//Ajout du serveurThread                
                 GestionDesConnexions.get().ajouterConnexion(st);

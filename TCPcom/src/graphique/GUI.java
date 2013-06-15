@@ -77,12 +77,24 @@ public class GUI extends JFrame {
     public ItemCard getSelectedPane() {
         return (ItemCard) this.onglets.getSelectedComponent();
     }
-
+    //Permet de retourner l'onglet du serveur en fonction du serveur 
     public ItemCard obtainCard(Serveur s) {
         for (int i = 0; i < this.onglets.getTabCount(); i++) {
             ItemCard item = (ItemCard) this.onglets.getComponentAt(i);
             if (!item.isClient()) {
                 if (item.getServeur() == s) {
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
+    //Permet de retourner l'onglet du client en fonction du client 
+    public ItemCard obtainCard(Client s) {
+        for (int i = 0; i < this.onglets.getTabCount(); i++) {
+            ItemCard item = (ItemCard) this.onglets.getComponentAt(i);
+            if (item.isClient()) {
+                if (item.getAutomate().getTcb().getConnexion() == s) {
                     return item;
                 }
             }
