@@ -59,6 +59,11 @@ public class Commande {
 				}
 			}
 		}
+		for (Automate automate : LA) 
+		{
+		
+			
+		}
 		return auto;
 	}
 	

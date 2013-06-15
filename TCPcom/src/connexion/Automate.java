@@ -218,7 +218,7 @@ public class Automate implements Runnable {
             System.out.println("Automate::Probleme serveur");
         }
         this.setOpenOk(true);
-        this.getTcb().setNomLocalConnexion("loc" + ip_distant + this.getTcb().getConnexion().getIpLocale());
+        this.getTcb().setNomLocalConnexion("loc" + this.getTcb().getConnexion().getIpLocale()+ ip_distant);
         return getTcb().getNomLocalConnexion();
     }
 
