@@ -176,7 +176,7 @@ public class GUI extends JFrame {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
-                    ConnectionFrame cof = new ConnectionFrame();
+                  //  ConnectionFrame cof = new ConnectionFrame();
                 } //new PanelSend();
                 //System.out.println("connect");
                 else {

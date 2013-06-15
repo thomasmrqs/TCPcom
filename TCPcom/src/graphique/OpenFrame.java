@@ -130,8 +130,9 @@ public class OpenFrame extends JFrame {
                     boolean succeed = Automate.open(card.getAutomate(), portLocal, ipDistante, portDistant, true);
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
+                        GUI.get().getSelectedPane().getConsole().insertLine("Client créé", "Green");
                     } else {
-                        System.out.println("Erreur du client");
+                        GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 } else {
                     System.out.println("C'est un serveur");

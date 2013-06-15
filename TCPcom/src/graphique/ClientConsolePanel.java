@@ -202,30 +202,30 @@ import java.text.SimpleDateFormat;
 
 	       
 	        
-	        /* Style racineem = doc.addStyle("Normal EM", styleRacine);
+	         Style racineem = doc.addStyle("Normal EM", styleRacine);
 	        StyleConstants.setBold(racineem, false);
 	        StyleConstants.setItalic(racineem, true);
-	        StyleConstants.setForeground(racineem, Color.white);*/
+	        StyleConstants.setForeground(racineem, Color.white);
 
-	       /* Style GreenBold = doc.addStyle("Green Bold", styleRacine);
+	        Style GreenBold = doc.addStyle("Green Bold", styleRacine);
 	        StyleConstants.setBold(GreenBold, true);
-	        StyleConstants.setForeground(GreenBold, Color.green);*/
+	        StyleConstants.setForeground(GreenBold, Color.green);
 
-	        /*Style Green = doc.addStyle("Green", styleRacine);
+	        Style Green = doc.addStyle("Green", styleRacine);
 	        StyleConstants.setBold(Green, false);
-	        StyleConstants.setForeground(Green, Color.green);*/
+	        StyleConstants.setForeground(Green, Color.green);
 
-	       /* Style RedBold = doc.addStyle("Red Bold", styleRacine);
+	        Style RedBold = doc.addStyle("Red Bold", styleRacine);
 	        StyleConstants.setBold(RedBold, true);
-	        StyleConstants.setForeground(RedBold, Color.red);*/
+	        StyleConstants.setForeground(RedBold, Color.red);
 	        // used
 	        Style Red = doc.addStyle("Red", styleRacine);
 	        StyleConstants.setBold(Red, false);
 	        StyleConstants.setForeground(Red, Color.red);
 
-	       /* Style WhiteBold = doc.addStyle("White Bold", styleRacine);
+	        Style WhiteBold = doc.addStyle("White Bold", styleRacine);
 	        StyleConstants.setBold(WhiteBold, true);
-	        StyleConstants.setForeground(WhiteBold, Color.white); */
+	        StyleConstants.setForeground(WhiteBold, Color.white); 
 	       
 	        // used
 	        Style CyanBold = doc.addStyle("Cyan Bold", styleRacine);
