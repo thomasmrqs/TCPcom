@@ -1,5 +1,7 @@
 package connexion;
 import Ressource.Ressource;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -67,8 +69,20 @@ public class Utils {
         return tab;
     } 
     
-    
-    public String conversionEtat(int i){
+    /*
+     
+      if (this.getTcb().getConnexion() instanceof Client) {
+                GUI.get().obtainCard(this).getPanel_automate().update_states(Utils.conversionEtat(this.etatCourant));
+            }
+            
+            Thread.sleep(200);
+     */
+    public static String conversionEtat(int i){
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        }
         switch(i){
             case Ressource.ETAT_CLOSED :
                 return "CLOSED_INIT";
