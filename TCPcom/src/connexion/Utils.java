@@ -1,5 +1,5 @@
 package connexion;
-
+import Ressource.Ressource;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -66,4 +66,34 @@ public class Utils {
         }
         return tab;
     } 
+    
+    
+    public String conversionEtat(int i){
+        switch(i){
+            case Ressource.ETAT_CLOSED :
+                return "CLOSED_INIT";
+            case Ressource.ETAT_LISTEN:
+                return "LISTEN";
+            case Ressource.ETAT_SYN_RCVD:
+                return "SYN_RCVD";
+            case Ressource.ETAT_SYN_SENT:
+                return "SYN_SENT";
+            case Ressource.ETAT_ESTABLISHED:
+                return "ESTAB";
+            case Ressource.ETAT_FIN_WAIT_1:
+                return "FIN_WAIT_1";
+            case Ressource.ETAT_CLOSE_WAIT:
+                return "CLOSE_WAIT";
+            case Ressource.ETAT_FIN_WAIT_2:
+                return "FIN_WAIT_2";
+            case Ressource.ETAT_CLOSING:
+                return "CLOSING";
+            case Ressource.ETAT_LAST_ACK:
+                return "LAST_ACK";
+            case Ressource.ETAT_TIME_WAIT:
+                return "TIME_WAIT";
+        }
+        return "";
+        
+    }
 }

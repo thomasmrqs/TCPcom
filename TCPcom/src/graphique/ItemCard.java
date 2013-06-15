@@ -125,6 +125,10 @@ public class ItemCard extends JPanel //implements Runnable
         this.add(panel_automate);
     }
 
+    public ClientAutomatePanel getPanel_automate() {
+        return panel_automate;
+    }
+
     public int increase(int count) {
         return (count++);
     }
