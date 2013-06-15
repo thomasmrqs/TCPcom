@@ -32,7 +32,16 @@ public class Commande {
 		statu.setIp_loc(auto.getTcb().getConnexion().getIpLocale());
 		statu.setPort_dist(auto.getTcb().getConnexion().getPortDistant());
 		statu.setPort_loc(auto.getTcb().getConnexion().getPortLocal());
-		//statu.isPriorite(auto.getTcb().)
+		if (auto.getTcb().getPrioriteConnexion() != 0)
+			statu.setPriorite(true);
+		if (auto.getTcb().getSecuriteConnexion() != 0)
+			statu.setSecurite(true);
+		if (auto.getTcb().getSecuriteConnexion() != 0)
+			statu.setUrg(true);
+		/**********************/
+		/* Fix me             */
+		/**********************/
+		
 		return statu;
 	}
 
