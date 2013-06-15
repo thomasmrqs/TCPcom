@@ -99,10 +99,11 @@ public class ItemCard extends JPanel //implements Runnable
                 }
             }
         });
-        nomComboBox.setBounds(500, 0, 140, 20);
+        nomComboBox.setBounds(500, 0, 200, 20);
         this.comboBoxServeur.setBounds(650, 0, 600, 20);
-        this.add(console);
         this.add(nomComboBox);
+        this.add(console);
+        
         this.add(this.comboBoxServeur);
         /*Fin ComboBox*/
 
