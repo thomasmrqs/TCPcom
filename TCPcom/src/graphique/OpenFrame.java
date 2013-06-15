@@ -120,7 +120,7 @@ public class OpenFrame extends JFrame {
                 ItemCard card = GUI.get().getSelectedPane();
                 String ipDistante = boundedIpDst.getText();
                 int portDistant = 0;
-                if (boundedPortDst.getText() != null) {
+                if (boundedPortDst.getText() != null && !boundedPortDst.getText().isEmpty()) {
                     portDistant = Integer.parseInt(boundedPortDst.getText());
                 }
                 if (card.isClient()) {
