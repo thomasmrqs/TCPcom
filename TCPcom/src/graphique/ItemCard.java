@@ -6,6 +6,7 @@ import java.util.logging.ConsoleHandler;
 
 
 import connexion.Automate;
+import java.awt.Color;
 import javax.swing.JPanel;
 
 public class ItemCard extends JPanel //implements Runnable
@@ -18,11 +19,15 @@ public class ItemCard extends JPanel //implements Runnable
     private ClientConsolePanel console = null;
     private ClientAutomatePanel panel_automate = null;
     private final int count = 1;
-    private boolean client;
-    private Automate automate;
+    private boolean client; // Permet de savoir su c'est un ItemCard de client ou de serveur
+    private Automate automate; // Si c'est un client, il faut directement un Automate
 
     public boolean isClient() {
         return client;
+    }
+
+    public ClientConsolePanel getConsole() {
+        return console;
     }
 
     public Automate getAutomate() {

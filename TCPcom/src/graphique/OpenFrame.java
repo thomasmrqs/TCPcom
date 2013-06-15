@@ -41,16 +41,20 @@ public class OpenFrame extends JFrame {
 
         private JButton EnvoiBtnAccept;
         private JCheckBox Actif;
-        private JLabel LabPortLocale, LabSocket, LabTempo;
-        private BoundedTextField PortLocale, Socket, Tempo;
+        private JLabel LabPortLocale, LabTempo;
+        private JLabel labelIpDst;
+        private JLabel labelPortDst;
+        private BoundedTextField boundedIpDst;
+        private BoundedTextField boundedPortDst;
+        private BoundedTextField PortLocale, Tempo;
 
         /**
          * Constructeur
          */
         public PanelSend() {
-            setLayout(null);
-            setPreferredSize(new Dimension(300, 200));
-            setBounds(5, 5, 305, 300);
+            setLayout(null);            
+            setPreferredSize(new Dimension(320, 270));
+            setBounds(5, 5, 315, 320);
             setBorder(new TitledBorder("Open"));
 
             // Port Locale
@@ -63,37 +67,49 @@ public class OpenFrame extends JFrame {
             add(LabPortLocale);
             add(PortLocale);
 
-            // Numero Socket
-            LabSocket = new JLabel("Socket");
-            LabSocket.setFont(new Font("arial", 0, 12));
-            Socket = new BoundedTextField("", 32);
-            LabSocket.setBounds(10, 55, 180, 20);
-            Socket.setBounds(10, 75, 285, 20);
-            add(LabSocket);
-            add(Socket);
+            // Numero ip distante
+            labelIpDst = new JLabel("Adresse Ip distante");
+            labelIpDst.setFont(new Font("arial", 0, 12));
+            boundedIpDst = new BoundedTextField("", 32);
+            
+            labelIpDst.setBounds(10, 55, 180, 20);
+            boundedIpDst.setBounds(10, 75, 285, 20);
+            add(labelIpDst);
+            add(boundedIpDst);
+
+            // Numero port distant
+            labelPortDst = new JLabel("Port applicatif distant");
+            labelPortDst.setFont(new Font("arial", 0, 12));
+            boundedPortDst = new BoundedTextField("", 32);
+            labelPortDst.setBounds(10, 95, 180, 20);
+            boundedPortDst.setBounds(10, 115, 285, 20);
+            add(labelPortDst);
+            add(boundedPortDst);
+
+
 
             // Temporisation
             LabTempo = new JLabel("Temporisation (min)");
             LabTempo.setFont(new Font("arial", 0, 12));
             Tempo = new BoundedTextField("", 4);
             Tempo.setText("5");
-            LabTempo.setBounds(10, 95, 125, 20);
-            Tempo.setBounds(10, 115, 285, 20);
+            LabTempo.setBounds(10, 135, 125, 20);
+            Tempo.setBounds(10, 155, 285, 20);
             add(LabTempo);
             add(Tempo);
 
             // Actif Passif
             Actif = new JCheckBox("Actif");
             Actif.setFont(new Font("arial", 0, 12));
-            Actif.setBounds(10, 140, 60, 20);
+            Actif.setBounds(10, 185, 60, 20);
             add(Actif);
 
 
-
-            EnvoiBtnAccept = new JButton("Valider");
+            
+            EnvoiBtnAccept = new JButton("Valider le " + ((GUI.get().getSelectedPane().isClient()) ? " client " : " serveur"));
             EnvoiBtnAccept.addActionListener(this);
             add(EnvoiBtnAccept);
-            EnvoiBtnAccept.setBounds(10, 180, 100, 20);
+            EnvoiBtnAccept.setBounds(10, 205, 160, 20);
 
         }
 
@@ -104,16 +120,21 @@ public class OpenFrame extends JFrame {
                 /**
                  * ************* Fonction open **********************
                  */
+                int portLocal = Integer.parseInt(PortLocale.getText());
+                
+                String ipDistante = labelIpDst.getText();
+                int portDistant = Integer.parseInt(boundedPortDst.getText());
+
                 ItemCard card = GUI.get().getSelectedPane();
-                if (card.isClient()) {                    
-                    boolean succeed = Automate.open(card.getAutomate(), 60000, "127.0.0.1", 60000, true);
+                if (card.isClient()) {
+                    boolean succeed = Automate.open(card.getAutomate(), portLocal, ipDistante, portDistant, true);
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
-                    }else{
+                    } else {
                         System.out.println("Erreur du client");
                     }
                 } else {
-                    System.out.println("C'est un serveur");                    
+                    System.out.println("C'est un serveur");
                 }
                 openframe.dispose();
             }

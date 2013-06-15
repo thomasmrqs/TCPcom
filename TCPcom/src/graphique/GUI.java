@@ -129,8 +129,8 @@ public class GUI extends JFrame {
     }
 
     public void CreateTCPJMenuBar() throws SocketException {
-        connexion.setText("connexion".toUpperCase());
-        deconnexion.setText("deconnexion".toUpperCase());
+        connexion.setText("Create".toUpperCase());
+        deconnexion.setText("destroy".toUpperCase());
         mode.setText("mode".toUpperCase());
         option.setText("option".toUpperCase());
         client.setText("client");
