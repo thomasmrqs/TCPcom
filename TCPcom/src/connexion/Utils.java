@@ -46,4 +46,14 @@ public class Utils {
         }
         return res + "]";
     }
+    
+    public static byte[] complement(String str){
+        byte[] tab = new byte[str.getBytes().length];
+        int i = 0;
+        for (byte d : str.getBytes()){
+            d ^= 0XFF;
+            tab[i++] = d;
+        }
+        return tab;
+    } 
 }
