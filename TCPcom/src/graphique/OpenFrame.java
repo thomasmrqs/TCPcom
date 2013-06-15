@@ -134,8 +134,8 @@ public class OpenFrame extends JFrame {
                     } else {
                         GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
-                } else {
-                    System.out.println("C'est un serveur");
+                } else {//Cas d'un serveur
+                    //boolean succeed = Automate.open(null, portLocal, ipDistante, portLocal, succeed)
                 }
                 openframe.dispose();
             }

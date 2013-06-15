@@ -245,7 +245,9 @@ public class GUI extends JFrame {
     }
 
     public void creer_onglet_server() throws SocketException {
-        ClientConsolePanel console_tmp = new ClientConsolePanel();
+        ItemCard card = new ItemCard();
+        onglets.addTab("Serveur " + count_serv++, new ImageIcon(getClass().getResource("./IMAGES/network.png")), card, "Serveur");
+      /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
         ClientAutomatePanel automate_tmp = new ClientAutomatePanel(console_tmp);
         console_tmp.setLocation(10, 5);
         JPanel cards_tmp = new JPanel(new CardLayout());
@@ -262,7 +264,7 @@ public class GUI extends JFrame {
         count_serv_tmp = count_serv;
         count_serv += 1;
 
-        cards_tmp = null;
+        cards_tmp = null;*/
     }
 
     public void valider_actionPerformed(ActionEvent e) throws SocketException {
