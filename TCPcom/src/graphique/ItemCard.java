@@ -5,14 +5,19 @@ import java.net.SocketException;
 
 import connexion.Automate;
 import connexion.Serveur;
-import connexion.ServeurThread;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 public class ItemCard extends JPanel //implements Runnable
 {
@@ -29,6 +34,7 @@ public class ItemCard extends JPanel //implements Runnable
     private boolean client; // Permet de savoir su c'est un ItemCard de client ou de serveur
     private Automate automate; // Si c'est un client, il faut directement un Automate
     private Serveur serveur;
+    Map<Automate, ClientConsolePanel> map_console = new HashMap<Automate, ClientConsolePanel>();//Représente la liste des consoles des clients du serveur
 
     public boolean isClient() {
         return client;
@@ -43,7 +49,13 @@ public class ItemCard extends JPanel //implements Runnable
     }
 
     public void addClientToServeur(Automate a) {
-        this.comboBoxServeurModel.addElement(a.getTcb().getConnexion());
+        try {
+            ClientConsolePanel clientConsolePanel = new ClientConsolePanel(true);
+            this.map_console.put(a, clientConsolePanel);
+        } catch (SocketException ex) {
+            Logger.getLogger(ItemCard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.comboBoxServeurModel.addElement(a);
     }
 
     public Serveur getServeur() {
@@ -54,8 +66,13 @@ public class ItemCard extends JPanel //implements Runnable
         this.serveur = serveur;
     }
 
+    public Map<Automate, ClientConsolePanel> getMap_console() {
+        return map_console;
+    }
+
     public ItemCard() throws SocketException//Constructeur pour un serveur
     {
+        this.map_console = new HashMap<Automate, ClientConsolePanel>();
         this.client = false;
         this.automate = null;
         this.serveur = null;
@@ -67,27 +84,30 @@ public class ItemCard extends JPanel //implements Runnable
         JLabel nomComboBox = new JLabel("Server connected clients : ");
         this.comboBoxServeurModel = new DefaultComboBoxModel();
         this.comboBoxServeur = new JComboBox(this.comboBoxServeurModel);
-        this.comboBoxServeurModel.addElement("10");
-        this.comboBoxServeurModel.addElement("12");
         this.comboBoxServeur.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    System.out.println("Element selectionne : " + e.getItem());
+                    Automate a = (Automate) e.getItem();
+                    ClientConsolePanel console = GUI.get().getSelectedPane().getMap_console().get(a);
+                    GUI.get().getSelectedPane().remove(0);
+                    GUI.get().getSelectedPane().add(console, 0);
                 }
             }
         });
         nomComboBox.setBounds(500, 0, 140, 20);
         this.comboBoxServeur.setBounds(650, 0, 600, 20);
+         this.add(console);
         this.add(nomComboBox);
         this.add(this.comboBoxServeur);
         /*Fin ComboBox*/
-        this.add(console);
+       
         this.add(panel_automate);
     }
 
     public ItemCard(Automate a) throws SocketException//Constructeur pour un client
     {
+        this.map_console = new HashMap<Automate, ClientConsolePanel>();
         this.comboBoxServeurModel = null;
         this.client = true;
         this.automate = a;
