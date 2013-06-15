@@ -13,6 +13,7 @@ public class Automate implements Runnable {
     private boolean mod = false; //Si true = client
     private int port_dist = 0;
     private String ip_dist = null;
+    private boolean openOk = false;
 
     public boolean getMod() {
         return mod;
@@ -172,7 +173,7 @@ public class Automate implements Runnable {
         this.tcb = tcb;
     }
 
-    public boolean open(int port_local, String ip_distant, int port_ser, boolean mode) {
+   public String open(int port_local, String ip_distant, int port_ser, boolean mode) {
         //mode True = client
         this.setMod(mode);
         this.setIp_dist(ip_distant);
@@ -192,11 +193,21 @@ public class Automate implements Runnable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return c.isAlive();
+            this.getTcb().setNomLocalConnexion("loc" + this.getTcb().getConnexion().getIpLocale()+ ip_distant );
+            return getTcb().getNomLocalConnexion();
         }
         //Dans le cas d'un serveur
+        try 
+        {
+        this.setTcb(new TCB (connexion));
         this.etatCourant = Ressource.ETAT_LISTEN;
-        return true;
+        }
+        catch (Exception e) {
+            System.out.println("Automate::Probleme serveur");
+        }
+        this.setOpenOk(true);
+        this.getTcb().setNomLocalConnexion("loc" + ip_distant + this.getTcb().getConnexion().getIpLocale());
+        return getTcb().getNomLocalConnexion();
     }
 
     /* Changer l'�tat de CLOSED � SYN_SENT */
@@ -232,6 +243,14 @@ public class Automate implements Runnable {
                 this.getTcb().getConnexion().ecrirePaquet(p);
             }
         }
+    }
+
+    public boolean getOpenOk() {
+        return openOk;
+    }
+
+    public void setOpenOk(boolean ok) {
+        this.openOk = ok;
     }
 
     public void closedToListen() {
@@ -334,6 +353,10 @@ public class Automate implements Runnable {
                 this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
             }
         }
+    }
+
+    public void setConnexion(Connexion connexion) {
+        this.connexion = connexion;
     }
 
     /**

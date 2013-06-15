@@ -50,6 +50,11 @@ public class Serveur implements Runnable {
             while (this.alive) {
                 st = new ServeurThread(this.id, ++idServeurThread, this.socket.accept());
                 this.liste.add(st);
+                System.out.println("Je vais ajouter un client à mon serveur"); 
+                Automate a = new Automate();
+                a.setConnexion(st);
+                a.open(st.portLocal, st.ipDistante, st.portDistant, false);
+                //Faire le OPen
                 GUI.get().obtainCard(this).addClientToServeur(st);//Ajout du serveurThread                
                 GestionDesConnexions.get().ajouterConnexion(st);
                 (new Thread(st)).start();

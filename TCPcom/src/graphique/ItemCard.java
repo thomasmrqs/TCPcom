@@ -45,6 +45,10 @@ public class ItemCard extends JPanel //implements Runnable
     public Serveur getServeur() {
         return serveur;
     }
+
+    public void setServeur(Serveur serveur) {
+        this.serveur = serveur;
+    }
     
     public ItemCard() throws SocketException//Constructeur pour un serveur
     {

@@ -1,6 +1,7 @@
 package graphique;
 
 import connexion.Automate;
+import connexion.Client;
 import connexion.Serveur;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -72,26 +73,27 @@ public class GUI extends JFrame {
     public JTabbedPane getOnglets() {
         return onglets;
     }
-    public ItemCard getSelectedPane(){
+
+    public ItemCard getSelectedPane() {
         return (ItemCard) this.onglets.getSelectedComponent();
     }
-    
-    public ItemCard obtainCard(Serveur s){
-       for (int i = 0; i <= this.onglets.getTabCount(); i++){
-           ItemCard item = (ItemCard)this.onglets.getTabComponentAt(i);
-           if (!item.isClient()){
-               if (item.getServeur() == s){
-                   return item;
-               }
-           }
-       }
-       return null;
+
+    public ItemCard obtainCard(Serveur s) {
+        for (int i = 0; i < this.onglets.getTabCount(); i++) {
+            ItemCard item = (ItemCard) this.onglets.getComponentAt(i);
+            if (!item.isClient()) {
+                if (item.getServeur() == s) {
+                    return item;
+                }
+            }
+        }
+        return null;
     }
     
     private static GUI inst = null;
-    
-    public static GUI get(){
-        if (GUI.inst == null){
+
+    public static GUI get() {
+        if (GUI.inst == null) {
             try {
                 GUI.inst = new GUI();
             } catch (IOException ex) {
@@ -100,7 +102,7 @@ public class GUI extends JFrame {
         }
         return GUI.inst;
     }
-    
+
     private GUI() throws IOException {
 
         fenetre = new JFrame();
@@ -188,7 +190,7 @@ public class GUI extends JFrame {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
-                  //  ConnectionFrame cof = new ConnectionFrame();
+                    //  ConnectionFrame cof = new ConnectionFrame();
                 } //new PanelSend();
                 //System.out.println("connect");
                 else {
@@ -259,24 +261,24 @@ public class GUI extends JFrame {
     public void creer_onglet_server() throws SocketException {
         ItemCard card = new ItemCard();
         onglets.addTab("Serveur " + count_serv++, new ImageIcon(getClass().getResource("./IMAGES/network.png")), card, "Serveur");
-      /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
-        ClientAutomatePanel automate_tmp = new ClientAutomatePanel(console_tmp);
-        console_tmp.setLocation(10, 5);
-        JPanel cards_tmp = new JPanel(new CardLayout());
-        cards_tmp.setLayout(null);
-        cards_tmp.add(console_tmp);
-        cards_tmp.add(automate_tmp);
-        if (count_serv == 1) {
-            onglets.addTab("Serveur " + count_serv, new ImageIcon(getClass().getResource("./IMAGES/network.png")), cards_tmp, "Serveur");
-        }
-        if (count_serv > count_serv_tmp) {
+        /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
+         ClientAutomatePanel automate_tmp = new ClientAutomatePanel(console_tmp);
+         console_tmp.setLocation(10, 5);
+         JPanel cards_tmp = new JPanel(new CardLayout());
+         cards_tmp.setLayout(null);
+         cards_tmp.add(console_tmp);
+         cards_tmp.add(automate_tmp);
+         if (count_serv == 1) {
+         onglets.addTab("Serveur " + count_serv, new ImageIcon(getClass().getResource("./IMAGES/network.png")), cards_tmp, "Serveur");
+         }
+         if (count_serv > count_serv_tmp) {
 
-            onglets.addTab("Serveur " + count_serv, new ImageIcon(getClass().getResource("./IMAGES/network.png")), cards_tmp, "Serveur");
-        }
-        count_serv_tmp = count_serv;
-        count_serv += 1;
+         onglets.addTab("Serveur " + count_serv, new ImageIcon(getClass().getResource("./IMAGES/network.png")), cards_tmp, "Serveur");
+         }
+         count_serv_tmp = count_serv;
+         count_serv += 1;
 
-        cards_tmp = null;*/
+         cards_tmp = null;*/
     }
 
     public void valider_actionPerformed(ActionEvent e) throws SocketException {

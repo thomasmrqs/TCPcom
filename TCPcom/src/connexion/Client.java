@@ -69,6 +69,6 @@ public class Client extends Connexion {
 
     @Override
     public String toString() {
-        return "Client " + this.id + " : ";
+        return "Client ";
     }
 }

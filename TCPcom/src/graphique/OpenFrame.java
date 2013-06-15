@@ -122,19 +122,20 @@ public class OpenFrame extends JFrame {
                  */
                 int portLocal = Integer.parseInt(PortLocale.getText());
 
-                String ipDistante = labelIpDst.getText();
+                String ipDistante = boundedIpDst.getText();
                 int portDistant = Integer.parseInt(boundedPortDst.getText());
 
                 ItemCard card = GUI.get().getSelectedPane();
                 if (card.isClient()) {
-                    boolean succeed = card.getAutomate().open(portLocal, ipDistante, portLocal, true);
+                    card.getAutomate().open(portLocal, ipDistante, portDistant, true);
+                    boolean succeed = card.getAutomate().getOpenOk();
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
                         GUI.get().getSelectedPane().getConsole().insertLine("Client créé", "Green");
                     } else {
                         GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
-                } else {//Cas d'un serveur
+                } else {//Cas d'un serveur                    
                     Serveur s = GestionDesConnexions.get().lancerServeur("toto", portLocal);
                     try {
                         Thread.sleep(2000);
@@ -143,6 +144,7 @@ public class OpenFrame extends JFrame {
                     }
                     if (s.isAlive()) {
                         GUI.get().getSelectedPane().getConsole().insertLine("Serveur créé", "Green");
+                        GUI.get().getSelectedPane().setServeur(s);
                     } else {
                         GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
