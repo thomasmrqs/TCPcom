@@ -493,6 +493,11 @@ public class Automate implements Runnable {
     }
 
     @Override
+    public String toString() {
+        return this.getTcb().getConnexion().ipLocale;
+    }
+
+    @Override
     public void run() {
         while (true) {
             try {

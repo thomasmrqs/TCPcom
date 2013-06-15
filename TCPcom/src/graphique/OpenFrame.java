@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 public class OpenFrame extends JFrame {
 
@@ -40,7 +41,6 @@ public class OpenFrame extends JFrame {
     private class PanelSend extends JPanel implements ActionListener {
 
         private JButton EnvoiBtnAccept;
-        private JCheckBox Actif;
         private JLabel LabPortLocale, LabTempo;
         private JLabel labelIpDst;
         private JLabel labelPortDst;
@@ -98,11 +98,6 @@ public class OpenFrame extends JFrame {
             add(LabTempo);
             add(Tempo);
 
-            // Actif Passif
-            Actif = new JCheckBox("Actif");
-            Actif.setFont(new Font("arial", 0, 12));
-            Actif.setBounds(10, 185, 60, 20);
-            add(Actif);
 
 
 
@@ -129,14 +124,14 @@ public class OpenFrame extends JFrame {
                     boolean succeed = card.getAutomate().getOpenOk();
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
+                        System.out.println("Client créé" + card.getAutomate().getTcb().getConnexion());
+                        
                         GUI.get().getSelectedPane().getConsole().insertLine("Client créé" + card.getAutomate().getTcb().getConnexion(), "Green");
                     } else {
                         GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 } else {//Cas d'un serveur                    
-                    this.Actif.setEnabled(false);
-                    //this.Actif.setSelected(true);
-                    //this.set
+                   
                     Serveur s = GestionDesConnexions.get().lancerServeur("toto", portLocal);
                     s.setIp_saisie(ipDistante);
                     s.setPort_saisie(portDistant);
