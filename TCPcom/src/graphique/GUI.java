@@ -68,6 +68,7 @@ public class GUI extends JFrame {
     private int count_tmp = 1;
     private int count_serv = 1;
     private int count_serv_tmp = 1;
+    private String serverconnectedclients = null;
     DegradPanel degradPanel = new DegradPanel();
 
     public JTabbedPane getOnglets() {
@@ -152,6 +153,7 @@ public class GUI extends JFrame {
         fenetre.setVisible(true);
         fenetre.setJMenuBar(mb);
         cards_tmp = new JPanel();
+        serverconnectedclients = new String ();
     }
 
     public void CreateTCPJMenuBar() throws SocketException {
@@ -267,13 +269,13 @@ public class GUI extends JFrame {
 
     public void creer_onglet_client() throws SocketException {
         ItemCard card = new ItemCard(new Automate());
-        onglets.addTab("Client " + count++, new ImageIcon(getClass().getResource("./IMAGES/Client.gif")), card, "Client");
+        onglets.addTab("Client " + count++, new ImageIcon(getClass().getResource("./IMAGES/Client.gif")), card, "Client" + count);
     }
 
     public void creer_onglet_server() throws SocketException {
         ItemCard card = new ItemCard();
-        onglets.addTab("Serveur " + count_serv++, new ImageIcon(getClass().getResource("./IMAGES/network.png")), card, "Serveur");
-        /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
+        onglets.addTab("Serveur " + count_serv++, new ImageIcon(getClass().getResource("./IMAGES/network.png")), card, "Serveur" + count_serv);
+                /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
          ClientAutomatePanel automate_tmp = new ClientAutomatePanel(console_tmp);
          console_tmp.setLocation(10, 5);
          JPanel cards_tmp = new JPanel(new CardLayout());

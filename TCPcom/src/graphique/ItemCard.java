@@ -6,9 +6,13 @@ import java.net.SocketException;
 import connexion.Automate;
 import connexion.Serveur;
 import connexion.ServeurThread;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 public class ItemCard extends JPanel //implements Runnable
 {
@@ -37,9 +41,9 @@ public class ItemCard extends JPanel //implements Runnable
     public Automate getAutomate() {
         return automate;
     }
-    
-    public void addClientToServeur(ServeurThread a){
-        this.comboBoxServeurModel.addElement(a);
+
+    public void addClientToServeur(Automate a) {
+        this.comboBoxServeurModel.addElement(a.getTcb().getConnexion());
     }
 
     public Serveur getServeur() {
@@ -49,7 +53,7 @@ public class ItemCard extends JPanel //implements Runnable
     public void setServeur(Serveur serveur) {
         this.serveur = serveur;
     }
-    
+
     public ItemCard() throws SocketException//Constructeur pour un serveur
     {
         this.client = false;
@@ -60,10 +64,23 @@ public class ItemCard extends JPanel //implements Runnable
         this.panel_automate = new ClientAutomatePanel(console);
         this.setLayout(null);
         /*Debut ComboBox*/
+        JLabel nomComboBox = new JLabel("Server connected clients : ");
         this.comboBoxServeurModel = new DefaultComboBoxModel();
         this.comboBoxServeur = new JComboBox(this.comboBoxServeurModel);
-        this.comboBoxServeur.setBounds(630, 0, 600, 20);
-        this.add(comboBoxServeur);
+        this.comboBoxServeurModel.addElement("10");
+        this.comboBoxServeurModel.addElement("12");
+        this.comboBoxServeur.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    System.out.println("Element selectionne : " + e.getItem());
+                }
+            }
+        });
+        nomComboBox.setBounds(500, 0, 140, 20);
+        this.comboBoxServeur.setBounds(650, 0, 600, 20);
+        this.add(nomComboBox);
+        this.add(this.comboBoxServeur);
         /*Fin ComboBox*/
         this.add(console);
         this.add(panel_automate);

@@ -16,6 +16,24 @@ public class Serveur implements Runnable {
     private int id;
     private boolean alive;
     private ServerSocket socket;
+    private int port_saisie;
+    private String ip_saisie;
+
+    public int getPort_saisie() {
+        return port_saisie;
+    }
+
+    public void setPort_saisie(int port_saisie) {
+        this.port_saisie = port_saisie;
+    }
+
+    public String getIp_saisie() {
+        return ip_saisie;
+    }
+
+    public void setIp_saisie(String ip_saisie) {
+        this.ip_saisie = ip_saisie;
+    }
 
     @Deprecated
     public Serveur(String nom, int port) {
@@ -52,11 +70,10 @@ public class Serveur implements Runnable {
                 this.liste.add(st);
                 System.out.println("Je vais ajouter un client à mon serveur"); 
                 Automate a = new Automate();
-                a.setConnexion(st);
-                a.open(st.portLocal, st.ipDistante, st.portDistant, false);
-                (new Thread(a)).start();
-                //Faire le OPen
-                GUI.get().obtainCard(this).addClientToServeur(st);//Ajout du serveurThread                
+                a.setConnexion(st);                
+                a.open(st.portLocal, this.ip_saisie, this.port_saisie, false);
+                (new Thread(a)).start();                
+                GUI.get().obtainCard(this).addClientToServeur(a);//Ajout du serveurThread                
                 GestionDesConnexions.get().ajouterConnexion(st);
                 (new Thread(st)).start();
             }

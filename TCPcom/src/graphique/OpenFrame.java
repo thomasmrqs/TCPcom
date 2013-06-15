@@ -32,7 +32,7 @@ public class OpenFrame extends JFrame {
         panelsend = new PanelSend();
         openframe.setTitle("Open");
         openframe.setLocationRelativeTo(null);
-        openframe.setSize(400, 250);
+        openframe.setSize(500, 400);
         openframe.setContentPane(panelsend);
         openframe.setVisible(true);
     }
@@ -53,8 +53,8 @@ public class OpenFrame extends JFrame {
          */
         public PanelSend() {
             setLayout(null);
-            setPreferredSize(new Dimension(320, 270));
-            setBounds(5, 5, 315, 320);
+            setPreferredSize(new Dimension(350, 350));
+            setBounds(5, 5, 350, 350);
             setBorder(new TitledBorder("Open"));
 
             // Port Locale
@@ -118,9 +118,10 @@ public class OpenFrame extends JFrame {
             if (e.getSource() == EnvoiBtnAccept) {
                 int portLocal = Integer.parseInt(PortLocale.getText());
                 ItemCard card = GUI.get().getSelectedPane();
+                String ipDistante = boundedIpDst.getText();
+                int portDistant = Integer.parseInt(boundedPortDst.getText());
                 if (card.isClient()) {
-                    String ipDistante = boundedIpDst.getText();
-                    int portDistant = Integer.parseInt(boundedPortDst.getText());
+
                     card.getAutomate().open(portLocal, ipDistante, portDistant, true);
                     boolean succeed = card.getAutomate().getOpenOk();
                     if (succeed) {
@@ -130,7 +131,13 @@ public class OpenFrame extends JFrame {
                         GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 } else {//Cas d'un serveur                    
+                    this.Actif.setEnabled(false);
+                    //this.Actif.setSelected(true);
+                    //this.set
                     Serveur s = GestionDesConnexions.get().lancerServeur("toto", portLocal);
+                    s.setIp_saisie(ipDistante);
+                    s.setPort_saisie(portDistant);
+
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException ex) {
