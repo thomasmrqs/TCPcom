@@ -11,31 +11,49 @@ import javax.swing.JPanel;
 public class ItemCard extends JPanel //implements Runnable
 {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private ClientConsolePanel console = null;
+    private ClientAutomatePanel panel_automate = null;
+    private final int count = 1;
+    private boolean client;
+    private Automate automate;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private ClientConsolePanel console = null;
-	private ClientAutomatePanel automate = null;
-	private final int count = 1;
-	//private JTabbedPane onglets = null;
-	public ItemCard() throws SocketException
-	{
-		//onglets = new JTabbedPane();
-		//run();
-		//onglets.addTab("Client " + increase(count), new ImageIcon(getClass().getResource("/IMAGES/Client.gif")) , this, "Client");
-		this.console = new ClientConsolePanel();
-		console.setLocation(10, 5);
-		this.automate = new ClientAutomatePanel(console);
-		this.setLayout(null);
-		this.add(console);
-		this.add(automate);
-	}
-	
-	public int increase (int count)
-	{
-		return (count ++);
-	}
-	
+    public boolean isClient() {
+        return client;
+    }
+
+    public Automate getAutomate() {
+        return automate;
+    }
+
+    public ItemCard() throws SocketException//Constructeur pour un serveur
+    {
+        this.client = false;
+        this.automate = null;
+        this.console = new ClientConsolePanel();
+        console.setLocation(10, 5);
+        this.panel_automate = new ClientAutomatePanel(console);
+        this.setLayout(null);
+        this.add(console);
+        this.add(panel_automate);
+    }
+
+    public ItemCard(Automate a) throws SocketException//Constructeur pour un client
+    {
+        this.client = true;
+        this.automate = a;
+        this.console = new ClientConsolePanel();
+        console.setLocation(10, 5);
+        this.panel_automate = new ClientAutomatePanel(console);
+        this.setLayout(null);
+        this.add(console);
+        this.add(panel_automate);
+    }
+
+    public int increase(int count) {
+        return (count++);
+    }
 }

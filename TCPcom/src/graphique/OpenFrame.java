@@ -104,23 +104,16 @@ public class OpenFrame extends JFrame {
                 /**
                  * ************* Fonction open **********************
                  */
-                System.out.println(PortLocale.getText());
-                System.out.println(Socket.getText());
-                System.out.println(Tempo.getText());
-                System.out.println(Actif.isSelected());
-                //Récupération de l'automate séléctioné
-                //Si c'est un client
-                if (((ItemCard) GUI.get().getOnglets().getSelectedComponent()).a != null) {
-                    GestionDesConnexions.get().lancerServeur("tot", 60000);
-                    boolean succeed = Automate.open(((ItemCard) GUI.get().getOnglets().getSelectedComponent()).a, 60000, "127.0.0.1", 60000, true);
+                ItemCard card = GUI.get().getSelectedPane();
+                if (card.isClient()) {                    
+                    boolean succeed = Automate.open(card.getAutomate(), 60000, "127.0.0.1", 60000, true);
                     if (succeed) {
-                        (new Thread(((ItemCard) GUI.get().getOnglets().getSelectedComponent()).a)).start();
+                        (new Thread(card.getAutomate())).start();
                     }else{
                         System.out.println("Erreur du client");
                     }
                 } else {
-                    System.out.println("C'est un serveur");
-                    //Il faut récupérer le bon client séléctionné dans la liste du serveur
+                    System.out.println("C'est un serveur");                    
                 }
                 openframe.dispose();
             }

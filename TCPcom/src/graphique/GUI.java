@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -67,7 +69,27 @@ public class GUI extends JFrame {
     private int count_serv_tmp = 1;
     DegradPanel degradPanel = new DegradPanel();
 
-    public GUI() throws IOException {
+    public JTabbedPane getOnglets() {
+        return onglets;
+    }
+    public ItemCard getSelectedPane(){
+        return (ItemCard) this.onglets.getSelectedComponent();
+    }
+    
+    private static GUI inst = null;
+    
+    public static GUI get(){
+        if (GUI.inst == null){
+            try {
+                GUI.inst = new GUI();
+            } catch (IOException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return GUI.inst;
+    }
+    
+    private GUI() throws IOException {
 
         fenetre = new JFrame();
         mb = new JMenuBar();
@@ -218,15 +240,8 @@ public class GUI extends JFrame {
     }
 
     public void creer_onglet_client() throws SocketException {
-
-        ItemCard card = new ItemCard();
-
+        ItemCard card = new ItemCard(new Automate());
         onglets.addTab("Client " + count++, new ImageIcon(getClass().getResource("./IMAGES/Client.gif")), card, "Client");
-
-        card = null;
-
-
-
     }
 
     public void creer_onglet_server() throws SocketException {
@@ -303,8 +318,8 @@ public class GUI extends JFrame {
 
         //SplashScreenMain splash =	new SplashScreenMain();
         //splash.splash();
-        GUI gui = new GUI();
-        gui.CreateTCPJMenuBar();
+        //GUI gui = new GUI();
+        GUI.get().CreateTCPJMenuBar();
     }
 
     public JButton getSbs() {
