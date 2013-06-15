@@ -1,13 +1,11 @@
 package graphique;
 
-import java.awt.CardLayout;
 import java.net.SocketException;
-import java.util.logging.ConsoleHandler;
 
 
 import connexion.Automate;
-import java.awt.Color;
-import javax.swing.ComboBoxModel;
+import connexion.Serveur;
+import connexion.ServeurThread;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -26,6 +24,7 @@ public class ItemCard extends JPanel //implements Runnable
     private final int count = 1;
     private boolean client; // Permet de savoir su c'est un ItemCard de client ou de serveur
     private Automate automate; // Si c'est un client, il faut directement un Automate
+    private Serveur serveur;
 
     public boolean isClient() {
         return client;
@@ -38,11 +37,20 @@ public class ItemCard extends JPanel //implements Runnable
     public Automate getAutomate() {
         return automate;
     }
+    
+    public void addClientToServeur(ServeurThread a){
+        this.comboBoxServeurModel.addElement(a);
+    }
 
+    public Serveur getServeur() {
+        return serveur;
+    }
+    
     public ItemCard() throws SocketException//Constructeur pour un serveur
     {
         this.client = false;
         this.automate = null;
+        this.serveur = null;
         this.console = new ClientConsolePanel();
         console.setLocation(10, 5);
         this.panel_automate = new ClientAutomatePanel(console);
@@ -62,6 +70,7 @@ public class ItemCard extends JPanel //implements Runnable
         this.comboBoxServeurModel = null;
         this.client = true;
         this.automate = a;
+        this.serveur = null;
         this.console = new ClientConsolePanel();
         console.setLocation(10, 5);
         this.panel_automate = new ClientAutomatePanel(console);

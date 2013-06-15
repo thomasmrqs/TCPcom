@@ -1,7 +1,7 @@
 package graphique;
 
-import connexion.Automate;
 import connexion.GestionDesConnexions;
+import connexion.Serveur;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -52,7 +52,7 @@ public class OpenFrame extends JFrame {
          * Constructeur
          */
         public PanelSend() {
-            setLayout(null);            
+            setLayout(null);
             setPreferredSize(new Dimension(320, 270));
             setBounds(5, 5, 315, 320);
             setBorder(new TitledBorder("Open"));
@@ -71,7 +71,7 @@ public class OpenFrame extends JFrame {
             labelIpDst = new JLabel("Adresse Ip distante");
             labelIpDst.setFont(new Font("arial", 0, 12));
             boundedIpDst = new BoundedTextField("", 32);
-            
+
             labelIpDst.setBounds(10, 55, 180, 20);
             boundedIpDst.setBounds(10, 75, 285, 20);
             add(labelIpDst);
@@ -105,8 +105,8 @@ public class OpenFrame extends JFrame {
             add(Actif);
 
 
-            
-            EnvoiBtnAccept = new JButton("Valider le " + ((GUI.get().getSelectedPane().isClient()) ? " client " : " serveur"));
+
+            EnvoiBtnAccept = new JButton("Valider le" + ((GUI.get().getSelectedPane().isClient()) ? " client " : " serveur"));
             EnvoiBtnAccept.addActionListener(this);
             add(EnvoiBtnAccept);
             EnvoiBtnAccept.setBounds(10, 205, 160, 20);
@@ -121,13 +121,13 @@ public class OpenFrame extends JFrame {
                  * ************* Fonction open **********************
                  */
                 int portLocal = Integer.parseInt(PortLocale.getText());
-                
+
                 String ipDistante = labelIpDst.getText();
                 int portDistant = Integer.parseInt(boundedPortDst.getText());
 
                 ItemCard card = GUI.get().getSelectedPane();
                 if (card.isClient()) {
-                    boolean succeed = Automate.open(card.getAutomate(), portLocal, ipDistante, portDistant, true);
+                    boolean succeed = card.getAutomate().open(portLocal, ipDistante, portLocal, true);
                     if (succeed) {
                         (new Thread(card.getAutomate())).start();
                         GUI.get().getSelectedPane().getConsole().insertLine("Client créé", "Green");
@@ -135,7 +135,17 @@ public class OpenFrame extends JFrame {
                         GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 } else {//Cas d'un serveur
-                    //boolean succeed = Automate.open(null, portLocal, ipDistante, portLocal, succeed)
+                    Serveur s = GestionDesConnexions.get().lancerServeur("toto", portLocal);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger("OpenFrame::" + OpenFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if (s.isAlive()) {
+                        GUI.get().getSelectedPane().getConsole().insertLine("Serveur créé", "Green");
+                    } else {
+                        GUI.get().getSelectedPane().getConsole().insertLine("Informations de connexion invalides", "Red");
+                    }
                 }
                 openframe.dispose();
             }

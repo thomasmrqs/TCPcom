@@ -11,6 +11,8 @@ public class Automate implements Runnable {
     private TCB tcb = null;
     private Connexion connexion;
     private boolean mod = false; //Si true = client
+    private int port_dist = 0;
+    private String ip_dist = null;
 
     public boolean getMod() {
         return mod;
@@ -18,6 +20,22 @@ public class Automate implements Runnable {
 
     public void setMod(boolean mod) {
         this.mod = mod;
+    }
+
+    public int getPort_dist() {
+        return port_dist;
+    }
+
+    public void setPort_loc(int port_distant) {
+        this.port_dist = port_distant;
+    }
+
+    public String getIp_dist() {
+        return ip_dist;
+    }
+
+    public void setIp_dist(String ip_distant) {
+        this.ip_dist = ip_distant;
     }
 
     public Automate() {
@@ -154,16 +172,18 @@ public class Automate implements Runnable {
         this.tcb = tcb;
     }
 
-    public static boolean open(Automate a, int port_local, String ip_ser, int port_ser, boolean mode) {
+    public boolean open(int port_local, String ip_distant, int port_ser, boolean mode) {
         //mode True = client
-        a.setMod(mode);
+        this.setMod(mode);
+        this.setIp_dist(ip_distant);
+        this.setPort_loc(port_local);
         if (mode == true) {//Client
             Client c = null;
             try {
-                c = GestionDesConnexions.get().lancerClient("toto", ip_ser, port_ser);
-                a.setTcb(new TCB(c));
-                a.connexion = c;
-                a.etatCourant = Ressource.ETAT_CLOSED;
+                c = GestionDesConnexions.get().lancerClient("toto", ip_distant, port_ser);
+                this.setTcb(new TCB(c));
+                this.connexion = c;
+                this.etatCourant = Ressource.ETAT_CLOSED;
             } catch (Exception e) {
                 System.out.println("Automate::J'ai tout casse");
             }
@@ -175,7 +195,7 @@ public class Automate implements Runnable {
             return c.isAlive();
         }
         //Dans le cas d'un serveur
-        a.etatCourant = Ressource.ETAT_LISTEN;
+        this.etatCourant = Ressource.ETAT_LISTEN;
         return true;
     }
 
@@ -224,6 +244,14 @@ public class Automate implements Runnable {
         if (this.getMod() == true) {
             return;
         }
+        if (this.getIp_dist() != null && this.getPort_dist() != 0) {
+            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist()) {
+                return;
+            }
+            if (this.getTcb().getConnexion().getPortDistant() != this.getPort_dist()) {
+                return;
+            }
+        }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
         if (p == null) {
             return;
@@ -240,6 +268,14 @@ public class Automate implements Runnable {
     public void synRevToEstablished() {
         if (this.getMod() == true) {
             return;
+        }
+        if (this.getIp_dist() != null && this.getPort_dist() != 0) {
+            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist()) {
+                return;
+            }
+            if (this.getTcb().getConnexion().getPortDistant() != this.getPort_dist()) {
+                return;
+            }
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
         if (p == null) {

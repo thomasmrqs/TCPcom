@@ -1,6 +1,7 @@
 package graphique;
 
 import connexion.Automate;
+import connexion.Serveur;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -21,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
-import javax.swing.plaf.SplitPaneUI;
 
 public class GUI extends JFrame {
 
@@ -74,6 +74,18 @@ public class GUI extends JFrame {
     }
     public ItemCard getSelectedPane(){
         return (ItemCard) this.onglets.getSelectedComponent();
+    }
+    
+    public ItemCard obtainCard(Serveur s){
+       for (int i = 0; i <= this.onglets.getTabCount(); i++){
+           ItemCard item = (ItemCard)this.onglets.getTabComponentAt(i);
+           if (!item.isClient()){
+               if (item.getServeur() == s){
+                   return item;
+               }
+           }
+       }
+       return null;
     }
     
     private static GUI inst = null;

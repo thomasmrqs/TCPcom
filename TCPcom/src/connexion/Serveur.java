@@ -1,5 +1,6 @@
 package connexion;
 
+import graphique.GUI;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class Serveur implements Runnable {
             while (this.alive) {
                 st = new ServeurThread(this.id, ++idServeurThread, this.socket.accept());
                 this.liste.add(st);
+                GUI.get().obtainCard(this).addClientToServeur(st);//Ajout du serveurThread                
                 GestionDesConnexions.get().ajouterConnexion(st);
                 (new Thread(st)).start();
             }
