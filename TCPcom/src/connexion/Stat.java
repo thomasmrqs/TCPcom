@@ -16,7 +16,7 @@ public class Stat {
 	private String nom_loc = null;
 	private int fenetre_recep = 0;
 	private int fenetre_emis = 0;
-	private boolean etat = false;
+	private int etat = 0;
 	private int nbr_tam_att_ack = 0;
 	private int nbr_tam_att_recep = 0;
 	private boolean urg = false;
@@ -66,10 +66,10 @@ public class Stat {
 	public void setFenetre_emis(int fenetre_emis) {
 		this.fenetre_emis = fenetre_emis;
 	}
-	public boolean isEtat() {
+	public int getEtat() {
 		return etat;
 	}
-	public void setEtat(boolean etat) {
+	public void setEtat(int etat) {
 		this.etat = etat;
 	}
 	public int getNbr_tam_att_ack() {
