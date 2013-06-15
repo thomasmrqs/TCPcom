@@ -13,6 +13,7 @@ public class Automate implements Runnable {
     private Connexion connexion;
     private boolean mod = false; //Si true = client
     private int port_dist = 0;
+    private int port_loc = 0;
     private String ip_dist = null;
     private boolean openOk = false;
 
@@ -20,18 +21,26 @@ public class Automate implements Runnable {
         return mod;
     }
 
-    public void setMod(boolean mod) {
-        this.mod = mod;
+    public void setMod(boolean mode) {
+        this.mod = mode;
     }
 
     public int getPort_dist() {
         return port_dist;
     }
 
-    public void setPort_loc(int port_distant) {
+    public void setPort_dist(int port_distant) {
         this.port_dist = port_distant;
     }
 
+    public int getPort_local() {
+        return port_loc;
+    }
+
+    public void setPort_local(int port_local) {
+        this.port_loc = port_local;
+    }
+    
     public String getIp_dist() {
         return ip_dist;
     }
@@ -126,6 +135,7 @@ public class Automate implements Runnable {
     }
 
     public void afficheEtatCourant() {
+    	System.out.println("client/serveur : " + this.getMod());
         switch (this.etatCourant) {
             case Ressource.ETAT_CLOSE_WAIT:
                 System.out.println("Etat actuel : ETAT_CLOSE_WAIT");
@@ -178,8 +188,11 @@ public class Automate implements Runnable {
         //mode True = client
         this.setMod(mode);
         this.setIp_dist(ip_distant);
-        this.setPort_loc(port_local);
+        this.setPort_local(port_local);
+        this.setPort_dist(port_ser);
+        //System.out.println("client/serveur : " + mode + "port dist : " + port_ser + "Ip dist : " + ip_distant);
         if (mode == true) {//Client
+        	System.out.println("entre du clienttttt");
             Client c = null;
             try {
                 c = GestionDesConnexions.get().lancerClient("toto", ip_distant, port_ser);
@@ -201,8 +214,8 @@ public class Automate implements Runnable {
         //Dans le cas d'un serveur
         try 
         {
-        this.setTcb(new TCB (connexion));
-        this.etatCourant = Ressource.ETAT_LISTEN;
+        	this.setTcb(new TCB (connexion));
+        	this.etatCourant = Ressource.ETAT_LISTEN;
         }
         catch (Exception e) {
             System.out.println("Automate::Probleme serveur");
@@ -215,19 +228,23 @@ public class Automate implements Runnable {
     /* Changer l'�tat de CLOSED � SYN_SENT */
     public void closedToSynSent() {
         if (this.getMod() == true) {
+        	System.out.println("coucou");
             int port_ser = this.getTcb().getConnexion().portDistant;
             /* CA FAIT TOUT CASSEEEEEE */
             //int port_client = this.getTcb().getConnexion().socket.getLocalPort();
-            Paquet p = new Paquet(100005, port_ser);
+            Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
             p.MettreSyn(true);
             p.CreerPaquet();
+            p.AfficherPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
             this.etatCourant = Ressource.ETAT_SYN_SENT;
 
         }
     }
 
-    public void synSentToEstablished() {
+    public void synSentToEstablished() 
+    {
+    	//System.out.println("dans la fonction synSentToEstablished");
         if (this.getMod() == false) {
             return;
         }
@@ -239,6 +256,7 @@ public class Automate implements Runnable {
         }
         if (p.ObtenirSyn() == true) {
             if (p.ObtenirAck() == true) {
+            	//System.out.println("devenir establi");
                 this.etatCourant = Ressource.ETAT_ESTABLISHED;
                 p.MettreSyn(false);
                 p.CreerPaquet();
@@ -262,9 +280,13 @@ public class Automate implements Runnable {
     }
 
     public void listenToSynRec() {
+    	 //System.out.println("jakez0");
         if (this.getMod() == true) {
             return;
         }
+        System.out.println("jakez1");
+        System.out.println("ip : " + this.getIp_dist());
+        System.out.println("Port : " + this.getPort_dist());
         if (this.getIp_dist() != null && this.getPort_dist() != 0) {
             if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist()) {
                 return;
@@ -273,10 +295,13 @@ public class Automate implements Runnable {
                 return;
             }
         }
+        System.out.println("jakez");
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+        //p.AfficherPaquet();
         if (p == null) {
             return;
         }
+        System.out.println("jakez2");
         if (p.ObtenirSyn() == true) {
             this.etatCourant = Ressource.ETAT_SYN_RCVD;
             p.MettreSyn(true);
@@ -427,7 +452,7 @@ public class Automate implements Runnable {
         /* CHANGER LE TRUE */
         while (true) {
             afficheEtatCourant();
-            System.out.println("before switch");
+            //System.out.println("before switch");
             switch (this.etatCourant) {
                 case Ressource.ETAT_CLOSE_WAIT:
                     this.closeWaitToLastAck();
@@ -476,9 +501,10 @@ public class Automate implements Runnable {
                     System.out.println("Etat actuel : ETAT_SYN_RCVD");
                     break;
                 case Ressource.ETAT_SYN_SENT:
+                	System.out.println("youpi ?");
                     this.synSentToEstablished();
                     //System.out.println("Etat actuel : ETAT_SYN_SENT");
-                    System.out.println("youpi ?");
+                   
                     break;
                 case Ressource.ETAT_TIME_WAIT:
                     this.timeWaitToClosed();
