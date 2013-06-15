@@ -56,4 +56,14 @@ public class Utils {
         }
         return tab;
     } 
+    
+    public static byte[] complement(byte[] str){
+        byte[] tab = new byte[str.length];
+        int i = 0;
+        for (byte d : str){
+            d ^= 0XFF;
+            tab[i++] = d;
+        }
+        return tab;
+    } 
 }
