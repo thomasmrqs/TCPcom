@@ -10,24 +10,18 @@ import java.util.logging.Logger;
 public class Automate implements Runnable {
 
 	private int etatCourant = Ressource.ETAT_CLOSED;
+    private boolean modePasAPas = false;
     private TCB tcb = null;
-    private Connexion connexion;
-    private boolean mod = false; //Si true = client
+    private Connexion connexion = null;
+    private boolean mod = false; //Si true = clien
+    
     private int port_dist = 0;
     private int port_loc = 0;
     private String ip_dist = null;
+    
     private boolean openOk = false;
     private Stack<Paquet> bufferPaquet = null;
     private File fichier = null;
-    private boolean modePasAPas;
-
-    public boolean isModePasAPas() {
-        return modePasAPas;
-    }
-
-    public void setModePasAPas(boolean modePasAPas) {
-        this.modePasAPas = modePasAPas;
-    }
     
     public Automate()
     {
@@ -203,38 +197,88 @@ public class Automate implements Runnable {
         return getTcb().getNomLocalConnexion();
     }
 
-    /* Changer l'etat de CLOSED a SYN_SENT */
+    /* Depuis Closed */
     public void closedToSynSent()
     {
         if (this.getMod())
         {
+        	this.getTcb().initISS();
             Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
             p.MettreSyn(true);
+            p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
             this.etatCourant = Ressource.ETAT_SYN_SENT;
-
         }
     }
 
-    public void synSentToEstablished() 
+    /* Depuis Closed */
+    public void closedToListen()
     {
         if (!this.getMod())
         {
+        	this.getTcb().initISS();
+            this.etatCourant = Ressource.ETAT_LISTEN;
+        }
+    }
+
+    
+    /* Depuis Listen */
+    public void listenToSynRec()
+    {
+        if (this.getMod())
             return;
+        if (this.getIp_dist() != null && this.getPort_dist() != 0)
+        {
+            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist() ||
+            	this.getTcb().getConnexion().getPortDistant() != this.getPort_dist())
+                return;
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
         if (p == null)
-        {
             return;
+        if (p.ObtenirSyn())
+        {
+        	this.getTcb().initACK(p.ObtenirNbrSeq());
+            p.MettreSyn(true);
+            p.MettreAck(true);
+            p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+            p.MettreNbrAcc(this.getTcb().getSEG_ACK());
+            p.CreerPaquet();
+            this.getTcb().getConnexion().ecrirePaquet(p);
+            this.etatCourant = Ressource.ETAT_SYN_RCVD;
         }
+    }
+    
+    /* Depuis Listen */
+    public void listenToClosed()
+    {
+        if (!this.getTcb().getConnexion().isAlive())
+        {
+        	this.getTcb().setAbort(true);
+        	this.getTcb().resetTCB();
+            this.etatCourant = Ressource.ETAT_CLOSED;
+        }
+    }
+    
+    /* Depuis Syn Sent */
+    public void synSentToEstablished() 
+    {
+        if (!this.getMod())
+            return;
+        Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+        if (p == null)
+            return;
         
         /* ajout bapt */
+
+        this.getTcb().incrSEQ();
         
-        /* ouverture simultann�e */
+        /* ouverture simultannee */
         
         if (!p.ObtenirAck() && p.ObtenirSyn())
         {
+        	/* CHECK DES NUMS D'ACK ET DE SEQ A FAIRE */
         	p.MettreAck(true);
         	p.MettreSyn(true);
         	p.CreerPaquet();
@@ -243,18 +287,32 @@ public class Automate implements Runnable {
         	return;
         }
         
-        /* fin ajout bapt */
+        /* cas classique */
         
         if (p.ObtenirSyn() && p.ObtenirAck())
         {
-        	p.MettreSyn(false);
-        	p.CreerPaquet();
-        	this.getTcb().getConnexion().ecrirePaquet(p);
-        	this.etatCourant = Ressource.ETAT_ESTABLISHED;
+        	this.getTcb().incrSEQ();
+        	if (this.getTcb().checkACK(p))
+        	{
+        		this.getTcb().initACK(p.ObtenirNbrSeq());
+	        	p.MettreAck(true);
+	        	p.MettreSyn(false);
+	        	p.MettreNbrAcc(this.getTcb().getSEG_ACK());
+	        	p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+	        	p.CreerPaquet();
+	        	this.getTcb().getConnexion().ecrirePaquet(p);
+	        	this.etatCourant = Ressource.ETAT_ESTABLISHED;
+        	}
+        	else
+        	{
+        		/* PAQUET FOIREUX : DEMANDE DE RENVOI DE PAQUET x*/
+        	}
         }
+        
+        /* fin ajout/modif bapt */
     }
 
-
+    /* Depuis Syn Sent */
     public void synSentToClosed()
     {
     	if (!this.getMod())
@@ -264,52 +322,16 @@ public class Automate implements Runnable {
          if (p == null)
              return;
          
-         /* if (la commande est close) */
+         if (p.ObtenirRst())
          {
-        	 p.MettreRst(true);
+        	 p.MettreFin(true);
         	 p.CreerPaquet();
         	 this.getTcb().getConnexion().ecrirePaquet(p);
         	 this.etatCourant = Ressource.ETAT_CLOSED;
          }
     }
-    
-    public void closedToListen()
-    {
-        if (!this.getMod())
-        {
-            this.etatCourant = Ressource.ETAT_LISTEN;
-        }
-    }
 
-    public void listenToSynRec()
-    {
-        if (this.getMod())
-        {
-            return;
-        }
-        if (this.getIp_dist() != null && this.getPort_dist() != 0)
-        {
-            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist() ||
-            	this.getTcb().getConnexion().getPortDistant() != this.getPort_dist())
-            {
-                return;
-            }
-        }
-        Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        if (p == null)
-        {
-            return;
-        }
-        if (p.ObtenirSyn())
-        {
-            this.etatCourant = Ressource.ETAT_SYN_RCVD;
-            p.MettreSyn(true);
-            p.MettreAck(true);
-            p.CreerPaquet();
-            this.getTcb().getConnexion().ecrirePaquet(p);
-        }
-    }
-
+    /* Depuis Syn Received */
     public void synRevToEstablished()
     {
         if (this.getMod())
@@ -331,8 +353,8 @@ public class Automate implements Runnable {
             return;
         }
         
-        /* Ajout bapt pour d�co */
-        if (p.ObtenirFin())
+        /* Ajout bapt pour deco */
+        if (p.ObtenirRst())
         {
         	/* analyse du paquet pour savoir si c'est un abort ou un close */
         	this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
@@ -340,23 +362,15 @@ public class Automate implements Runnable {
         else
         {
         /* Fin ajout bapt */
-	        if (p.ObtenirAck())
+        	this.getTcb().incrSEQ();
+	        if (p.ObtenirAck() && this.getTcb().checkACK(p))
 	        {
 	            this.etatCourant = Ressource.ETAT_ESTABLISHED;
 	        }
         }
     }
 
-    public void listenToClosed()
-    {
-        if (!this.getTcb().getConnexion().isAlive())
-        {
-        	this.getTcb().resetTCB();
-            this.etatCourant = Ressource.ETAT_CLOSED;
-        }
-
-    }
-
+    /* Depuis Established */
     public void estaToCloseWait()
     {
         if (this.getMod())
@@ -390,6 +404,7 @@ public class Automate implements Runnable {
         }
     }
 
+    /* Depuis Fin Wait 1 */
     public void finWait1ToFinWait2()
     {
         if (!this.getMod())
@@ -410,11 +425,7 @@ public class Automate implements Runnable {
         }
     }
 
-    public void setConnexion(Connexion connexion)
-    {
-        this.connexion = connexion;
-    }
-
+    /* Depuis Close Wait */
     public void closeWaitToLastAck()
     {
         if (this.getMod())
@@ -429,6 +440,7 @@ public class Automate implements Runnable {
 
     }
 
+    /* Depuis Fin Wait 2 */
     public void finWait2ToTimeWait()
     {
         /**
@@ -441,6 +453,7 @@ public class Automate implements Runnable {
         return;
     }
 
+    /* Depuis Time Wait */
     public void timeWaitToClosed()
     {
         if (!this.getMod())
@@ -462,6 +475,7 @@ public class Automate implements Runnable {
         }
     }
 
+    /* Depuis Last Ack */
     public void lastAckToClosed()
     {
         if (this.getMod())
@@ -583,6 +597,11 @@ public class Automate implements Runnable {
     	return this.getTcb().getNomLocalConnexion();
     }
     
+    public void setConnexion(Connexion connexion)
+    {
+        this.connexion = connexion;
+    }
+    
     public boolean getMod()
     {
         return mod;
@@ -666,4 +685,12 @@ public class Automate implements Runnable {
 	public void setFichier(File fichier) {
 		this.fichier = fichier;
 	}
+	
+    public boolean isModePasAPas() {
+        return modePasAPas;
+    }
+
+    public void setModePasAPas(boolean modePasAPas) {
+        this.modePasAPas = modePasAPas;
+    }
 }
