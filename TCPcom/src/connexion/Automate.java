@@ -2,6 +2,7 @@ package connexion;
 
 import Ressource.Ressource;
 
+import java.io.File;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,7 @@ public class Automate implements Runnable {
     private String ip_dist = null;
     private boolean openOk = false;
     private Stack<Paquet> bufferPaquet = null;
+    private File fichier = null;
 
     
     public Automate()
@@ -260,11 +262,8 @@ public class Automate implements Runnable {
         }
         if (this.getIp_dist() != null && this.getPort_dist() != 0)
         {
-            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist())
-            {
-                return;
-            }
-            if (this.getTcb().getConnexion().getPortDistant() != this.getPort_dist())
+            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist() ||
+            	this.getTcb().getConnexion().getPortDistant() != this.getPort_dist())
             {
                 return;
             }
@@ -292,14 +291,12 @@ public class Automate implements Runnable {
         }
         if (this.getIp_dist() != null && this.getPort_dist() != 0)
         {
-            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist())
+            if (this.getTcb().getConnexion().getIpDistante() != this.getIp_dist() ||
+            	this.getTcb().getConnexion().getPortDistant() != this.getPort_dist())
             {
                 return;
             }
-            if (this.getTcb().getConnexion().getPortDistant() != this.getPort_dist())
-            {
-                return;
-            }
+            
         }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
         if (p == null)
@@ -390,13 +387,6 @@ public class Automate implements Runnable {
         this.connexion = connexion;
     }
 
-    /**
-     * *************************
-     */
-    /* GREGGGGGGGGGGGGGGGGGGGGGG*/
-    /**
-     * **************************
-     */
     public void closeWaitToLastAck()
     {
         if (this.getMod())
@@ -445,7 +435,7 @@ public class Automate implements Runnable {
 
     public void lastAckToClosed()
     {
-        if (this.getMod() == true)
+        if (this.getMod())
         {
             return;
         }
@@ -454,9 +444,9 @@ public class Automate implements Runnable {
         {
             return;
         }
-        if (p.ObtenirFin() == true)
+        if (p.ObtenirFin())
         {
-            if (p.ObtenirAck() == true)
+            if (p.ObtenirAck())
             {
                 this.etatCourant = Ressource.ETAT_CLOSED;
             }
@@ -481,7 +471,35 @@ public class Automate implements Runnable {
                 case Ressource.ETAT_CLOSING:
                     break;
                 case Ressource.ETAT_ESTABLISHED:
-                    //this.estaToCloseWait();
+                	
+                	/* mode serveur : verification des infos du client pour ne pas accepter n'importe qui */
+                	if (!this.getMod())
+                	{
+                		if (this.getIp_dist() == this.getTcb().getConnexion().getIpDistante() &&
+                			this.getPort_dist() == this.getTcb().getConnexion().getPortDistant())
+                		{
+                			/*OK*/
+                		}
+                		else
+                			break;
+                	}
+                	/*
+                	Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+                	
+                	if (this.getFile())
+                	{
+                		Utils.ecrireDansFichier(p, this.getFile()); 
+                	}
+                	else
+                	{
+                		this.getBufferPaquet().push(p);
+                		while (!p.ObtenirFin())
+                		{
+                	
+                		}
+                	}
+                    */
+                	//this.estaToCloseWait();
 
                     // Si j'envoie une commande close 
                     // Rajouter ici la commande close !!!!!!!!
@@ -535,14 +553,7 @@ public class Automate implements Runnable {
     @Override
     public String toString()
     {
-        Connexion c = this.getTcb().getConnexion();
-        if (this.getTcb().getConnexion() instanceof Client)
-        {
-            Client cl = (Client) c;            
-            return "Client " + cl.getId();
-        }
-        ServeurThread st = (ServeurThread) c;        
-        return "Client_" + st.getId() + "_Server_" + st.getIdServeur();
+    	return this.getTcb().getNomLocalConnexion();
     }
     
     public boolean getMod()
@@ -620,4 +631,12 @@ public class Automate implements Runnable {
     public void setTcb(TCB tcb) {
         this.tcb = tcb;
     }
+
+	public File getFichier() {
+		return fichier;
+	}
+
+	public void setFichier(File fichier) {
+		this.fichier = fichier;
+	}
 }
