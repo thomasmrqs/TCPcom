@@ -88,7 +88,7 @@ public class ItemCard extends JPanel //implements Runnable
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     Automate a = (Automate) e.getItem();
-                    a.pasApAS = pasApas;
+                    a.setModePasAPas(pasApas);
                     ClientConsolePanel c = GUI.get().obtainCard(serveur).getMap_console().get(a);
                     c.setLocation(10, 5);
                     GUI.get().obtainCard(serveur).remove(0);
@@ -114,7 +114,7 @@ public class ItemCard extends JPanel //implements Runnable
         this.comboBoxServeurModel = null;
         this.client = true;
         this.automate = a;
-        this.pasApas = a.pasApAS;
+        this.pasApas = this.automate.isModePasAPas();
         this.serveur = null;
         this.console = new ClientConsolePanel(this.client);
         console.setLocation(10, 5);

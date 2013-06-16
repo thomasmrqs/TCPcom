@@ -285,7 +285,7 @@ public class GUI extends JFrame {
 
     public void creer_onglet_client() throws SocketException {
         Automate a = new Automate();
-        a.pasApAS = this.sbs.isEnabled();
+        a.setModePasAPas(this.sbs.isEnabled());
         ItemCard card = new ItemCard(new Automate());
         onglets.addTab("Client " + count++, new ImageIcon(getClass().getResource("./IMAGES/Client.gif")), card, "Client" + count);
     }
