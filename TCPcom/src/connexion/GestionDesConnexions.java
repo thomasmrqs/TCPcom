@@ -38,22 +38,22 @@ public class GestionDesConnexions {
         return null;
     }
 
-    public Serveur lancerServeur(String nom, int port) {
-        Serveur serveur = new Serveur(nom, port);
+    public Serveur lancerServeur(int port) {
+        Serveur serveur = new Serveur(port);
         (new Thread(serveur)).start();
         return serveur;
     }
 
     @Deprecated
-    public Client lancerClient(String nom, String adresseDest, int portServeur) {
-        Client t = new Client(nom, adresseDest, portServeur);
+    public Client lancerClient(String adresseDest, int portServeur) {
+        Client t = new Client(adresseDest, portServeur);
         (new Thread(t)).start();
         this.ajouterConnexion(t);
         return t;
     }
 
-    public Client lancerClient(String nom, String adresseDest, int portServeur, int portClient) {
-        Client t = new Client(nom, adresseDest, portServeur, portClient);
+    public Client lancerClient(String adresseDest, int portServeur, int portClient) {
+        Client t = new Client(adresseDest, portServeur, portClient);
         (new Thread(t)).start();
         this.ajouterConnexion(t);
         return t;
