@@ -1,9 +1,7 @@
 package graphique;
 
-import java.awt.Checkbox;
+import connexion.Automate;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -20,8 +18,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class ClientAutomatePanel extends JPanel implements ActionListener, ItemListener {
@@ -122,8 +118,8 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
 
         // bouton de next step
         Bnextstep = new JButton("Suivant");
-        Bnextstep.addActionListener(this);
-        Bnextstep.setEnabled(false);
+        //Bnextstep.addActionListener(this);
+        Bnextstep.setEnabled(true);
         add(Bnextstep);
         Bnextstep.setBounds(480, 570, 90, 20);
     }
@@ -588,13 +584,26 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
 
     }
 
+    //Cette fonction demande a l'automate de se débloquer d'un cran
+    private void nextOnAutomate(){
+        System.out.println("Demande de debloquage d'etat");
+        //Récupération de l'automate courament affiché
+        Automate a = null;
+        ItemCard item = GUI.get().getSelectedPane();
+        if (item.isClient())
+        {
+            a = item.getAutomate();
+        }else{
+            a = (Automate) item.getComboBoxServeur().getSelectedItem();
+        }        
+    }
     @Override
     public void actionPerformed(ActionEvent action) {
 
         if (action.getSource() == Bnextstep && (GUI.getSbsflag() == true || automaton.getboxStepByStep() == true)) {
             //if (automaton.getClosed1() == false)
             //	System.out.println("FAUX");
-
+            this.nextOnAutomate();
             if (automaton.getClosed1() == true && stepon == true) {
                 update_states("CLOSED_INIT");
                 System.out.println("toto");

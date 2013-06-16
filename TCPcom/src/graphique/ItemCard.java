@@ -34,6 +34,10 @@ public class ItemCard extends JPanel //implements Runnable
     private Serveur serveur;
     Map<Automate, ClientConsolePanel> map_console = new HashMap<Automate, ClientConsolePanel>();//Représente la liste des consoles des clients du serveur
 
+    public JComboBox getComboBoxServeur() {
+        return comboBoxServeur;
+    }
+
     public boolean isClient() {
         return client;
     }
