@@ -16,6 +16,7 @@ public class Automate implements Runnable {
     private int port_dist = 0;
     private int port_loc = 0;
     private String ip_dist = null;
+    
     private boolean openOk = false;
     private Stack<Paquet> bufferPaquet = null;
     private File fichier = null;
