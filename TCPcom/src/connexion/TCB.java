@@ -65,6 +65,7 @@ public class TCB {
 		if (abort)
 		{
 			setNomLocalConnexion(null);
+			setNomDistantConnexion(null);
 			setConnexion(null);
 			setConnexionStatus(0);
 			setPrioriteConnexion(0);
@@ -97,14 +98,6 @@ public class TCB {
 			setSEG_WND(0);
 		}
 	}
-
-
-
-
-
-
-    
-    
 
     public Connexion getConnexion() {
         return connexion;
