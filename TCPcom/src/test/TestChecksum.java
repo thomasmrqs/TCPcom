@@ -19,16 +19,11 @@ public class TestChecksum {
         p.MettreReserve(0);
         p.MettreFenetre(128);
         p.MettreChecksum(0);
+        p.MettreSyn(true);
         p.AfficherPaquet();
-        byte b = 1;
-        System.out.println("jakez");
-		System.out.println(Utils.afficherOctet(b));
-        System.out.println("jakez2");
         byte[] test = new byte[2];
-        test = c.PortVerBit(4097);
-        System.out.println("tab0 : " + Utils.afficherOctet(test[0]) + "tab1 : " +  Utils.afficherOctet(test[1]));
-        System.out.println(Utils.bitEstVrai(test[1], 7));
-        System.out.println("valeur calcule : " + c.calcul(test[0], test[1]));
-        //c.calculChecksum(p, "192.68.43.1", "10.176.2.34", 6);
+        test = c.PortVerBit(1645);
+        System.out.println("port : " + c.calcul(test[0], test[1]));
+        System.out.println("chcecksum : " + c.calculChecksum(p, "192.68.43.1", "10.176.2.34", 6));
 	}
 }
