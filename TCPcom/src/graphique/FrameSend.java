@@ -35,7 +35,7 @@ private PanelSend panelsend = null;
 	    /**
 	     * Constructeur
 	     */
-	    public FrameSend () 
+	    public FrameSend (Object toto) 
 	    {
 	        framesend = new JFrame();
 	        panelsend = new PanelSend();

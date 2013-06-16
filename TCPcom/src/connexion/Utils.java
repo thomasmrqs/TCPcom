@@ -1,7 +1,6 @@
 package connexion;
 import Ressource.Ressource;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.File;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -68,6 +67,10 @@ public class Utils {
         }
         return tab;
     } 
+    
+    public static void ecrireDansFichier(Paquet p , File f){
+        
+    }
     
     public static String conversionEtat(int i){
         switch(i){

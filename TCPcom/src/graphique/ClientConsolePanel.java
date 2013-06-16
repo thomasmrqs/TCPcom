@@ -1,6 +1,7 @@
 package graphique;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -316,7 +317,7 @@ public class ClientConsolePanel extends JPanel implements ActionListener {
                 }
                 if (cmdField.getSelectedIndex() == 1) { // commande Send
                     //SendFrame sf = new SendFrame();
-                    JFrameSend jfrmaeSend = new JFrameSend();
+                    JFrameSend jfrmaeSend = new JFrameSend();                   
                     jfrmaeSend.pack();
                     jfrmaeSend.setVisible(true);
                 }
