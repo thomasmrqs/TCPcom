@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,15 +24,15 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class ClientAutomatePanel extends JPanel implements ActionListener, ItemListener {
 
-    ImageIcon panel_background = new ImageIcon(getClass().getResource("Automate/WALL.jpg"));
-    Map<String, Map<String, ImageIcon>> map_textures = new HashMap<String, Map<String, ImageIcon>>();
-    Map<String, JLabel> map_jlabels = new HashMap<String, JLabel>();
-    JLabel labclosed1, lablisten, labsynrcvd, labsynsent;
-    JComboBox listStates = null;
-    JButton Bnextstep;
-    JCheckBox Boxstepbystep, Boxautoack;
+    private ImageIcon panel_background = new ImageIcon(getClass().getResource("Automate/WALL.jpg"));
+    private Map<String, Map<String, ImageIcon>> map_textures = new HashMap<String, Map<String, ImageIcon>>();
+    private Map<String, JLabel> map_jlabels = new HashMap<String, JLabel>();
+    private JLabel labclosed1, lablisten, labsynrcvd, labsynsent;
+    private JComboBox listStates = null;
+    private JButton Bnextstep;
+    private JCheckBox Boxstepbystep, Boxautoack;
     private Automaton automaton = new Automaton();    // Automaton.getInstance();
-    String[] automate_states = new String[]{"", "CLOSED_INIT", "LISTEN", "SYN_RCVD", "SYN_SENT", "ESTAB",
+    private String[] automate_states = new String[]{"", "CLOSED_INIT", "LISTEN", "SYN_RCVD", "SYN_SENT", "ESTAB",
         "FIN_WAIT_1", "CLOSE_WAIT", "FIN_WAIT_2", "CLOSING",
         "LAST_ACK", "TIME_WAIT", "CLOSED"};
     private String state = null;
@@ -38,6 +40,10 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
     private ClientConsolePanel console = null;
     //private AutomateConditions conditions = null;
     private Boolean stepon = true;
+
+    public Automaton getAutomaton() {
+        return automaton;
+    }
 
     /**
      * Constructeur du panneau automate
@@ -119,9 +125,15 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
         // bouton de next step
         Bnextstep = new JButton("Suivant");
         //Bnextstep.addActionListener(this);
-        Bnextstep.setEnabled(true);
+        //  Bnextstep.setEnabled(true);
         add(Bnextstep);
         Bnextstep.setBounds(480, 570, 90, 20);
+        Bnextstep.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                nextOnAutomate();
+            }
+        });
     }
 
     public Map<String, ImageIcon> loadTexture(String text1, String text2) {
@@ -585,25 +597,26 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
     }
 
     //Cette fonction demande a l'automate de se débloquer d'un cran
-    private void nextOnAutomate(){
-        System.out.println("Demande de debloquage d'etat");
-        //Récupération de l'automate courament affiché
-        Automate a = null;
+    private void nextOnAutomate() {
+        Automate a;
         ItemCard item = GUI.get().getSelectedPane();
-        if (item.isClient())
-        {
+        if (item.isClient()) {
             a = item.getAutomate();
-        }else{
-            a = (Automate) item.getComboBoxServeur().getSelectedItem();
-        }        
+            a.bypass = true;
+        } else {
+            if (item.getComboBoxServeur().getItemCount() > 0) {
+                a = (Automate) item.getComboBoxServeur().getSelectedItem();
+                a.bypass = true;
+            }
+        }
     }
+
     @Override
     public void actionPerformed(ActionEvent action) {
 
-        if (action.getSource() == Bnextstep && (GUI.getSbsflag() == true || automaton.getboxStepByStep() == true)) {
+        if (action.getSource() == Bnextstep && (automaton.getboxStepByStep() == true)) {
             //if (automaton.getClosed1() == false)
             //	System.out.println("FAUX");
-            this.nextOnAutomate();
             if (automaton.getClosed1() == true && stepon == true) {
                 update_states("CLOSED_INIT");
                 System.out.println("toto");
@@ -728,26 +741,21 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
 
     @Override
     public void itemStateChanged(ItemEvent item) {
-
-        if (item.getSource() == Boxstepbystep) {
-            if (item.getStateChange() == ItemEvent.SELECTED) {
-                Bnextstep.setEnabled(true);
-                automaton.boxSetStepByStep(true);
-                this.console.insertLine("Step-by-Step Mode : ENABLED", "Normal");
-            } else {
-                Bnextstep.setEnabled(false);
-                automaton.setStepByStep(false);
-                this.console.insertLine("Step-by-Step Mode : DISABLED", "Normal");
-            }
-        }
-        if (item.getSource() == Boxautoack) {
-            if (item.getStateChange() == ItemEvent.SELECTED) {
-                automaton.setAutoAck(true);
-                this.console.insertLine("ACK Auto Mode : ENABLED", "Normal");
-            } else {
-                automaton.setAutoAck(false);
-                this.console.insertLine("ACK Auto Mode : DISABLED", "Normal");
-            }
-        }
+        /* if (item.getSource() == Boxstepbystep) {
+         if (item.getStateChange() == ItemEvent.SELECTED) {
+         this.console.insertLine("Step-by-Step Mode : ENABLED", "Normal");
+         } else {
+         this.console.insertLine("Step-by-Step Mode : DISABLED", "Normal");
+         }
+         }
+         if (item.getSource() == Boxautoack) {
+         if (item.getStateChange() == ItemEvent.SELECTED) {
+         automaton.setAutoAck(true);
+         this.console.insertLine("ACK Auto Mode : ENABLED", "Normal");
+         } else {
+         automaton.setAutoAck(false);
+         this.console.insertLine("ACK Auto Mode : DISABLED", "Normal");
+         }
+         }*/
     }
 }

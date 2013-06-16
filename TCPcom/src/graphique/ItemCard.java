@@ -32,7 +32,7 @@ public class ItemCard extends JPanel //implements Runnable
     private boolean client; // Permet de savoir su c'est un ItemCard de client ou de serveur
     private Automate automate; // Si c'est un client, il faut directement un Automate
     private Serveur serveur;
-    Map<Automate, ClientConsolePanel> map_console = new HashMap<Automate, ClientConsolePanel>();//Représente la liste des consoles des clients du serveur
+   private Map<Automate, ClientConsolePanel> map_console = new HashMap<Automate, ClientConsolePanel>();//Représente la liste des consoles des clients du serveur
 
     public JComboBox getComboBoxServeur() {
         return comboBoxServeur;
@@ -52,6 +52,7 @@ public class ItemCard extends JPanel //implements Runnable
 
     public void addClientToServeur(Automate a) {
         try {
+            a.setModePasAPas(this.pasApas);
             ClientConsolePanel clientConsolePanel = new ClientConsolePanel(true);
             this.map_console.put(a, clientConsolePanel);
         } catch (SocketException ex) {
@@ -82,6 +83,7 @@ public class ItemCard extends JPanel //implements Runnable
         this.console = new ClientConsolePanel(this.client);
         console.setLocation(10, 5);
         this.panel_automate = new ClientAutomatePanel(console);
+        this.panel_automate.getAutomaton().setStepByStep(sbs);
         this.setLayout(null);
         /*Debut ComboBox*/
         JLabel nomComboBox = new JLabel("Server connected clients : ");
@@ -92,7 +94,6 @@ public class ItemCard extends JPanel //implements Runnable
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     Automate a = (Automate) e.getItem();
-                    a.setModePasAPas(pasApas);
                     ClientConsolePanel c = GUI.get().obtainCard(serveur).getMap_console().get(a);
                     c.setLocation(10, 5);
                     GUI.get().obtainCard(serveur).remove(0);
@@ -123,6 +124,7 @@ public class ItemCard extends JPanel //implements Runnable
         this.console = new ClientConsolePanel(this.client);
         console.setLocation(10, 5);
         this.panel_automate = new ClientAutomatePanel(console);
+        this.panel_automate.getAutomaton().setStepByStep(a.isModePasAPas());
         this.setLayout(null);
         this.add(console);
         this.add(panel_automate);

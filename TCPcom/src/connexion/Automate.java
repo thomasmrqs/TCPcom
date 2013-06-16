@@ -20,7 +20,7 @@ public class Automate implements Runnable {
     private Stack<Paquet> bufferPaquet = null;
     private File fichier = null;
     private boolean modePasAPas;
-
+   
     public boolean isModePasAPas() {
         return modePasAPas;
     }
