@@ -56,37 +56,25 @@ public class JFrameSend extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Send Frame");
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("OU");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, -1, -1));
-        getContentPane().add(jtxtNomLocal, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 130, -1));
 
         jLabel2.setText("Nom local");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         jLabel3.setText("Compteur");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
         jtxtCompteur.setText("0");
-        getContentPane().add(jtxtCompteur, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 130, 20));
 
         jLabel5.setText("Texte à envoyer");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
-        getContentPane().add(jtxtTextAEnvoyer, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 130, 20));
 
         jLabel6.setText("Temporisation");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
 
         jtxtTemporisation1.setText("0");
-        getContentPane().add(jtxtTemporisation1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 20));
 
         jCheckUrg.setText("Urg");
-        getContentPane().add(jCheckUrg, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 240, -1, -1));
 
         jCheckPush.setText("Push");
-        getContentPane().add(jCheckPush, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, -1));
 
         jButton1.setText("Valider");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -94,7 +82,6 @@ public class JFrameSend extends javax.swing.JFrame {
                 jButton1MouseClicked(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, -1, -1));
 
         jButton2.setText("Choisir un fichier");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -102,7 +89,79 @@ public class JFrameSend extends javax.swing.JFrame {
                 jButton2MouseClicked(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 130, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel2))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jtxtNomLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel5))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jtxtTextAEnvoyer, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addComponent(jLabel1)
+                .addGap(19, 19, 19)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel6))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jtxtTemporisation1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel3))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jtxtCompteur, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jCheckPush)
+                .addGap(101, 101, 101)
+                .addComponent(jCheckUrg))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addComponent(jButton1))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel2)
+                .addGap(6, 6, 6)
+                .addComponent(jtxtNomLocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jLabel5)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtxtTextAEnvoyer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel1))
+                    .addComponent(jButton2))
+                .addGap(13, 13, 13)
+                .addComponent(jLabel6)
+                .addGap(6, 6, 6)
+                .addComponent(jtxtTemporisation1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jLabel3)
+                .addGap(6, 6, 6)
+                .addComponent(jtxtCompteur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCheckPush)
+                    .addComponent(jCheckUrg))
+                .addGap(7, 7, 7)
+                .addComponent(jButton1))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -115,7 +174,7 @@ public class JFrameSend extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2MouseClicked
 
-    private String stockerDonnées() {
+    private String stockerDonnees() {
         if (this.fichier == null) {
             return this.jtxtTextAEnvoyer.getText();
         }
@@ -161,7 +220,7 @@ public class JFrameSend extends javax.swing.JFrame {
             return;
         }
         String nomLocal = this.jtxtNomLocal.getText();
-        String txt = this.stockerDonnées();
+        String txt = this.stockerDonnees();
         int tempo = Integer.parseInt(this.jtxtTemporisation1.getText());
         int cpt = Integer.parseInt(this.jtxtCompteur.getText());
         boolean push = this.jCheckPush.isEnabled();
