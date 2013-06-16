@@ -4,6 +4,7 @@
  */
 package graphique;
 
+import connexion.Commande;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -228,7 +229,8 @@ public class JFrameSend extends javax.swing.JFrame {
         int cpt = Integer.parseInt(this.jtxtCompteur.getText());
         boolean push = this.jCheckPush.isEnabled();
         boolean urg = this.jCheckUrg.isEnabled();
-        
+        Commande c  = new Commande();
+        c.Send(nomLocal, txt, cpt, push, urg, tempo);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked
