@@ -1,6 +1,7 @@
 package connexion;
 
 import Ressource.Ressource;
+import graphique.GUI;
 
 import java.io.File;
 import java.util.Stack;
@@ -9,6 +10,7 @@ import java.util.logging.Logger;
 
 public class Automate implements Runnable {
 
+    public boolean bypass = false; // permet de debloquer le mode pas a pas
     private int etatCourant = Ressource.ETAT_CLOSED;
     private TCB tcb = null;
     private Connexion connexion = null;
@@ -16,7 +18,6 @@ public class Automate implements Runnable {
     private int port_dist = 0;
     private int port_loc = 0;
     private String ip_dist = null;
-    
     private boolean openOk = false;
     private Stack<Paquet> bufferPaquet = null;
     private File fichier = null;
@@ -448,6 +449,14 @@ public class Automate implements Runnable {
     public void changerEtat() throws InterruptedException {
         while (true) {
             afficheEtatCourant();
+            if (this.modePasAPas) {
+                Thread.sleep(200);
+                GUI.get().obtainCard(this).getConsole().insertLine(" attente ... ", "Blue");
+                while (!this.bypass) {
+                    Thread.sleep(200);
+                }
+                this.bypass = false;
+            }
             switch (this.etatCourant) {
                 case Ressource.ETAT_CLOSE_WAIT:
                     this.closeWaitToLastAck();
