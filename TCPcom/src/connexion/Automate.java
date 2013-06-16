@@ -222,7 +222,7 @@ public class Automate implements Runnable {
         
         /* ajout bapt */
         
-        /* ouverture simultannée */
+        /* ouverture simultannï¿½e */
         
         if (!p.ObtenirAck() && p.ObtenirSyn())
         {
@@ -304,7 +304,7 @@ public class Automate implements Runnable {
             return;
         }
         
-        /* Ajout bapt pour déco */
+        /* Ajout bapt pour dï¿½co */
         if (p.ObtenirFin())
         {
         	/* analyse du paquet pour savoir si c'est un abort ou un close */

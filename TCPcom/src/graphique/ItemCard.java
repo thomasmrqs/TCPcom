@@ -22,6 +22,7 @@ public class ItemCard extends JPanel //implements Runnable
     /**
      *
      */
+    private final boolean pasApas;
     private static final long serialVersionUID = 1L;
     private ClientConsolePanel console = null;
     private ClientAutomatePanel panel_automate = null;
@@ -67,11 +68,12 @@ public class ItemCard extends JPanel //implements Runnable
         return map_console;
     }
 
-    public ItemCard() throws SocketException//Constructeur pour un serveur
+    public ItemCard(boolean sbs) throws SocketException//Constructeur pour un serveur
     {
         this.map_console = new HashMap<Automate, ClientConsolePanel>();
         this.client = false;
         this.automate = null;
+        this.pasApas = sbs;
         this.serveur = null;
         this.console = new ClientConsolePanel(this.client);
         console.setLocation(10, 5);
@@ -86,16 +88,12 @@ public class ItemCard extends JPanel //implements Runnable
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     Automate a = (Automate) e.getItem();
+                    a.pasApAS = pasApas;
                     ClientConsolePanel c = GUI.get().obtainCard(serveur).getMap_console().get(a);
                     c.setLocation(10, 5);
                     GUI.get().obtainCard(serveur).remove(0);
                     GUI.get().obtainCard(serveur).add(c, 0);
                     GUI.get().obtainCard(serveur).repaint();
-                   // c.setLayout(null);
-                    GUI.get().obtainCard(serveur).paintImmediately(675, 300, 600, 650);
-                  //  console.setR
-                    //GUI.get().obtainCard(serveur).invalidate();
-                    GUI.get().obtainCard(serveur).validate();
                 }
             }
         });
@@ -116,6 +114,7 @@ public class ItemCard extends JPanel //implements Runnable
         this.comboBoxServeurModel = null;
         this.client = true;
         this.automate = a;
+        this.pasApas = a.pasApAS;
         this.serveur = null;
         this.console = new ClientConsolePanel(this.client);
         console.setLocation(10, 5);

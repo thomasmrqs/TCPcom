@@ -50,7 +50,7 @@ public class GUI extends JFrame {
     private Boolean connect = false;
     private Boolean clientflag = false;
     private Boolean serverflag = false;
-    private static Boolean sbsflag = false;
+    private static Boolean sbsflag = false;//Correspond au mode pas à pas
     private Boolean defaultflag = false;
     private Boolean sslflag = false;
     private JOptionPane jop1 = null;
@@ -284,12 +284,14 @@ public class GUI extends JFrame {
     }
 
     public void creer_onglet_client() throws SocketException {
+        Automate a = new Automate();
+        a.pasApAS = this.sbs.isEnabled();
         ItemCard card = new ItemCard(new Automate());
         onglets.addTab("Client " + count++, new ImageIcon(getClass().getResource("./IMAGES/Client.gif")), card, "Client" + count);
     }
 
     public void creer_onglet_server() throws SocketException {
-        ItemCard card = new ItemCard();
+        ItemCard card = new ItemCard(this.sbs.isEnabled());
         onglets.addTab("Serveur " + count_serv++, new ImageIcon(getClass().getResource("./IMAGES/network.png")), card, "Serveur" + count_serv);
         /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
          ClientAutomatePanel automate_tmp = new ClientAutomatePanel(console_tmp);
