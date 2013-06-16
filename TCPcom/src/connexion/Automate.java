@@ -21,15 +21,7 @@ public class Automate implements Runnable {
     private boolean openOk = false;
     private Stack<Paquet> bufferPaquet = null;
     private File fichier = null;
-    private boolean modePasAPas;
-
-    public boolean isModePasAPas() {
-        return modePasAPas;
-    }
-
-    public void setModePasAPas(boolean modePasAPas) {
-        this.modePasAPas = modePasAPas;
-    }
+    private boolean modePasAPas = false;
 
     public Automate() {
         this.modePasAPas = false;
@@ -259,8 +251,6 @@ public class Automate implements Runnable {
         }
 
         /* ajout bapt */
-
-        this.getTcb().incrSEQ();
 
         /* ouverture simultannee */
 
@@ -620,5 +610,13 @@ public class Automate implements Runnable {
 
     public void setFichier(File fichier) {
         this.fichier = fichier;
+    }
+    
+    public boolean isModePasAPas() {
+        return modePasAPas;
+    }
+
+    public void setModePasAPas(boolean modePasAPas) {
+        this.modePasAPas = modePasAPas;
     }
 }
