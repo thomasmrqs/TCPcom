@@ -217,6 +217,23 @@ public class Automate implements Runnable {
         {
             return;
         }
+        
+        /* ajout bapt */
+        
+        /* ouverture simultannée */
+        
+        if (!p.ObtenirAck() && p.ObtenirSyn())
+        {
+        	p.MettreAck(true);
+        	p.MettreSyn(true);
+        	p.CreerPaquet();
+        	this.getTcb().getConnexion().ecrirePaquet(p);
+        	this.etatCourant = Ressource.ETAT_SYN_RCVD;
+        	return;
+        }
+        
+        /* fin ajout bapt */
+        
         if (p.ObtenirSyn() && p.ObtenirAck())
         {
         	p.MettreSyn(false);
