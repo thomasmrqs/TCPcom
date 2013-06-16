@@ -154,7 +154,7 @@ public class Automate implements Runnable {
             Client c = null;
             try
             {
-                c = GestionDesConnexions.get().lancerClient("toto", ip_distant, port_ser, port_local);
+                c = GestionDesConnexions.get().lancerClient(ip_distant, port_ser, port_local);
                 this.setTcb(new TCB(c));
                 this.connexion = c;
                 this.etatCourant = Ressource.ETAT_CLOSED;
@@ -172,7 +172,8 @@ public class Automate implements Runnable {
             {
                 Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.getTcb().setNomLocalConnexion("loc" + this.getTcb().getConnexion().getIpLocale() + ip_distant);
+            this.getTcb().setNomLocalConnexion("con_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local + "_" + ip_distant + ":" + port_ser);
+            this.getTcb().setNomDistantConnexion("con_" + ip_distant + ":" + port_ser + "_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local);
             this.setOpenOk(true);
             return getTcb().getNomLocalConnexion();
         }
@@ -218,10 +219,10 @@ public class Automate implements Runnable {
         }
         if (p.ObtenirSyn() && p.ObtenirAck())
         {
-        	this.etatCourant = Ressource.ETAT_ESTABLISHED;
         	p.MettreSyn(false);
         	p.CreerPaquet();
         	this.getTcb().getConnexion().ecrirePaquet(p);
+        	this.etatCourant = Ressource.ETAT_ESTABLISHED;
         }
     }
 
@@ -288,9 +289,20 @@ public class Automate implements Runnable {
         {
             return;
         }
-        if (p.ObtenirAck())
+        
+        /* Ajout bapt pour déco */
+        if (p.ObtenirFin())
         {
-            this.etatCourant = Ressource.ETAT_ESTABLISHED;
+        	/* analyse du paquet pour savoir si c'est un abort ou un close */
+        	this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
+        }
+        else
+        {
+        /* Fin ajout bapt */
+	        if (p.ObtenirAck())
+	        {
+	            this.etatCourant = Ressource.ETAT_ESTABLISHED;
+	        }
         }
     }
 

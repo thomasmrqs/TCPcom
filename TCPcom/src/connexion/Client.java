@@ -17,7 +17,6 @@ import java.net.Socket;
  */
 public class Client extends Connexion {
 
-    private String nom;
     private int id;
 
     public String getIpClient() {
@@ -29,26 +28,20 @@ public class Client extends Connexion {
 
     
 
-    public String getNom() {
-        return nom;
-    }
-
     
 
-    public Client(String nom, String ipServeur, int portServeur) {
+    public Client(String ipServeur, int portServeur) {
         super();
         this.id = Utils.creerIdentifiantClient();
         this.portLocal = 0;
-        this.nom = nom;
         this.ipDistante = ipServeur;
         this.portDistant = portServeur;
     }
 
-    public Client(String nom, String ipServeur, int portServeur, int portClient) {
+    public Client(String ipServeur, int portServeur, int portClient) {
         super();
         this.id = Utils.creerIdentifiantClient();
         this.portLocal = portClient;
-        this.nom = nom;
         this.ipDistante = ipServeur;
         this.portDistant = portServeur;
     }

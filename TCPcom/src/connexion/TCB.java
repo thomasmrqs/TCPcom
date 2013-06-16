@@ -3,6 +3,7 @@ package connexion;
 public class TCB {
 	
 	private String 		nomLocalConnexion = null; // nom local de la connexion
+	private String		nomDistantConnexion = null;
 	private Connexion 	connexion = null; // contient la socket
 	private int 		connexionStatus = 0; // status de la connexion
 	private int 		prioriteConnexion = 0; // priorite de la connexion
@@ -312,5 +313,13 @@ public class TCB {
 	public void setAbort(Boolean abort)
 	{
 		this.abort = abort;
+	}
+
+	public String getNomDistantConnexion() {
+		return nomDistantConnexion;
+	}
+
+	public void setNomDistantConnexion(String nomDistantConnexion) {
+		this.nomDistantConnexion = nomDistantConnexion;
 	}
 }

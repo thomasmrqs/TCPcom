@@ -36,7 +36,7 @@ public class Serveur implements Runnable {
     }
 
     @Deprecated
-    public Serveur(String nom, int port) {
+    public Serveur(int port) {
         //Retirer le nom du serveur => identifiant géré automatiquement
         this.alive = false;
         this.liste = new ArrayList();
