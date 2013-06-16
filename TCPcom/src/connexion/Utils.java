@@ -69,7 +69,8 @@ public class Utils {
     } 
     
     public static void ecrireDansFichier(Paquet p , File f){
-        
+        System.out.println("Méthode non faite dans Utils");
+        System.exit(2);
     }
     
     public static String conversionEtat(int i){
