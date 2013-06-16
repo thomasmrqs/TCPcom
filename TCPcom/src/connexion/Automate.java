@@ -19,11 +19,20 @@ public class Automate implements Runnable {
     private boolean openOk = false;
     private Stack<Paquet> bufferPaquet = null;
     private File fichier = null;
+    private boolean modePasAPas;
 
+    public boolean isModePasAPas() {
+        return modePasAPas;
+    }
+
+    public void setModePasAPas(boolean modePasAPas) {
+        this.modePasAPas = modePasAPas;
+    }
     
     public Automate()
     {
-    	setBufferPaquet(new Stack<Paquet>());
+        this.modePasAPas = false;
+    	this.setBufferPaquet(new Stack<Paquet>());
     }
 
     /* change l'etat de l'automate, prend en compte la continuite des etats (on peut pas passer de closed a established) */
