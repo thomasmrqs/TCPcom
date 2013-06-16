@@ -43,11 +43,43 @@ public class Commande {
 		p.MettrePortDST(auto.getPort_dist());
 		p.CreerPaquet();
         auto.getTcb().getConnexion().ecrirePaquet(p);
+        addr = compteur;
 		return addr;
 	}
 	
+	public int Close (String nom_local)
+	{
+		int addr = 0;
+		Automate auto = null;
+		if ((auto = this.trouverNomLocal(nom_local)) == null)
+			return addr;
+		Paquet p = new Paquet (auto.getPort_local(), auto.getPort_dist());
+		p.MettreDataOff(6);
+		p.MettrePsh(true);
+		p.MettreFin(true);
+		p.MettreDonnee("close");
+		p.CreerPaquet();
+        auto.getTcb().getConnexion().ecrirePaquet(p);
+		addr = 1;
+		return addr;
+	}
 	
-	
+	public int Abort (String nom_local)
+	{
+		int addr = 0;
+		Automate auto = null;
+		if ((auto = this.trouverNomLocal(nom_local)) == null)
+			return addr;
+		Paquet p = new Paquet (auto.getPort_local(), auto.getPort_dist());
+		p.MettreDataOff(6);
+		p.MettrePsh(true);
+		p.MettreFin(true);
+		p.MettreUrg(true);
+		p.MettreDonnee("abort");
+		p.CreerPaquet();
+        auto.getTcb().getConnexion().ecrirePaquet(p);
+		return 1;
+	}
 	
 	public Stat status (String nom_local) 
 	{
