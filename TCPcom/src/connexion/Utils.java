@@ -1,10 +1,17 @@
 package connexion;
+
 import Ressource.Ressource;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
  *
  * @author greg
@@ -47,45 +54,66 @@ public class Utils {
         }
         return res + "]";
     }
-    
-    public static byte[] complement(String str){
+
+    public static byte[] complement(String str) {
         byte[] tab = new byte[str.getBytes().length];
         int i = 0;
-        for (byte d : str.getBytes()){
+        for (byte d : str.getBytes()) {
             d ^= 0XFF;
             tab[i++] = d;
         }
         return tab;
-    } 
-    
-    public static byte[] complement(byte[] str){
+    }
+
+    public static byte[] complement(byte[] str) {
         byte[] tab = new byte[str.length];
         int i = 0;
-        for (byte d : str){
+        for (byte d : str) {
             d ^= 0XFF;
             tab[i++] = d;
         }
         return tab;
-    } 
-    
-    public static int[] byteArrayToIntarray(byte[] barray)
-    {
-      int[] iarray = new int[barray.length];
-      int i = 0;
-      for (byte b : barray)
-          iarray[i++] = b & 0xff;
-      // "and" with 0xff since bytes are signed in java
-      return iarray;
     }
-    
-    public static void ecrireDansFichier(Paquet p , File f){
-        System.out.println("Méthode non faite dans Utils");
-        System.exit(2);
+
+    public static int[] byteArrayToIntarray(byte[] barray) {
+        int[] iarray = new int[barray.length];
+        int i = 0;
+        for (byte b : barray) {
+            iarray[i++] = b & 0xff;
+        }
+        // "and" with 0xff since bytes are signed in java
+        return iarray;
     }
-    
-    public static String conversionEtat(int i){
-        switch(i){
-            case Ressource.ETAT_CLOSED :
+
+    public static void ecrireDansFichier(Paquet p, File f) {
+        FileWriter fileWritter = null;
+        BufferedWriter bufferWritter = null;
+        try {
+            fileWritter = new FileWriter(f.getName(), true);
+            bufferWritter = new BufferedWriter(fileWritter);
+            bufferWritter.write(p.ObtenirDonnee());
+            bufferWritter.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+            try {
+                if (bufferWritter != null) {
+                    bufferWritter.close();
+                }
+                if (fileWritter != null) {
+                    fileWritter.close();
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+        }
+    }
+
+    public static String conversionEtat(int i) {
+        switch (i) {
+            case Ressource.ETAT_CLOSED:
                 return "CLOSED_INIT";
             case Ressource.ETAT_LISTEN:
                 return "LISTEN";
@@ -109,6 +137,6 @@ public class Utils {
                 return "TIME_WAIT";
         }
         return "";
-        
+
     }
 }

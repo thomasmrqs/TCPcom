@@ -98,7 +98,42 @@ public class TCB {
 			setSEG_WND(0);
 		}
 	}
+	
+	/* CONTROLE DE FLUX */
+	
+	/* on genere aleatoirement le numero de sequence entre 1 et 100 */
+	public void initISS ()
+	{
+		int lower = 1; 
+		int higher = 101; 
 
+		int random = (int) (Math.random() * (higher - lower)) + lower;
+		this.setISS(random);
+		this.setSEG_SEQ(random);
+	}
+	
+	/* a l'initialisation, on prend le premier numero de sequence, qu'on incremente, pour obtenir ack */
+	public void initACK (int seq)
+	{
+		this.setSEG_ACK(seq + 1);
+	}
+	
+	/* verifie si le numero ACK recu correspond bien au numero de SEQ local */
+	public Boolean checkACK (Paquet p)
+	{
+		if (p.ObtenirNbrAcc() == this.getSEG_SEQ())
+			return true;
+		return false;
+	}
+
+	/* Incremente le numero de sequence */
+	public void incrSEQ ()
+	{
+		this.setSEG_SEQ(this.getSEG_SEQ() + 1);
+	}
+	
+	/* FIN CONTROLE DE FLUX */
+	
     public Connexion getConnexion() {
         return connexion;
     }

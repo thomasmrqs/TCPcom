@@ -50,7 +50,7 @@ public class GUI extends JFrame {
     private Boolean connect = false;
     private Boolean clientflag = false;
     private Boolean serverflag = false;
-    private static Boolean sbsflag = false;
+    private Boolean sbsflag = false;//Correspond au mode pas à pas
     private Boolean defaultflag = false;
     private Boolean sslflag = false;
     private JOptionPane jop1 = null;
@@ -80,15 +80,20 @@ public class GUI extends JFrame {
     }
 
     public ItemCard obtainCard(Automate a) {
+        Automate tmp = null;
         for (int i = 0; i < this.onglets.getTabCount(); i++) {
             ItemCard item = (ItemCard) this.onglets.getComponentAt(i);
             if (item.isClient()) {
                 if (item.getAutomate() == a) {
                     return item;
                 }
-            }else{
-                System.out.println("zdfjvlkfjvkljfncblkfnbjvknfdbnldfvbdf");
-                System.exit(0);
+            }else{                
+                for (int y = 0; y < item.getComboBoxServeur().getItemCount(); y++){
+                    tmp = (Automate) item.getComboBoxServeur().getModel().getElementAt(y);
+                    if (tmp == a){
+                        return item;
+                    }
+                }
             }
         }
         return null;
@@ -283,13 +288,15 @@ public class GUI extends JFrame {
 
     }
 
-    public void creer_onglet_client() throws SocketException {
-        ItemCard card = new ItemCard(new Automate());
+    public void creer_onglet_client() throws SocketException {        
+        Automate a = new Automate();
+        a.setModePasAPas(this.sbsflag);
+        ItemCard card = new ItemCard(a);
         onglets.addTab("Client " + count++, new ImageIcon(getClass().getResource("./IMAGES/Client.gif")), card, "Client" + count);
     }
 
     public void creer_onglet_server() throws SocketException {
-        ItemCard card = new ItemCard();
+        ItemCard card = new ItemCard(this.sbsflag);
         onglets.addTab("Serveur " + count_serv++, new ImageIcon(getClass().getResource("./IMAGES/network.png")), card, "Serveur" + count_serv);
         /*  ClientConsolePanel console_tmp = new ClientConsolePanel();
          ClientAutomatePanel automate_tmp = new ClientAutomatePanel(console_tmp);
@@ -376,12 +383,12 @@ public class GUI extends JFrame {
         this.sbs = sbs;
     }
 
-    public static Boolean getSbsflag() {
+    public Boolean getSbsflag() {
         return sbsflag;
     }
 
-    public static void setSbsflag(Boolean sbsflag) {
-        GUI.sbsflag = sbsflag;
+    public void setSbsflag(Boolean sbsflag) {
+        this.sbsflag = sbsflag;
     }
 
     /*@Override
