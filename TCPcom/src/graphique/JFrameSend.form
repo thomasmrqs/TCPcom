@@ -25,50 +25,55 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jtxtNomLocal" min="-2" pref="130" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
-              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jtxtTextAEnvoyer" min="-2" pref="130" max="-2" attributes="0"/>
-              <EmptySpace min="50" pref="50" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="19" pref="19" max="-2" attributes="0"/>
-              <Component id="jButton2" min="-2" pref="130" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
-              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jtxtTemporisation1" min="-2" pref="130" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
-              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jtxtCompteur" min="-2" pref="130" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
-              <Component id="jCheckPush" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="101" pref="101" max="-2" attributes="0"/>
-              <Component id="jCheckUrg" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="70" pref="70" max="-2" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Component id="jtxtNomLocal" min="-2" pref="130" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Component id="jtxtTemporisation1" min="-2" pref="130" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Component id="jtxtCompteur" min="-2" pref="130" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                      <Component id="jCheckPush" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="101" pref="101" max="-2" attributes="0"/>
+                      <Component id="jCheckUrg" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="70" pref="70" max="-2" attributes="0"/>
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Component id="jtxtTextAEnvoyer" min="-2" pref="130" max="-2" attributes="0"/>
+                      <EmptySpace min="50" pref="50" max="-2" attributes="0"/>
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jButton2" min="-2" pref="130" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace pref="41" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -88,7 +93,7 @@
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton2" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="13" pref="13" max="-2" attributes="0"/>
               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
@@ -137,7 +142,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Texte &#xe0; envoyer"/>
+        <Property name="text" type="java.lang.String" value="Envoyer texte"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jtxtTextAEnvoyer">
