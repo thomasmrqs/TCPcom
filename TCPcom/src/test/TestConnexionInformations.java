@@ -17,9 +17,9 @@ import java.io.IOException;
 public class TestConnexionInformations {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Serveur s = GestionDesConnexions.get().lancerServeur(null, 8080);
+        Serveur s = GestionDesConnexions.get().lancerServeur(8080);
         Thread.sleep(1000);
-        Connexion c = GestionDesConnexions.get().lancerClient(null, "127.0.0.1", 8080, 12);
+        Connexion c = GestionDesConnexions.get().lancerClient("127.0.0.1", 8080, 12);
         Thread.sleep(1000);
         System.out.println("______________CONNEXION__________________________________________");
         System.out.println(c + " ipLocale:" + c.getIpLocale() + "::" + c.getPortLocal() + " connecte a " + c.getIpDistante() + "::" + c.getPortDistant());

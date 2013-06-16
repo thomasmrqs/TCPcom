@@ -132,7 +132,7 @@ public class OpenFrame extends JFrame {
                     }
                 } else {//Cas d'un serveur                    
                    
-                    Serveur s = GestionDesConnexions.get().lancerServeur("toto", portLocal);
+                    Serveur s = GestionDesConnexions.get().lancerServeur(portLocal);
                     s.setIp_saisie(ipDistante);
                     s.setPort_saisie(portDistant);
 

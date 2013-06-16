@@ -15,7 +15,7 @@ public class TestConnexionAutomate {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
-		GestionDesConnexions.get().lancerServeur("Test TOTO", 10001);
+		GestionDesConnexions.get().lancerServeur(10001);
 		Thread.sleep(500);
 		Automate test = null;//Automate.open(10000, "192.168.1.127", 10001, true);
 		test.changerEtat();

@@ -19,9 +19,9 @@ public class TestConnexionSocket {
     public static void main(String[] args) throws IOException, InterruptedException {
         Paquet p = new Paquet("data");
         System.out.println("______________CONNEXION__________________________________________");
-        Serveur s = GestionDesConnexions.get().lancerServeur("1", 8000);
+        Serveur s = GestionDesConnexions.get().lancerServeur(8000);
         Thread.sleep(10);
-        Client c = GestionDesConnexions.get().lancerClient("1", "127.0.0.1", 8000);
+        Client c = GestionDesConnexions.get().lancerClient("127.0.0.1", 8000);
         Thread.sleep(1000);
         System.out.println("______________CONTROLE CONNEXION_________________________________");
         System.out.println(GestionDesConnexions.get());
@@ -37,7 +37,7 @@ public class TestConnexionSocket {
         Thread.sleep(1000);
 
         System.out.println("______________CONNEXION NOUVEAU CLIENT___________________________");
-        GestionDesConnexions.get().lancerClient("2", "127.0.0.1", 8000);
+        GestionDesConnexions.get().lancerClient("127.0.0.1", 8000);
         Thread.sleep(1000);
         System.out.println("______________CONTROLE CONNEXION_________________________________");
         System.out.println(GestionDesConnexions.get());
