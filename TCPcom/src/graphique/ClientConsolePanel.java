@@ -315,7 +315,10 @@ public class ClientConsolePanel extends JPanel implements ActionListener {
                     OpenFrame of = new OpenFrame();
                 }
                 if (cmdField.getSelectedIndex() == 1) { // commande Send
-                    SendFrame sf = new SendFrame();
+                    //SendFrame sf = new SendFrame();
+                    JFrameSend jfrmaeSend = new JFrameSend();
+                    jfrmaeSend.pack();
+                    jfrmaeSend.setVisible(true);
                 }
                 if (cmdField.getSelectedIndex() == 2) { // commande Receive
                     ReceiveFrame rf = new ReceiveFrame();
