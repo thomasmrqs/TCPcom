@@ -41,9 +41,9 @@ import java.text.SimpleDateFormat;
 @SuppressWarnings("serial")
 public class ClientConsolePanel extends JPanel implements ActionListener {
 
-    private  StyledDocument doc;
-    private  MyTextPane textPane;
-    private  JScrollPane scrollPane;
+    private StyledDocument doc;
+    private MyTextPane textPane;
+    private JScrollPane scrollPane;
     private JButton Bclear, BcmdField;
     private JComboBox cmdField;
     private String networkstr = null;
@@ -51,9 +51,8 @@ public class ClientConsolePanel extends JPanel implements ActionListener {
     private Date actuelle = null;
     private static Locale locale = Locale.getDefault();
     private static DateFormat dateformat = null;
-
     private boolean isClient;
-    
+
     private class MyTextPane extends JTextPane {
 
         public MyTextPane() {
@@ -315,14 +314,15 @@ public class ClientConsolePanel extends JPanel implements ActionListener {
                 if (cmdField.getSelectedIndex() == 0) { // commande Open
                     OpenFrame of = new OpenFrame();
                 }
-                if (cmdField.getSelectedIndex() == 1) { // commande Send
-                    //SendFrame sf = new SendFrame();
-                    JFrameSend jfrmaeSend = new JFrameSend();                   
+                if (cmdField.getSelectedIndex() == 1) { // commande Send                  
+                    JFrameSend jfrmaeSend = new JFrameSend();
                     jfrmaeSend.pack();
                     jfrmaeSend.setVisible(true);
                 }
                 if (cmdField.getSelectedIndex() == 2) { // commande Receive
-                    ReceiveFrame rf = new ReceiveFrame();
+                    JFrameReceive ff = new JFrameReceive();
+                    ff.pack();
+                    ff.setVisible(true);
                 }
                 if (cmdField.getSelectedIndex() == 3) { // commande Close
                     CloseFrame cf = new CloseFrame();
