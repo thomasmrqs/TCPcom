@@ -246,6 +246,24 @@ public class Automate implements Runnable {
     }
 
 
+    public void synSentToClosed()
+    {
+    	if (!this.getMod())
+    		return;
+    	
+    	 Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+         if (p == null)
+             return;
+         
+         /* if (la commande est close) */
+         {
+        	 p.MettreRst(true);
+        	 p.CreerPaquet();
+        	 this.getTcb().getConnexion().ecrirePaquet(p);
+        	 this.etatCourant = Ressource.ETAT_CLOSED;
+         }
+    }
+    
     public void closedToListen()
     {
         if (!this.getMod())
@@ -324,6 +342,7 @@ public class Automate implements Runnable {
     {
         if (!this.getTcb().getConnexion().isAlive())
         {
+        	this.getTcb().resetTCB();
             this.etatCourant = Ressource.ETAT_CLOSED;
         }
 
@@ -429,7 +448,8 @@ public class Automate implements Runnable {
             p.MettreAck(true);
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
-            this.etatCourant = Ressource.ETAT_TIME_WAIT;
+            this.getTcb().resetTCB();
+            this.etatCourant = Ressource.ETAT_CLOSED;
         }
     }
 
@@ -444,12 +464,10 @@ public class Automate implements Runnable {
         {
             return;
         }
-        if (p.ObtenirFin())
+        if (p.ObtenirFin() && p.ObtenirAck())
         {
-            if (p.ObtenirAck())
-            {
-                this.etatCourant = Ressource.ETAT_CLOSED;
-            }
+        	this.getTcb().resetTCB();
+        	this.etatCourant = Ressource.ETAT_CLOSED;
         }
     }
 
