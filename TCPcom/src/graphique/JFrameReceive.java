@@ -131,8 +131,10 @@ public class JFrameReceive extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Fichier non précisé");
             return;
         }
+        String nomLocal = this.jtxtNomLocal.getText();
+        int cpt = Integer.parseInt(this.jtxtCompteur.getText());
         Commande c  = new Commande();
-        
+        c.reveive(nomLocal, this.fichier, cpt);
         this.setVisible(false);
         this.dispose();
 
