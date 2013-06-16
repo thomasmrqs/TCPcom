@@ -5,6 +5,7 @@ import Ressource.Ressource;
 import graphique.GUI;
 import graphique.ItemCard;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -46,6 +47,19 @@ public class Commande {
         addr = compteur;
 		return addr;
 	}
+	
+	public int reveive (String nom_local, File fil, int compteur)
+	{
+		int addr = 0;
+		Automate auto = null;
+		String don = null;
+		if ((auto = this.trouverNomLocal(nom_local)) == null)
+			return addr;
+		auto.setFichier(fil);
+		
+		return 1;
+	}
+	
 	
 	public int Close (String nom_local)
 	{
