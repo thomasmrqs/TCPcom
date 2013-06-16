@@ -25,9 +25,9 @@ public class TestEnvoiePaquet {
         p.AfficherPaquet();
 
         System.out.println("______________CONNEXION__________________________________________");
-        Serveur s = GestionDesConnexions.get().lancerServeur("1", port);
+        Serveur s = GestionDesConnexions.get().lancerServeur(port);
 
-        Client c = GestionDesConnexions.get().lancerClient("1", "127.0.0.1", port);
+        Client c = GestionDesConnexions.get().lancerClient("127.0.0.1", port);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {

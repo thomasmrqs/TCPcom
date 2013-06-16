@@ -19,6 +19,35 @@ public class Commande {
 	{
 	}
 
+	public int Send (String nom_local, String donnee, int compteur, boolean push, boolean urg, int tempo)
+	{
+		int addr = 0;
+		Automate auto = null;
+		String don = null;
+		if ((auto = this.trouverNomLocal(nom_local)) == null)
+			return addr;
+		Paquet p = new Paquet (auto.getPort_local(), auto.getPort_dist());
+		p.MettreDataOff(6);
+		if (push)
+			p.MettrePsh(push);
+		if (urg)
+			p.MettreUrg(urg);
+		if (compteur != donnee.length())
+		{
+			don.concat(donnee.substring(0, compteur - 1));
+		}
+		else
+			don.concat(donnee);
+		p.MettreDonnee(don);
+		p.MettrePortSRC(auto.getPort_local());
+		p.MettrePortDST(auto.getPort_dist());
+		p.CreerPaquet();
+        auto.getTcb().getConnexion().ecrirePaquet(p);
+		return addr;
+	}
+	
+	
+	
 	
 	public Stat status (String nom_local) 
 	{
