@@ -122,11 +122,19 @@ public class OpenFrame extends JFrame {
                 if (card.isClient()) {
 
                     card.getAutomate().open(portLocal, ipDistante, portDistant, true);
+                    try {
+						Thread.sleep(200);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                    System.out.println("ALLLLLLOOO");
                     boolean succeed = card.getAutomate().getOpenOk();
                     if (succeed) {
+                        System.out.print("");
                         (new Thread(card.getAutomate())).start();
-                        
-                        card.getConsole().insertLine("Client créé", "Green");
+                        System.out.print("");
+                        card.getConsole().insertLine("Client cree", "Green");
                     } else {
                         card.getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
@@ -142,13 +150,13 @@ public class OpenFrame extends JFrame {
                         Logger.getLogger("OpenFrame::" + OpenFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     if (s.isAlive()) {
-                        card.getConsole().insertLine("Serveur créé", "Green");
+                        card.getConsole().insertLine("Serveur cree", "Green");
                         card.setServeur(s);
                     } else {
                         card.getConsole().insertLine("Informations de connexion invalides", "Red");
                     }
                 }
-                openframe.removeAll();
+                //openframe.removeAll();
                 openframe.dispose();
             }
         }

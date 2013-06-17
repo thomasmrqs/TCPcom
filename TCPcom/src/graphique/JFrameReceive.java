@@ -120,15 +120,15 @@ public class JFrameReceive extends javax.swing.JFrame {
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         if (this.jtxtNomLocal.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nom local non précisé");
+            JOptionPane.showMessageDialog(this, "Nom local non precise");
             return;
         }
         if (this.jtxtCompteur.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Compteur non précisé");
+            JOptionPane.showMessageDialog(this, "Compteur non precise");
             return;
         }
         if (this.fichier == null) {
-            JOptionPane.showMessageDialog(this, "Fichier non précisé");
+            JOptionPane.showMessageDialog(this, "Fichier non precise");
             return;
         }
         String nomLocal = this.jtxtNomLocal.getText();

@@ -166,8 +166,10 @@ public class Automate implements Runnable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.getTcb().setNomLocalConnexion("con_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local + "_" + ip_distant + ":" + port_ser);
-            this.getTcb().setNomDistantConnexion("con_" + ip_distant + ":" + port_ser + "_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local);
+            //this.getTcb().setNomLocalConnexion("con_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local + "_" + ip_distant + ":" + port_ser);
+            //this.getTcb().setNomDistantConnexion("con_" + ip_distant + ":" + port_ser + "_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local);
+            this.getTcb().setNomLocalConnexion("TOTO");
+            this.getTcb().setNomDistantConnexion("TOTO");
             this.setOpenOk(true);
             return getTcb().getNomLocalConnexion();
         }
@@ -181,6 +183,8 @@ public class Automate implements Runnable {
         this.setOpenOk(true);
         this.getTcb().setNomDistantConnexion("con_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local + "_" + ip_distant + ":" + port_ser);
         this.getTcb().setNomLocalConnexion("con_" + ip_distant + ":" + port_ser + "_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local);
+        this.getTcb().setNomLocalConnexion("TOTO");
+        this.getTcb().setNomDistantConnexion("TOTO");
         return getTcb().getNomLocalConnexion();
     }
 
@@ -442,6 +446,7 @@ public class Automate implements Runnable {
          
             if (this.modePasAPas) 
             {
+            	Thread.sleep(200);
             	if (GUI.get().obtainCard(this) != null)
             	{
             		GUI.get().obtainCard(this).getPanel_automate().update_states(Utils.conversionEtat(this.etatCourant));
@@ -499,23 +504,25 @@ public class Automate implements Runnable {
     }
 
     private void established() {
-    	/* mode serveur : verification des infos du client pour ne pas accepter n'importe qui */
-        if (!this.getMod()) {
-            if (this.getIp_dist() == this.getTcb().getConnexion().getIpDistante()
-                    && this.getPort_dist() == this.getTcb().getConnexion().getPortDistant()) {
-                /*OK*/
-            } else {
-                return;
-            }
+    	System.out.println("debut established");
+        /*
+    	if (this.getIp_dist() == this.getTcb().getConnexion().getIpDistante()
+                && this.getPort_dist() == this.getTcb().getConnexion().getPortDistant()) {
+
+        } else {
+        	System.out.println("fail des ports ?");
+            return;
         }
-        
+        */
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
     	if (p == null)
     		return;
     	p.AfficherPaquet();
     	/* reception de la commande close */
+    	System.out.println("established > test FIN et !ACK ?");
     	if (p.ObtenirFin() && !p.ObtenirAck())
     	{
+    		System.out.println("established > test FIN et !ACK = OK");
     		Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
     		pr.MettreFin(true);
     		pr.MettreAck(true);
@@ -526,8 +533,10 @@ public class Automate implements Runnable {
     		return;
     	}
     	/* reception d'un paquet de FIN */
+    	System.out.println("established > test FIN et ACK ?");
     	if (p.ObtenirFin() && p.ObtenirAck())
     	{
+    		System.out.println("established > test FIN et ACK = OK");
     		Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
     		pr.MettreAck(true);
     		pr.MettreNbrAcc(this.getTcb().getSEG_SEQ() + 1);
@@ -538,8 +547,10 @@ public class Automate implements Runnable {
     	}
     	
     	/* Donnees sont que des strings */
+		System.out.println("established > test donnee ?");
     	if (!p.ObtenirDonnee().equals(""))
     	{
+    		System.out.println("established > test donnee = OK");
     		GUI.get().obtainCard(this).getConsole().insertLine(p.ObtenirDonnee(), "Green");
     		Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
     		pr.MettreAck(true);
@@ -551,8 +562,10 @@ public class Automate implements Runnable {
     	}
     	
     	/* J'ai envoye des donnees, je controle le numero d'ACK */
-    	if (p.ObtenirAck())
+    	System.out.println("established > test !FIN et ACK ?");
+    	if (p.ObtenirAck() && !p.ObtenirFin())
     	{
+    		System.out.println("established > test !FIN et ACK = OK");
     		if (p.ObtenirNbrSeq() == this.getTcb().getSEG_ACK() && p.ObtenirNbrAcc() == (this.getTcb().getSEG_SEQ() + 1))
     		{
     			System.out.println("Acquitement des donnees OK");
@@ -562,11 +575,7 @@ public class Automate implements Runnable {
     			System.out.println("Acquitement des donnees FAUX");
     		}
     		return;
-    	}
-        
-        //this.estaToCloseWait();
-        //this.estaToFinWait1();
-		
+    	}	
 	}
 
 	@Override

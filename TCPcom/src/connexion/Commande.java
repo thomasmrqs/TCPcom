@@ -74,6 +74,7 @@ public class Commande {
 		p.MettreDataOff(6);
 		p.MettrePsh(true);
 		p.MettreFin(true);
+		p.MettreNbrSeq(auto.getTcb().getSEG_SEQ());
 		p.MettreDonnee("close");
 		p.CreerPaquet();
 		p.AfficherPaquet();
@@ -142,13 +143,23 @@ public class Commande {
 				}
 			}
 		}
+		System.out.println("taille du nombre d'automates trouves : " + LA.size());
 		for (Automate automate : LA) 
 		{
 			String nom = automate.getTcb().getNomLocalConnexion();
-			if (nom == nom_loc)
-				return automate;
-			else 
-				return null;
+			System.out.println("nom = " + nom);
+			System.out.println("nom_loc = " + nom_loc);
+			if (nom != null)
+			{
+				if (nom.equals(nom_loc))
+					return automate;
+				else 
+				{
+					return null;
+				}
+			}
+			else
+				System.out.println("nom est null");
 			
 		}
 		return null;

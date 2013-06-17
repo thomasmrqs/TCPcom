@@ -265,10 +265,11 @@ public class ClientConsolePanel extends JPanel implements ActionListener {
      */
     public void insertLine(String str, String style) {
         try {
+        	Thread.sleep(500);
             textPane.scrollRectToVisible(textPane.modelToView(textPane.getDocument().getLength()));
             insertPrompt();
             doc.insertString(doc.getLength(), str + "\n", textPane.getStyle(style));
-        } catch (BadLocationException e) {
+        } catch (BadLocationException | InterruptedException e) {
             e.printStackTrace();
         }
     }
