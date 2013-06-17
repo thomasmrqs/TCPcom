@@ -130,8 +130,15 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
         Bnextstep.setBounds(480, 570, 90, 20);
         Bnextstep.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent evt) {
-                nextOnAutomate();
+            public void mouseClicked(MouseEvent evt) 
+            {
+                //if (automaton.getboxStepByStep() == true)
+					try {
+						nextOnAutomate();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
             }
         });
     }
@@ -597,7 +604,7 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
     }
 
     //Cette fonction demande a l'automate de se débloquer d'un cran
-    private void nextOnAutomate() {
+    private void nextOnAutomate() throws InterruptedException {
         Automate a;
         ItemCard item = GUI.get().getSelectedPane();
         if (item.isClient()) {
@@ -607,140 +614,28 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
             if (item.getComboBoxServeur().getItemCount() > 0) {
                 a = (Automate) item.getComboBoxServeur().getSelectedItem();
                 a.bypass = true;
+                a.changerEtat();
             }
         }
     }
 
-    @Override
+   /* @Override
     public void actionPerformed(ActionEvent action) {
 
-        if (action.getSource() == Bnextstep && (automaton.getboxStepByStep() == true)) {
-            //if (automaton.getClosed1() == false)
-            //	System.out.println("FAUX");
-            if (automaton.getClosed1() == true && stepon == true) {
-                update_states("CLOSED_INIT");
-                System.out.println("toto");
-                stepon = false;
-                //automaton.setClosed1(false);
-                automaton.setClosed1(false);
-                //automaton.setListen(true);
-
-            } else if (automaton.getAutoAck() == true) {
-                this.console.insertLine("Cannot switched state to : CLOSED INIT", "Normal");
-
-                error = true;
-                System.out.println("FAUX11");
-            }
-            if (automaton.getListen() == true && stepon == true) {
-                update_states("LISTEN");
-                //return (automaton.getListen());
-                stepon = false;
-                automaton.setListen(false);
-            } //if (error == false)
-            //	System.out.println("FAUX3");
-            else if (automaton.getAutoAck() == true) {
-                this.console.insertLine("Cannot switched state to : LISTEN", "Normal");
-                System.out.println("OK1");
-                //return (automaton.getListen());
-                error = true;
-            }
-
-            if (automaton.getSynrcvd() == true && stepon == false) {
-                update_states("SYN_RCVD");
-                stepon = true;
-                automaton.setSynrcvd(false);
-
-                //return (automaton.getSynrcvd());
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : SYN RCVD", "Normal");
-                //return (automaton.getSynrcvd());
-                System.out.println("FAUX12");
-                error = true;
-
-            }
-            if (automaton.getSynsent() == true && stepon == false) {
-                update_states("SYN_SENT");
-                stepon = true;
-                automaton.setSynsent(false);
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : SYN SENT", "Normal");
-                //return (automaton.getSynsent());
-                error = true;
-            }
-            if (automaton.getEstab() == true && stepon == false) {
-                update_states("ESTAB");
-                stepon = true;
-                automaton.setEstab(false);
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : ESTAB next state", "Normal");
-                //return (automaton.getEstab());
-                error = true;
-            }
-
-            if (automaton.getFinwait1() == true) {
-                update_states("FIN_WAIT_1");
-                stepon = true;
-                automaton.setFinwait1(false);
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : FIN WAIT-1 next state", "Normal");
-                //return (automaton.getFinwait1());
-                error = true;
-            }
-
-            if (automaton.getFinwait2() == true && stepon == false) {
-                update_states("FIN_WAIT_2");
-                stepon = true;
-                automaton.setFinwait2(false);
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : FIN WAIT-2 next state", "Normal");
-                //return (automaton.getFinwait2());
-                error = true;
-            }
-
-            if (automaton.getClosing() == true && stepon == false) {
-                update_states("CLOSING");
-                stepon = true;
-                automaton.setClosing(false);
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : CLOSING", "Normal");
-                //return (automaton.getClosing());
-                error = true;
-            }
-
-            if (automaton.getLastack() == true && stepon == false) {
-                update_states("LAST_ACK");
-                stepon = true;
-                automaton.setLastack(false);
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : LAST ACK next state", "Normal");
-                //return (automaton.getLastack());
-                error = true;
-            }
-
-            if (automaton.getTimewait() == true && stepon == false) {
-                update_states("TIME_WAIT");
-                stepon = true;
-                automaton.setTimewait(false);
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : TIME WAIT next state", "Normal");
-                //return (automaton.getTimewait());
-                error = true;
-            }
-
-            if (automaton.getClosed2() == true && stepon == false) {
-                update_states("CLOSED");
-                stepon = true;
-                automaton.setClosed2(false);
-            } else if (automaton.getAutoAck() == true && error == false) {
-                this.console.insertLine("Cannot switched state to : CLOSED END", "Normal");
-                //return (automaton.getClosed2());
-                error = true;
-            }
+        if (action.getSource() == Bnextstep && (automaton.getboxStepByStep() == true)) 
+        {
+        	try {
+				nextOnAutomate();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
-    }
+    }*/
 
     @Override
-    public void itemStateChanged(ItemEvent item) {
+    public void itemStateChanged(ItemEvent item) 
+    {
         /* if (item.getSource() == Boxstepbystep) {
          if (item.getStateChange() == ItemEvent.SELECTED) {
          this.console.insertLine("Step-by-Step Mode : ENABLED", "Normal");
@@ -758,4 +653,10 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
          }
          }*/
     }
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }

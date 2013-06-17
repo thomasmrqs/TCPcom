@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.Style;
@@ -83,8 +84,11 @@ public class ClientConsolePanel extends JPanel implements ActionListener {
 
 
             super.paintComponent(g);
+            super.repaint();
         }
+        
     }
+    
 
     /**
      * Constructeur
@@ -107,6 +111,7 @@ public class ClientConsolePanel extends JPanel implements ActionListener {
 
         textPane = new MyTextPane();
         doc = textPane.getStyledDocument();
+        doc.putProperty(Document.StreamDescriptionProperty, null);
         scrollPane = new JScrollPane(textPane);
         textPane.setBounds(10, 10, 285, 50);
 

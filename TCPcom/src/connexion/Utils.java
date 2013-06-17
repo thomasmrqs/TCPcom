@@ -111,7 +111,7 @@ public class Utils {
         }
     }
 
-    public static String conversionEtat(int i) {
+    public  String conversionEtat(int i) {
         switch (i) {
             case Ressource.ETAT_CLOSED:
                 return "CLOSED_INIT";

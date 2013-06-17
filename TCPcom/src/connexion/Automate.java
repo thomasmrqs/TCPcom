@@ -14,6 +14,7 @@ public class Automate implements Runnable {
     private int etatCourant = Ressource.ETAT_CLOSED;
     private TCB tcb = null;
     private Connexion connexion = null;
+    private Utils utils = null;
     private boolean mod = false; //Si true = clien
     private int port_dist = 0;
     private int port_loc = 0;
@@ -22,10 +23,12 @@ public class Automate implements Runnable {
     private Stack<Paquet> bufferPaquet = null;
     private File fichier = null;
     private boolean modePasAPas = false;
+    private int currentstate = 0;
 
     public Automate() {
         this.modePasAPas = false;
         this.setBufferPaquet(new Stack<Paquet>());
+        utils = new Utils();
     }
 
     /* change l'etat de l'automate, prend en compte la continuite des etats (on peut pas passer de closed a established) */
@@ -436,16 +439,27 @@ public class Automate implements Runnable {
         }
     }
 
-    public void changerEtat() throws InterruptedException {
-        while (true) {
+    public void changerEtat() throws InterruptedException 
+    {
+        while (true) 
+        {
             afficheEtatCourant();
-            if (this.modePasAPas) {
+            if (this.modePasAPas) 
+            {
                 Thread.sleep(200);
                 GUI.get().obtainCard(this).getConsole().insertLine(" attente ... ", "Blue");
-                while (!this.bypass) {
+            
+                while (!this.bypass && currentstate <= 10) 
+                {
                     Thread.sleep(200);
+                    GUI.get().obtainCard(this).getPanel_automate().update_states(utils.conversionEtat(currentstate));
+                    currentstate++;
                 }
                 this.bypass = false;
+              
+                
+                
+                
             }
             switch (this.etatCourant) {
                 case Ressource.ETAT_CLOSE_WAIT:
