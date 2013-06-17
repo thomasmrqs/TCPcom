@@ -192,7 +192,7 @@ public class Automate implements Runnable {
             this.getTcb().initISS();
             Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
             p.MettreSyn(true);
-            p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+            //p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
             this.etatCourant = Ressource.ETAT_SYN_SENT;
@@ -227,8 +227,8 @@ public class Automate implements Runnable {
             this.getTcb().initACK(p.ObtenirNbrSeq());
             p.MettreSyn(true);
             p.MettreAck(true);
-            p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
-            p.MettreNbrAcc(this.getTcb().getSEG_ACK());
+            //p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+            //p.MettreNbrAcc(this.getTcb().getSEG_ACK());
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
             this.etatCourant = Ressource.ETAT_SYN_RCVD;
@@ -253,7 +253,7 @@ public class Automate implements Runnable {
         if (p == null) {
             return;
         }
-
+        Paquet pr = null;
         /* ajout bapt */
 
         /* ouverture simultannee */
@@ -269,21 +269,23 @@ public class Automate implements Runnable {
         }
 
         /* cas classique */
-
+        System.out.println("synsenttoestablished : afficher paquet recu :");
+        p.AfficherPaquet();
         if (p.ObtenirSyn() && p.ObtenirAck()) {
             this.getTcb().incrSEQ();
-            if (this.getTcb().checkACK(p)) {
+            //if (this.getTcb().checkACK(p)) {
                 this.getTcb().initACK(p.ObtenirNbrSeq());
-                p.MettreAck(true);
-                p.MettreSyn(false);
-                p.MettreNbrAcc(this.getTcb().getSEG_ACK());
-                p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
-                p.CreerPaquet();
-                this.getTcb().getConnexion().ecrirePaquet(p);
+                pr = new Paquet(p.ObtenirPortSRC(), p.ObtenirPortDST());
+                pr.MettreAck(true);
+                pr.MettreSyn(false);
+                //p.MettreNbrAcc(this.getTcb().getSEG_ACK());
+                //p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+                pr.CreerPaquet();
+                this.getTcb().getConnexion().ecrirePaquet(pr);
                 this.etatCourant = Ressource.ETAT_ESTABLISHED;
-            } else {
+            //} else {
                 /* PAQUET FOIREUX : DEMANDE DE RENVOI DE PAQUET x*/
-            }
+            //}
         }
 
         /* fin ajout/modif bapt */
@@ -332,7 +334,8 @@ public class Automate implements Runnable {
         } else {
             /* Fin ajout bapt */
             this.getTcb().incrSEQ();
-            if (p.ObtenirAck() && this.getTcb().checkACK(p)) {
+            if (p.ObtenirAck())// && this.getTcb().checkACK(p)) {
+            {
                 this.etatCourant = Ressource.ETAT_ESTABLISHED;
             }
         }

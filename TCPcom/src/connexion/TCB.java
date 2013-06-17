@@ -66,7 +66,7 @@ public class TCB {
 		{
 			setNomLocalConnexion(null);
 			setNomDistantConnexion(null);
-			setConnexion(null);
+			//setConnexion(null);
 			setConnexionStatus(0);
 			setPrioriteConnexion(0);
 			setSecuriteConnexion(0);
