@@ -14,7 +14,7 @@ public class Automate implements Runnable {
     private int etatCourant = Ressource.ETAT_CLOSED;
     private TCB tcb = null;
     private Connexion connexion = null;
-    private Utils utils = null;
+    //private Utils utils = null;
     private boolean mod = false; //Si true = clien
     private int port_dist = 0;
     private int port_loc = 0;
@@ -28,7 +28,7 @@ public class Automate implements Runnable {
     public Automate() {
         this.modePasAPas = false;
         this.setBufferPaquet(new Stack<Paquet>());
-        utils = new Utils();
+        //utils = new Utils();
     }
 
     /* change l'etat de l'automate, prend en compte la continuite des etats (on peut pas passer de closed a established) */
@@ -218,6 +218,7 @@ public class Automate implements Runnable {
                 return;
             }
         }
+        
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
         if (p == null) {
             return;
@@ -445,23 +446,21 @@ public class Automate implements Runnable {
         while (true) 
         {
             afficheEtatCourant();
+            /*
+            Thread.sleep(200);
+            GUI.get().obtainCard(this).getPanel_automate().update_states(Utils.conversionEtat(this.etatCourant));
             if (this.modePasAPas) 
             {
                 Thread.sleep(200);
                 GUI.get().obtainCard(this).getConsole().insertLine(" attente ... ", "Blue");
             
-                while (!this.bypass && currentstate <= 10) 
+                while (!this.bypass) 
                 {
                     Thread.sleep(200);
-                    GUI.get().obtainCard(this).getPanel_automate().update_states(utils.conversionEtat(currentstate));
-                    currentstate++;
                 }
-                this.bypass = false;
-              
-                
-                
-                
+                this.bypass = false;                
             }
+            */
             switch (this.etatCourant) {
                 case Ressource.ETAT_CLOSE_WAIT:
                     this.closeWaitToLastAck();
@@ -565,13 +564,12 @@ public class Automate implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                this.changerEtat();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Automate.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+       	try {
+			this.changerEtat();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     @Override
