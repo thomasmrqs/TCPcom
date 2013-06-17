@@ -107,6 +107,7 @@ public class ControlErreur {
 		for (i = 3, j = 4, pos = 0; j > 0; i--, j--, ++pos) {
 			if (Math.pow(2,i) <= data_off)
 			{
+				System.out.println("data offset pos = " + pos + " i = "+ i);
 				c[pos] = '1';
 				data_off = (int) (data_off - Math.pow(2,i));
 			}
@@ -116,6 +117,7 @@ public class ControlErreur {
 		for (i = 5, j = 6, pos = 4; j > 0; i--, j--, ++pos) {
 			if (Math.pow(2,i) <= reserve)
 			{
+					
 				c[pos] = '1';
 				reserve = (int) (reserve - Math.pow(2,i));
 			}
@@ -148,6 +150,7 @@ public class ControlErreur {
 		else 
 			c[15] = '0';
 				
+		System.out.println("tab = " + c[0] +  c[1] + c[2] + c[3] + c[4] + c[5] + c[6] + c[7] + c[8] + c[9] + c[10] + c[11] + c[12] + c[13] + c[14] + c[15]);
 		for (i=0, j = 0; i <= 15; i++, j++, bi = false)
 		{
 			if (c[i] == '1')
@@ -306,45 +309,31 @@ public class ControlErreur {
 		rese_proto = Utils.complement(rese_proto);
 		tcpHead = Utils.complement(tcpHead);
 		
-		System.out.println("getcheck1 : " + this.getCheck());
+		
+		
+		
+		
 		this.setCheck(this.getCheck() + this.calcul(p_s[0], p_s[1]));
-		System.out.println("getcheck2 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(p_d[0], p_d[1]));
-		System.out.println("getcheck3 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(nb_seq[0], nb_seq[1]));
-		System.out.println("getcheck4 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(nb_seq[2], nb_seq[3]));
-		System.out.println("getcheck5 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(nb_acc[0], nb_acc[1]));
-		System.out.println("getcheck6 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(nb_acc[2], nb_acc[3]));
-		System.out.println("getcheck7 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(data_reser_flag[0], data_reser_flag[1]));
-		System.out.println("getcheck8 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(fen[0], fen[1]));
-		System.out.println("getcheck9 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(urg_point[0], urg_point[1]));
-		System.out.println("getcheck10 : " + this.getCheck());
-		//this.setCheck(this.getCheck() + this.calcul(headercheck[0], headercheck[1]));
-		System.out.println("getcheck11 : " + this.getCheck());
+		this.setCheck(this.getCheck() + this.calcul(headercheck[0], headercheck[1]));
 		this.setCheck(this.getCheck() + this.calcul(opt[0], opt[1]));
-		System.out.println("getcheck12 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(opt[2], opt[3]));
-		System.out.println("getcheck13 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(ip_sr[0], ip_sr[1]));
-		System.out.println("getcheck14 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(ip_sr[2], ip_sr[3]));
-		System.out.println("getcheck15 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(ip_ds[0], ip_ds[1]));
-		System.out.println("getcheck16 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(ip_ds[2], ip_ds[3]));
-		System.out.println("getcheck17 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(rese_proto[0], rese_proto[1]));
-		System.out.println("getcheck18 : " + this.getCheck());
 		this.setCheck(this.getCheck() + this.calcul(tcpHead[0], tcpHead[1]));
-		System.out.println("getcheck19 : " + this.getCheck());
 		if (p.ObtenirDonnee() != null)
 		{
+			System.out.println("checksum avant jakez = " +this.getCheck());
 			System.out.println("jakez donne");
 			data = p.ObtenirDonnee().getBytes();
 			data = Utils.complement(data);

@@ -14,7 +14,8 @@ public class TestChecksum {
         p.MettrePortSRC(1645);
         p.MettrePortDST(80);
         p.MettreNbrSeq(1);
-        p.MettreAck(true);
+        p.MettreNbrAcc(1);
+        //p.MettreAck(true);
         p.MettreDataOff(5);
         p.MettreReserve(0);
         p.MettreFenetre(128);
