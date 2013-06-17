@@ -324,7 +324,7 @@ public class Automate implements Runnable {
             return;
         }
 
-        /* Ajout bapt pour deco */
+        /* Ajout bapt */
         if (p.ObtenirRst()) {
             /* analyse du paquet pour savoir si c'est un abort ou un close */
             this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
@@ -419,6 +419,7 @@ public class Automate implements Runnable {
             p.MettreAck(true);
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
+            this.getTcb().setAbort(true);
             this.getTcb().resetTCB();
             this.etatCourant = Ressource.ETAT_CLOSED;
         }
@@ -474,14 +475,42 @@ public class Automate implements Runnable {
                     break;
                 case Ressource.ETAT_ESTABLISHED:
 
+                	/* controle de flux theorique */
+                	
+                	Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+                	if (p == null)
+                		break;
+                	
+                	if (p.ObtenirAck())
+                	{
+                		/* mode envoi */
+                		{
+                			
+                		}
+                		
+                		/* mode reception */
+                		{
+                			this.getTcb().incrSEQ();
+                			
+                		}
+                	}
+                	
+                	
+                	
                     /* mode serveur : verification des infos du client pour ne pas accepter n'importe qui */
+                	/* mode lecture ? */
                     if (!this.getMod()) {
                         if (this.getIp_dist() == this.getTcb().getConnexion().getIpDistante()
                                 && this.getPort_dist() == this.getTcb().getConnexion().getPortDistant()) {
                             /*OK*/
+                        	/*  */
                         } else {
                             break;
                         }
+                    }
+                    else // mode ecriture ?
+                    {
+                    	
                     }
                     /*
                      Paquet p = this.getTcb().getConnexion().lireDernierMessage();
