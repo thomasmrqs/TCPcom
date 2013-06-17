@@ -106,9 +106,7 @@ public abstract class Connexion implements Runnable {
         String tmp;
         synchronized (this.ecriture) {
             if (this.ecriture.size() > 0) {
-                System.out.println(this + " ecrit vraiment un message /////////////////////////////////////");
                 Paquet p = this.ecriture.pop();
-                p.AfficherPaquet();
                 this.out.write(p.convertirBitSet());
                 this.out.write('\n');
             } else {
@@ -118,10 +116,7 @@ public abstract class Connexion implements Runnable {
         synchronized (this.lecture) {
             tmp = this.in.readLine();
             if (!tmp.isEmpty()) {
-                System.out.println(this + " lit vraiment un message //////////////////////////////////////////");
                 Decompression d = new Decompression(tmp.getBytes());
-                Paquet p = d.DecompSegment();
-                p.AfficherPaquet();
                 this.lecture.add(d.DecompSegment());
             }
         }

@@ -14,8 +14,7 @@ public class Automate implements Runnable {
     private int etatCourant = Ressource.ETAT_CLOSED;
     private TCB tcb = null;
     private Connexion connexion = null;
-    //private Utils utils = null;
-    private boolean mod = false; //Si true = clien
+    private boolean mod = false; //Si true = client
     private int port_dist = 0;
     private int port_loc = 0;
     private String ip_dist = null;
@@ -23,12 +22,10 @@ public class Automate implements Runnable {
     private Stack<Paquet> bufferPaquet = null;
     private File fichier = null;
     private boolean modePasAPas = false;
-    private int currentstate = 0;
 
     public Automate() {
         this.modePasAPas = false;
         this.setBufferPaquet(new Stack<Paquet>());
-        //utils = new Utils();
     }
 
     /* change l'etat de l'automate, prend en compte la continuite des etats (on peut pas passer de closed a established) */
@@ -177,7 +174,7 @@ public class Automate implements Runnable {
         //Dans le cas d'un serveur
         try {
             this.setTcb(new TCB(connexion));
-            this.etatCourant = Ressource.ETAT_LISTEN;
+            this.etatCourant = Ressource.ETAT_CLOSED;
         } catch (Exception e) {
             System.out.println("Automate::Probleme serveur");
         }
@@ -192,9 +189,12 @@ public class Automate implements Runnable {
             this.getTcb().initISS();
             Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
             p.MettreSyn(true);
-            //p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+            System.out.println("Numero Seq ClosedToSynSent : " + this.getTcb().getSEG_SEQ());
+            p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
             p.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(p);
+            System.out.println("Closed To SynSent : paquet envoye :");
+            p.AfficherPaquet();
             this.etatCourant = Ressource.ETAT_SYN_SENT;
         }
     }
@@ -223,14 +223,20 @@ public class Automate implements Runnable {
         if (p == null) {
             return;
         }
+        Paquet pr = null;
         if (p.ObtenirSyn()) {
             this.getTcb().initACK(p.ObtenirNbrSeq());
-            p.MettreSyn(true);
-            p.MettreAck(true);
-            //p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
-            //p.MettreNbrAcc(this.getTcb().getSEG_ACK());
-            p.CreerPaquet();
-            this.getTcb().getConnexion().ecrirePaquet(p);
+            pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
+            pr.MettreSyn(true);
+            pr.MettreAck(true);
+            System.out.println("Numero Seq ListenToSynRec : " + this.getTcb().getSEG_SEQ());
+            System.out.println("Numero Ack ListenToSynRec : " + this.getTcb().getSEG_ACK());
+            pr.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+            pr.MettreNbrAcc(this.getTcb().getSEG_ACK());
+            pr.CreerPaquet();
+            this.getTcb().getConnexion().ecrirePaquet(pr);
+            System.out.println("Listen To SynRec : paquet envoye :");
+            pr.AfficherPaquet();
             this.etatCourant = Ressource.ETAT_SYN_RCVD;
         }
     }
@@ -260,32 +266,35 @@ public class Automate implements Runnable {
 
         if (!p.ObtenirAck() && p.ObtenirSyn()) {
             /* CHECK DES NUMS D'ACK ET DE SEQ A FAIRE */
-            p.MettreAck(true);
-            p.MettreSyn(true);
-            p.CreerPaquet();
-            this.getTcb().getConnexion().ecrirePaquet(p);
+        	pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
+            pr.MettreAck(true);
+            pr.MettreSyn(true);
+            pr.CreerPaquet();
+            this.getTcb().getConnexion().ecrirePaquet(pr);
             this.etatCourant = Ressource.ETAT_SYN_RCVD;
             return;
         }
 
         /* cas classique */
-        System.out.println("synsenttoestablished : afficher paquet recu :");
-        p.AfficherPaquet();
         if (p.ObtenirSyn() && p.ObtenirAck()) {
+        	/* incrementation du numero de sequence local */
             this.getTcb().incrSEQ();
-            //if (this.getTcb().checkACK(p)) {
+            if (this.getTcb().checkACK(p)) {
+            	/* incremente le numero de sequence recu et le met dans ack */
                 this.getTcb().initACK(p.ObtenirNbrSeq());
-                pr = new Paquet(p.ObtenirPortSRC(), p.ObtenirPortDST());
+                pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
                 pr.MettreAck(true);
-                pr.MettreSyn(false);
-                //p.MettreNbrAcc(this.getTcb().getSEG_ACK());
-                //p.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+                pr.MettreNbrAcc(this.getTcb().getSEG_ACK());
+                pr.MettreNbrSeq(this.getTcb().getSEG_SEQ());
                 pr.CreerPaquet();
                 this.getTcb().getConnexion().ecrirePaquet(pr);
+                System.out.println("SynSent To Esta : paquet envoye :");
+                pr.AfficherPaquet();
                 this.etatCourant = Ressource.ETAT_ESTABLISHED;
-            //} else {
-                /* PAQUET FOIREUX : DEMANDE DE RENVOI DE PAQUET x*/
-            //}
+            } else {
+                /* PAQUET FOIREUX : DEMANDE DE RENVOI DE PAQUET */
+            	System.out.println("Paquet foireux, je change pas d'etat");
+            }
         }
 
         /* fin ajout/modif bapt */
@@ -380,7 +389,7 @@ public class Automate implements Runnable {
         }
         if (p.ObtenirFin()) {
             if (p.ObtenirAck()) {
-                this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
+                this.etatCourant = Ressource.ETAT_FIN_WAIT_2;
             }
         }
     }
@@ -400,18 +409,6 @@ public class Automate implements Runnable {
 
     /* Depuis Fin Wait 2 */
     public void finWait2ToTimeWait() {
-        /**
-         * ****************************
-         */
-        /*          TIMER              */
-        /**
-         * ****************************
-         */
-        return;
-    }
-
-    /* Depuis Time Wait */
-    public void timeWaitToClosed() {
         if (!this.getMod()) {
             return;
         }
@@ -420,12 +417,25 @@ public class Automate implements Runnable {
             return;
         }
         if (p.ObtenirFin()) {
-            p.MettreAck(true);
-            p.CreerPaquet();
-            this.getTcb().getConnexion().ecrirePaquet(p);
+        	Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
+            pr.MettreAck(true);
+            pr.CreerPaquet();
+            this.getTcb().getConnexion().ecrirePaquet(pr);
             this.getTcb().resetTCB();
-            this.etatCourant = Ressource.ETAT_CLOSED;
+            this.etatCourant = Ressource.ETAT_TIME_WAIT;
         }
+    }
+
+    /* Depuis Time Wait */
+    public void timeWaitToClosed() {
+    	try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	this.etatCourant = Ressource.ETAT_CLOSED;
+        return;
     }
 
     /* Depuis Last Ack */
@@ -448,27 +458,28 @@ public class Automate implements Runnable {
         while (true) 
         {
             afficheEtatCourant();
-            /*
-            Thread.sleep(200);
-            GUI.get().obtainCard(this).getPanel_automate().update_states(Utils.conversionEtat(this.etatCourant));
+         
             if (this.modePasAPas) 
             {
-                Thread.sleep(200);
-                GUI.get().obtainCard(this).getConsole().insertLine(" attente ... ", "Blue");
-            
+            	if (GUI.get().obtainCard(this) != null)
+            	{
+            		GUI.get().obtainCard(this).getPanel_automate().update_states(Utils.conversionEtat(this.etatCourant));
+            	}
+            	if (GUI.get().obtainCard(this) != null)
+                {
+            		GUI.get().obtainCard(this).getConsole().insertLine(" attente ... ", "Blue");
+                }
                 while (!this.bypass) 
                 {
                     Thread.sleep(200);
                 }
                 this.bypass = false;                
             }
-            */
             switch (this.etatCourant) {
                 case Ressource.ETAT_CLOSE_WAIT:
                     this.closeWaitToLastAck();
                     break;
                 case Ressource.ETAT_CLOSED:
-
                     this.closedToListen();
                     this.closedToSynSent();
                     break;
