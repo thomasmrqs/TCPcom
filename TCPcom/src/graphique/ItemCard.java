@@ -27,7 +27,7 @@ public class ItemCard extends JPanel //implements Runnable
     private ClientConsolePanel console = null;
     private ClientAutomatePanel panel_automate = null;
     private JComboBox comboBoxServeur;
-    private final DefaultComboBoxModel comboBoxServeurModel;
+    private final DefaultComboBoxModel<Automate> comboBoxServeurModel;
     private final int count = 1;
     private boolean client; // Permet de savoir su c'est un ItemCard de client ou de serveur
     private Automate automate; // Si c'est un client, il faut directement un Automate

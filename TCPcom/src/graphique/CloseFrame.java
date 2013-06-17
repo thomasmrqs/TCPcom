@@ -72,10 +72,6 @@ public class CloseFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getSource() == EnvoiBtnAccept){
-					
-					/*************** Fonction close
-					 * param: NomLocale
-					 *   ***********************/
 					closeframe.dispose();
 				}
 				}

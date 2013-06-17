@@ -179,7 +179,8 @@ public class Automate implements Runnable {
             System.out.println("Automate::Probleme serveur");
         }
         this.setOpenOk(true);
-        this.getTcb().setNomLocalConnexion("loc" + this.getTcb().getConnexion().getIpLocale() + ip_distant);
+        this.getTcb().setNomDistantConnexion("con_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local + "_" + ip_distant + ":" + port_ser);
+        this.getTcb().setNomLocalConnexion("con_" + ip_distant + ":" + port_ser + "_" + this.getTcb().getConnexion().getIpLocale() + ":" + port_local);
         return getTcb().getNomLocalConnexion();
     }
 
@@ -311,10 +312,11 @@ public class Automate implements Runnable {
             return;
         }
 
-        if (p.ObtenirRst()) {
-            p.MettreFin(true);
-            p.CreerPaquet();
-            this.getTcb().getConnexion().ecrirePaquet(p);
+        if (p.ObtenirFin()) {
+        	Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
+            pr.MettreFin(true);
+            pr.CreerPaquet();
+            this.getTcb().getConnexion().ecrirePaquet(pr);
             this.etatCourant = Ressource.ETAT_CLOSED;
         }
     }
@@ -337,74 +339,52 @@ public class Automate implements Runnable {
         }
 
         /* Ajout bapt pour deco */
-        if (p.ObtenirRst()) {
+        if (p.ObtenirFin()) {
             /* analyse du paquet pour savoir si c'est un abort ou un close */
             this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
         } else {
             /* Fin ajout bapt */
             this.getTcb().incrSEQ();
-            if (p.ObtenirAck())// && this.getTcb().checkACK(p)) {
+            if (p.ObtenirAck() && this.getTcb().checkACK(p))
             {
                 this.etatCourant = Ressource.ETAT_ESTABLISHED;
             }
         }
     }
 
-    /* Depuis Established */
-    public void estaToCloseWait() {
-        if (this.getMod()) {
-            return;
-        }
-        Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-        if (p == null) {
-            return;
-        }
-        if (p.ObtenirFin()) {
-            p.MettreAck(true);
-            p.CreerPaquet();
-            this.getTcb().getConnexion().ecrirePaquet(p);
-            this.etatCourant = Ressource.ETAT_CLOSE_WAIT;
-        }
-    }
-
-    public void estaToFinWait1() {
-        if (this.getMod()) {
-            Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
-            p.MettreFin(true);
-            p.CreerPaquet();
-            this.getTcb().getConnexion().ecrirePaquet(p);
-            this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
-
-        }
-    }
-
     /* Depuis Fin Wait 1 */
     public void finWait1ToFinWait2() {
-        if (!this.getMod()) {
-            return;
-        }
         Paquet p = this.getTcb().getConnexion().lireDernierMessage();
         if (p == null) {
             return;
         }
-        if (p.ObtenirFin()) {
-            if (p.ObtenirAck()) {
-                this.etatCourant = Ressource.ETAT_FIN_WAIT_2;
-            }
+        if (p.ObtenirAck() && p.ObtenirNbrAcc() == this.getTcb().getSEG_SEQ() + 1) {
+        	this.etatCourant = Ressource.ETAT_FIN_WAIT_2;
+        }
+        else
+        {
+        	/* ca a foire */
         }
     }
 
     /* Depuis Close Wait */
     public void closeWaitToLastAck() {
-        if (this.getMod()) {
-            return;
-        }
-        Paquet p = new Paquet(this.getPort_local(), this.getPort_dist());
-        p.MettreFin(true);
-        p.CreerPaquet();
-        this.getTcb().getConnexion().ecrirePaquet(p);
-        this.etatCourant = Ressource.ETAT_LAST_ACK;
-
+    	
+    	Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+        if (p == null)
+        	return;
+        
+        if (p.ObtenirFin() && !p.ObtenirAck())
+    	{
+    		Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
+    		pr.MettreFin(true);
+    		pr.MettreAck(true);
+    		pr.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+    		pr.CreerPaquet();
+    		this.getTcb().getConnexion().ecrirePaquet(pr);
+    		this.etatCourant = Ressource.ETAT_LAST_ACK;
+    		return;
+    	}
     }
 
     /* Depuis Fin Wait 2 */
@@ -416,9 +396,10 @@ public class Automate implements Runnable {
         if (p == null) {
             return;
         }
-        if (p.ObtenirFin()) {
+        if (p.ObtenirFin() && p.ObtenirAck()) {
         	Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
             pr.MettreAck(true);
+            pr.MettreNbrAcc(p.ObtenirNbrSeq() + 1);
             pr.CreerPaquet();
             this.getTcb().getConnexion().ecrirePaquet(pr);
             this.getTcb().resetTCB();
@@ -447,7 +428,7 @@ public class Automate implements Runnable {
         if (p == null) {
             return;
         }
-        if (p.ObtenirFin() && p.ObtenirAck()) {
+        if (p.ObtenirAck() && p.ObtenirNbrAcc() == this.getTcb().getSEG_SEQ() + 1) {
             this.getTcb().resetTCB();
             this.etatCourant = Ressource.ETAT_CLOSED;
         }
@@ -486,37 +467,7 @@ public class Automate implements Runnable {
                 case Ressource.ETAT_CLOSING:
                     break;
                 case Ressource.ETAT_ESTABLISHED:
-
-                    /* mode serveur : verification des infos du client pour ne pas accepter n'importe qui */
-                    if (!this.getMod()) {
-                        if (this.getIp_dist() == this.getTcb().getConnexion().getIpDistante()
-                                && this.getPort_dist() == this.getTcb().getConnexion().getPortDistant()) {
-                            /*OK*/
-                        } else {
-                            break;
-                        }
-                    }
-                    /*
-                     Paquet p = this.getTcb().getConnexion().lireDernierMessage();
-                	
-                     if (this.getFile())
-                     {
-                     Utils.ecrireDansFichier(p, this.getFile()); 
-                     }
-                     else
-                     {
-                     this.getBufferPaquet().push(p);
-                     while (!p.ObtenirFin())
-                     {
-                	
-                     }
-                     }
-                     */
-                    //this.estaToCloseWait();
-
-                    // Si j'envoie une commande close 
-                    // Rajouter ici la commande close !!!!!!!!
-                    //this.estaToFinWait1();
+                	this.established();
                     break;
                 case Ressource.ETAT_FIN_WAIT_1:
                     this.finWait1ToFinWait2();
@@ -547,7 +498,78 @@ public class Automate implements Runnable {
         }
     }
 
-    @Override
+    private void established() {
+    	/* mode serveur : verification des infos du client pour ne pas accepter n'importe qui */
+        if (!this.getMod()) {
+            if (this.getIp_dist() == this.getTcb().getConnexion().getIpDistante()
+                    && this.getPort_dist() == this.getTcb().getConnexion().getPortDistant()) {
+                /*OK*/
+            } else {
+                return;
+            }
+        }
+        
+        Paquet p = this.getTcb().getConnexion().lireDernierMessage();
+    	if (p == null)
+    		return;
+    	p.AfficherPaquet();
+    	/* reception de la commande close */
+    	if (p.ObtenirFin() && !p.ObtenirAck())
+    	{
+    		Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
+    		pr.MettreFin(true);
+    		pr.MettreAck(true);
+    		pr.MettreNbrSeq(this.getTcb().getSEG_SEQ());
+    		pr.CreerPaquet();
+    		this.getTcb().getConnexion().ecrirePaquet(pr);
+    		this.etatCourant = Ressource.ETAT_FIN_WAIT_1;
+    		return;
+    	}
+    	/* reception d'un paquet de FIN */
+    	if (p.ObtenirFin() && p.ObtenirAck())
+    	{
+    		Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
+    		pr.MettreAck(true);
+    		pr.MettreNbrAcc(this.getTcb().getSEG_SEQ() + 1);
+    		pr.CreerPaquet();
+    		this.getTcb().getConnexion().ecrirePaquet(pr);
+    		this.etatCourant = Ressource.ETAT_CLOSE_WAIT;
+    		return;
+    	}
+    	
+    	/* Donnees sont que des strings */
+    	if (!p.ObtenirDonnee().equals(""))
+    	{
+    		GUI.get().obtainCard(this).getConsole().insertLine(p.ObtenirDonnee(), "Green");
+    		Paquet pr = new Paquet(p.ObtenirPortDST(), p.ObtenirPortSRC());
+    		pr.MettreAck(true);
+    		pr.MettreNbrAcc(this.getTcb().getSEG_SEQ() + 1);
+    		pr.MettreNbrSeq(this.getTcb().getSEG_ACK());
+    		pr.CreerPaquet();
+    		this.getTcb().getConnexion().ecrirePaquet(pr);
+    		return;
+    	}
+    	
+    	/* J'ai envoye des donnees, je controle le numero d'ACK */
+    	if (p.ObtenirAck())
+    	{
+    		if (p.ObtenirNbrSeq() == this.getTcb().getSEG_ACK() && p.ObtenirNbrAcc() == (this.getTcb().getSEG_SEQ() + 1))
+    		{
+    			System.out.println("Acquitement des donnees OK");
+    		}
+    		else
+    		{
+    			System.out.println("Acquitement des donnees FAUX");
+    		}
+    		return;
+    	}
+        
+        //this.estaToCloseWait();
+        //this.estaToFinWait1();
+		
+	}
+
+	@Override
     public void run() {
        	try {
 			this.changerEtat();
@@ -559,7 +581,8 @@ public class Automate implements Runnable {
 
     @Override
     public String toString() {
-        return this.getTcb().getNomLocalConnexion();
+    	return "TOTO";
+        //return this.getTcb().getNomLocalConnexion();
     }
 
     public void setConnexion(Connexion connexion) {

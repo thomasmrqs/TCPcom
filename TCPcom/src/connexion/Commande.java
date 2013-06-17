@@ -42,6 +42,8 @@ public class Commande {
 		p.MettreDonnee(don);
 		p.MettrePortSRC(auto.getPort_local());
 		p.MettrePortDST(auto.getPort_dist());
+		p.MettreNbrAcc(auto.getTcb().getSEG_ACK());
+		p.MettreNbrSeq(auto.getTcb().getSEG_SEQ());
 		p.CreerPaquet();
         auto.getTcb().getConnexion().ecrirePaquet(p);
         addr = compteur;
@@ -65,6 +67,7 @@ public class Commande {
 	{
 		int addr = 0;
 		Automate auto = null;
+		System.out.println("test du nom local de l'automate");
 		if ((auto = this.trouverNomLocal(nom_local)) == null)
 			return addr;
 		Paquet p = new Paquet (auto.getPort_local(), auto.getPort_dist());
@@ -73,6 +76,7 @@ public class Commande {
 		p.MettreFin(true);
 		p.MettreDonnee("close");
 		p.CreerPaquet();
+		p.AfficherPaquet();
         auto.getTcb().getConnexion().ecrirePaquet(p);
 		addr = 1;
 		return addr;
@@ -132,9 +136,9 @@ public class Commande {
 			}
 			else
 			{
-				for (Object o : c.getMap_console().values())
+				for (Automate o : c.getMap_console().keySet())
 				{
-					LA.add((Automate) o);
+					LA.add(o);
 				}
 			}
 		}

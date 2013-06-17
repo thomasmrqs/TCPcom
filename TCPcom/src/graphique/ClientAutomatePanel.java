@@ -603,7 +603,7 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
 
     }
 
-    //Cette fonction demande a l'automate de se débloquer d'un cran
+    //Cette fonction demande a l'automate de se debloquer d'un cran
     private void nextOnAutomate() throws InterruptedException {
         Automate a;
         ItemCard item = GUI.get().getSelectedPane();
@@ -614,7 +614,6 @@ public class ClientAutomatePanel extends JPanel implements ActionListener, ItemL
             if (item.getComboBoxServeur().getItemCount() > 0) {
                 a = (Automate) item.getComboBoxServeur().getSelectedItem();
                 a.bypass = true;
-                a.changerEtat();
             }
         }
     }

@@ -37,7 +37,7 @@ public class Serveur implements Runnable {
 
     @Deprecated
     public Serveur(int port) {
-        //Retirer le nom du serveur => identifiant géré automatiquement
+        //Retirer le nom du serveur => identifiant gere automatiquement
         this.alive = false;
         this.liste = new ArrayList<ServeurThread>();
         this.port = port;
@@ -63,22 +63,28 @@ public class Serveur implements Runnable {
         int idServeurThread = 0;
         try {
             this.socket = new ServerSocket(this.port);
-            System.out.println(this + " en écoute");
+            System.out.println(this + " en ecoute");
             this.alive = true;
             while (this.alive) {
                 st = new ServeurThread(this.id, ++idServeurThread, this.socket.accept());
                 this.liste.add(st);
-                System.out.println("Je vais ajouter un client à mon serveur");
+                System.out.println("Je vais ajouter un client a mon serveur");
                 Automate a = new Automate();
                 a.setConnexion(st);
                 a.open(st.portLocal, this.ip_saisie, this.port_saisie, false);
                 (new Thread(a)).start();
+                try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 GUI.get().obtainCard(this).addClientToServeur(a);//Ajout du serveurThread                
                 GestionDesConnexions.get().ajouterConnexion(st);
                 (new Thread(st)).start();
             }
         } catch (IOException ex) {
-            System.out.println("Erreure de " + this + "IOException " + ex.getMessage());
+            System.out.println("Erreur de " + this + " : IOException " + ex.getMessage());
             this.alive = false;
         }
     }
