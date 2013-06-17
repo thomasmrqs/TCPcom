@@ -39,7 +39,7 @@ public class Serveur implements Runnable {
     public Serveur(int port) {
         //Retirer le nom du serveur => identifiant géré automatiquement
         this.alive = false;
-        this.liste = new ArrayList();
+        this.liste = new ArrayList<ServeurThread>();
         this.port = port;
         this.id = Utils.creerIdentifiantServeur();
     }
@@ -78,7 +78,7 @@ public class Serveur implements Runnable {
                 (new Thread(st)).start();
             }
         } catch (IOException ex) {
-            System.out.println("Erreure de " + this + "IOException");
+            System.out.println("Erreure de " + this + "IOException " + ex.getMessage());
             this.alive = false;
         }
     }

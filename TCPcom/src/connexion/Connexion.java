@@ -48,10 +48,11 @@ public abstract class Connexion implements Runnable {
 
     protected abstract void initialisation() throws IOException;
 
-    public Connexion() {
+    public Connexion() 
+    {
         this.alive = false;
-        this.lecture = new Stack();
-        this.ecriture = new Stack();
+        this.lecture = new Stack<Paquet>();
+        this.ecriture = new Stack<Paquet>();
     }
 
     @Override
@@ -92,7 +93,7 @@ public abstract class Connexion implements Runnable {
     @Deprecated
     public ArrayList<Paquet> lireMesssages() {
         synchronized (this.lecture) {
-            ArrayList<Paquet> liste = new ArrayList();
+            ArrayList<Paquet> liste = new ArrayList<Paquet>();
             while (!this.lecture.isEmpty()) {
                 liste.add(this.lecture.pop());
             }
